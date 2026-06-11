@@ -1,0 +1,51 @@
+---
+title: "Uniswap v2"
+slug: "uniswap-v2"
+era: "v0"
+track: "foundations"
+order: 1
+prereqs: []
+related: []
+tradfiAnchor: "Continuous-quote market maker"
+summary: "Constant-product AMM (x·y=k) — the passive market maker every DEX descends from."
+significance: 24
+---
+
+<!-- related: ["impermanent-loss"] — restored in Task 6 once that topic file is seeded -->
+
+## 01 · Concept — what problem does it solve?
+
+Order books need active market makers posting quotes. On-chain, every quote update costs gas, so order books were economically dead on Ethereum L1. Uniswap v2 replaces the market maker with a **formula**: a passive pool of two tokens whose product must stay constant. Anyone can trade against the pool 24/7; anyone can become the "market maker" by depositing both tokens.
+
+Unlike a TradFi market maker, the AMM never withdraws quotes, never widens spreads in panic, and never refuses a trade — the price impact curve *is* the spread.
+
+## 02 · Mechanics
+
+- **Pool:** reserves *x* (token A) and *y* (token B). Every swap must preserve `x · y = k` (after the 0.30% fee is added to reserves).
+- **Price:** the marginal price is just the reserve ratio *y/x*. Big trades move along the hyperbola → price impact grows with trade size.
+- **LP tokens:** depositors receive pro-rata pool shares; fees accrue into reserves, so LP tokens appreciate against the pool.
+- **TWAP oracle:** cumulative price accumulators allow manipulation-resistant time-weighted average prices.
+
+## 03 · Formulas
+
+```text
+// invariant
+x · y = k
+
+// swap output with 0.30% fee (997/1000)
+Δy = ( y · Δx · 997 ) / ( x · 1000 + Δx · 997 )
+
+// spot price & price impact
+P = y / x          execution price < P for buys
+
+// LP share minted (initial / subsequent)
+s₀ = √(Δx·Δy) − 1000        MINIMUM_LIQUIDITY lock
+s  = min( Δx/x , Δy/y ) · S
+```
+
+## 04 · Edge cases & risks
+
+- **Impermanent loss** — LPs lose vs. holding when price diverges. See [Impermanent Loss](/learn/impermanent-loss) for full treatment.
+- **Sandwich exposure** — deterministic price impact makes every pending swap a target. See [MEV](/learn/mev).
+- **Fee-on-transfer tokens** break the invariant math; v2 added `swapExactTokensForTokensSupportingFeeOnTransferTokens` as a workaround.
+- **1000-wei liquidity burn** — the first LP mints to `address(0)` to prevent share-price inflation attacks on tiny pools.
