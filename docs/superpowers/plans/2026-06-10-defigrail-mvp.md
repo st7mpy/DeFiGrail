@@ -1026,7 +1026,9 @@ Set `CRON_SECRET` in Vercel env (cron invocations then carry it automatically).
   - `search`: open home, press Control+K, type "sandwich", click MEV result → URL is `/learn/mev`.
   - `topic`: visit `/learn/impermanent-loss` → prereq chain links to `/learn/mm-primer`; ILCurve svg present; fill calculator 2000/3000 → `-2.02%` visible.
 - [ ] **Step 3:** `npm run e2e` → 3 passed.
-- [ ] **Step 4: Launch checklist** — Vercel env vars set (`DATABASE_URL`, `ADMIN_PASSWORD`, `CRON_SECRET`, `IP_SALT`); cron visible in Vercel dashboard; warm `/api/news/refresh` once in prod; submit + approve one real article in prod; update README status line to "🚀 live" with the production URL.
+- [ ] **Step 4: Launch checklist** — **disable Vercel Deployment Protection for Production** (Settings → Deployment Protection; it's ON by default and currently puts an SSO auth wall in front of the public site — leave it on for Preview only); Vercel env vars set (`DATABASE_URL`, `ADMIN_PASSWORD`, `CRON_SECRET`, `IP_SALT`); cron visible in Vercel dashboard; warm `/api/news/refresh` once in prod; submit + approve one real article in prod; update README status line to "🚀 live" with the production URL.
+
+> **Phase 0 note (Task 3, done):** project linked as `siddharth77work-gmailcoms-projects/defigrail`, GitHub auto-deploy connected, CI green, first prod deploy Ready. Deployment Protection is ON (expected) — see the disable step above before public launch.
 - [ ] **Step 5: Commit + push** — `git commit -am "test: e2e flows + launch checklist" && git push`
 
 ---
