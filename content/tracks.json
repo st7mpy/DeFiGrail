@@ -1,0 +1,7 @@
+{
+  "foundations":    { "label": "Foundations",     "era": "v0",       "topics": ["uniswap-v2", "makerdao", "compound", "aave-v1", "tradfi-mapping"] },
+  "composability":  { "label": "Composability",   "era": "v1",       "topics": ["pickle-finance", "sushiswap"] },
+  "frontier":       { "label": "Modern Frontier", "era": "v2",       "topics": ["uniswap-v3", "ohm-olympusdao", "pendle", "fluid", "euler"] },
+  "esoteric":       { "label": "Esoteric",        "era": "esoteric", "topics": ["mm-primer", "impermanent-loss", "ptyt-zero-coupon", "mev", "multi-utilization"] },
+  "infrastructure": { "label": "Infrastructure",  "era": "infra",    "topics": ["bot-architecture"] }
+}
