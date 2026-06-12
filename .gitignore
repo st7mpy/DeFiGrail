@@ -30,5 +30,3 @@ yarn-error.log*
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-
-.vercel
