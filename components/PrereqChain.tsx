@@ -8,7 +8,7 @@ export default function PrereqChain({ items }: { items: { slug: string; title: s
       {items.map(p => (
         <span key={p.slug} className="flex items-center gap-2">
           <Link href={`/learn/${p.slug}`} className="border-b border-dotted border-esoteric text-txt hover:text-esoteric">{p.title}</Link>
-          <span className="text-esoteric/70">→</span>
+          <span aria-hidden="true" className="text-esoteric/70">→</span>
         </span>
       ))}
       <span className="text-esoteric">THIS MODULE</span>
