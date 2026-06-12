@@ -1,0 +1,43 @@
+---
+title: "Euler"
+slug: "euler"
+era: "v2"
+track: "frontier"
+order: 5
+prereqs: ["compound"]
+related: []
+tradfiAnchor: "Risk-tiered prime brokerage"
+summary: "Permissionless lending with risk-tiered assets, reactive PID rates, soft liquidations."
+significance: 16
+---
+
+## 01 · Concept — what problem does it solve?
+
+Compound and Aave gate listings through governance — slow, political, and capped at a few dozen blue chips. Euler made lending **permissionless**: any asset with a Uniswap v3 oracle could get a money market. The insight that makes this survivable is **risk tiering**: untrusted assets can be borrowed but never used as collateral, quarantining long-tail risk away from the core pool.
+
+## 02 · Mechanics
+
+- **Asset tiers:** isolation (borrow alone, no collateral), cross (borrow alongside others), collateral (full privileges) — promotion via governance.
+- **Reactive rates:** a PID controller targets utilization dynamically instead of a fixed kink curve — rates adapt to market conditions per block.
+- **eTokens / dTokens:** tokenized deposits and tokenized debt; dTokens make synthetic leverage and "minting" loops first-class operations.
+- **Soft liquidations:** Dutch-auction discount that starts near zero and grows — minimizing liquidation penalty instead of fixed 5–13% bonuses.
+
+## 03 · Formulas
+
+```text
+// reactive interest rate (PID on utilization)
+r(t+1) = r(t) + kp·e(t) + ki·Σe   e = U − U_target
+
+// dutch-auction liquidation discount
+discount = f(HF) → grows as health factor falls
+   vs fixed 5–13% bonus in Compound/Aave
+
+// synthetic leverage via mint
+mint: eToken + dToken in equal measure → loop
+```
+
+## 04 · Edge cases & risks
+
+- **Mar 2023 hack — $197M** — `donateToReserves` let an attacker burn eTokens without a health check, then self-liquidate at a discount via flash loan. Largest DeFi hack of 2023; remarkably, the attacker returned essentially all funds within weeks.
+- **Permissionless ≠ safe** — long-tail listings concentrate oracle-manipulation risk; v3 TWAPs on thin pools are attackable.
+- **Euler v2 (2024)** — rebuilt as the EVK: a kit where anyone deploys customized, isolated vaults connected by the EVC — modularity as the answer to monolithic risk.

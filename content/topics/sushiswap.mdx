@@ -1,0 +1,40 @@
+---
+title: "SushiSwap"
+slug: "sushiswap"
+era: "v1"
+track: "composability"
+order: 2
+prereqs: ["uniswap-v2"]
+related: ["ohm-olympusdao"]
+tradfiAnchor: "Hostile takeover via equity incentives"
+summary: "Uniswap fork that executed the vampire attack — liquidity bought with SUSHI emissions."
+significance: 17
+---
+
+## 01 · Concept — what problem does it solve?
+
+If code is open-source, what's defensible? SushiSwap forked Uniswap v2 byte-for-byte and answered: **nothing but liquidity** — and liquidity can be bought. By paying SUSHI tokens to anyone staking Uniswap LP tokens, then migrating that liquidity wholesale, Sushi executed DeFi's first **vampire attack**: ~$1B of Uniswap's liquidity walked out the door in two weeks.
+
+## 02 · Mechanics
+
+- **Vampire attack:** stage 1 — reward staked UNI-V2 LP tokens with SUSHI emissions; stage 2 — atomically redeem them and re-deposit into identical Sushi pools.
+- **xSUSHI:** stake SUSHI to receive 0.05% of the 0.30% swap fee (LPs keep 0.25%) — fee-sharing token holders, unlike UNI at the time.
+- **MasterChef:** the emissions contract that became the most-forked farming primitive in DeFi.
+- **BentoBox:** later-era vault that lends idle pool capital out, layering yield under the AMM (proto-Fluid thinking).
+
+## 03 · Formulas
+
+```text
+// MasterChef reward accounting
+pending = user.amount · accSushiPerShare − user.rewardDebt
+accSushiPerShare += emission·Δblocks / totalStaked
+
+// fee split per swap
+0.30% total = 0.25% → LPs + 0.05% → xSUSHI
+```
+
+## 04 · Edge cases & risks
+
+- **Chef Nomi incident** — anonymous founder sold the dev-fund SUSHI (~$14M) mid-launch, cratering trust; later returned it. Key-person risk is real even in "decentralized" protocols.
+- **Mercenary liquidity** — emissions-bought liquidity leaves when emissions fall; the problem OlympusDAO's POL was invented to solve. See [OHM](/learn/ohm-olympusdao).
+- **Fork game theory** — the attack permanently changed protocol design: token launches, fee switches, and liquidity moats all trace to this event.

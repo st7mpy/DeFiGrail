@@ -1,0 +1,27 @@
+---
+title: "Prerequisite Primer — TradFi Market Making"
+slug: "mm-primer"
+era: "esoteric"
+track: "esoteric"
+order: 1
+prereqs: []
+related: ["impermanent-loss"]
+summary: "Bid-ask spreads, inventory risk, delta/gamma, adverse selection — the TradFi market-making concepts every LP question reduces to."
+significance: 14
+---
+
+## P1 · Bid-ask spread = inventory risk premium
+
+A market maker quotes two prices and earns the spread — but the spread is not free money. It is **compensation for inventory risk**: between your buy and your offsetting sell, the price can move against the inventory you're warehousing. Wider volatility → wider spreads. An AMM's price-impact curve plays exactly this role: it is a spread, set by formula instead of by a trader.
+
+## P2 · Delta & gamma
+
+**Delta**: how your position value changes with price. **Gamma**: how your delta itself changes. A position that loses faster the further price moves in either direction is **short gamma** — the classic example is selling a straddle. Remember this shape: value flat near entry, bleeding on both tails. LP positions have exactly this profile.
+
+## P3 · Adverse selection — why MMs lose to informed traders
+
+Counterparties are not random. The trader hitting your quote disproportionately **knows something you don't** — your stale quote is their profit. Market makers survive by skewing quotes and pulling them fast. An AMM **cannot pull its quote**: it fills every informed (arbitrage) trade at a stale price, every block. This is the deepest reason LPs underperform.
+
+## P4 · The synthesis
+
+An AMM LP is a market maker who: (1) earns a fixed-formula spread (the fee), (2) holds inventory with short-gamma payoff (divergence loss), and (3) cannot refuse informed flow (adverse selection / LVR). Whether LPing is profitable is just the TradFi question: **do fees collected exceed losses to informed flow?**

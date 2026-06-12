@@ -1,0 +1,45 @@
+---
+title: "Uniswap v3"
+slug: "uniswap-v3"
+era: "v2"
+track: "frontier"
+order: 1
+prereqs: ["uniswap-v2", "impermanent-loss"]
+related: []
+tradfiAnchor: "Limit-order market making / short straddle"
+summary: "Concentrated liquidity: LPs pick price ranges. Up to ~4000× capital efficiency, active risk."
+significance: 23
+---
+
+## 01 · Concept — what problem does it solve?
+
+In v2, liquidity is spread along the entire price curve from 0 to ∞ — most of it never touched. v3 lets each LP choose a **price range** and concentrate capital there, earning fees only while price is inside it. The same depth can be provided with up to ~4000× less capital. The cost: LPing stops being passive. Range selection is an active view on volatility — v3 LPs are functionally **short gamma**.
+
+## 02 · Mechanics
+
+- **Ticks:** price space is discretized as powers of 1.0001; positions are defined between two ticks.
+- **Virtual reserves:** inside a range the pool behaves like a v2 pool with much larger "virtual" reserves — hence the efficiency gain.
+- **Positions as NFTs:** every (range, amount) tuple is unique, so positions are non-fungible — breaking v2-style passive LP composability.
+- **Fee tiers:** 0.01% / 0.05% / 0.30% / 1% pools per pair; LPs select the tier matching the pair's volatility.
+- **Out of range:** position converts fully into one asset and earns nothing until price returns.
+
+## 03 · Formulas
+
+```text
+// tick i ↔ price
+P(i) = 1.0001ⁱ
+
+// liquidity L in range [Pa, Pb] at price P
+x = L·(√Pb − √P) / (√P·√Pb)
+y = L·(√P − √Pa)
+
+// capital efficiency vs v2 (range [Pa,Pb])
+eff = 1 / (1 − (Pa/Pb)^¼)   → ~4000× at ±0.05%
+```
+
+## 04 · Edge cases & risks
+
+- **Amplified IL** — concentration multiplies divergence loss inside the range; narrow ranges are leveraged short-volatility positions. See [Impermanent Loss](/learn/impermanent-loss).
+- **LVR / informed flow** — fast arbitrageurs rebalance the pool against stale prices; passive v3 LPs systematically lose to them (loss-versus-rebalancing).
+- **JIT liquidity** — bots add a razor-thin range one block before a whale swap, capture the fee, withdraw — diluting honest LPs.
+- **Oracle subtlety** — v3 TWAPs use geometric mean of ticks; thin-liquidity tails make manipulation cheaper than v2's full-range depth.

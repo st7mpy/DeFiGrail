@@ -1,0 +1,43 @@
+---
+title: "OHM — OlympusDAO"
+slug: "ohm-olympusdao"
+era: "v2"
+track: "frontier"
+order: 2
+prereqs: ["sushiswap"]
+related: []
+tradfiAnchor: "Central bank OMO + prisoner's dilemma"
+summary: "OlympusDAO — protocol-owned liquidity via bonds, rebase staking, (3,3) game theory."
+significance: 16
+---
+
+## 01 · Concept — what problem does it solve?
+
+SushiSwap proved rented liquidity leaves. Olympus inverted the model: instead of paying emissions to renters, the protocol **buys its own liquidity outright** by selling discounted OHM bonds for LP tokens. The treasury becomes the LP — liquidity that can never leave — and earns its own trading fees. Wrapped around it: a rebase-staking game whose payoff matrix, **(3,3)**, became a meme and a cautionary tale in equal measure.
+
+## 02 · Mechanics
+
+- **Bonding:** sell DAI / FRAX / OHM-DAI LP to the treasury for OHM at a discount, vesting over ~5 days → the treasury accumulates assets + POL.
+- **Staking rebase:** staked OHM balance grows every ~8h epoch; APYs quoted in the thousands of % (paid in supply expansion, not external yield).
+- **Backing:** each OHM is backed by ≥1 DAI of treasury assets; market price above backing = pure premium.
+- **(3,3):** if everyone stakes, price-supportive equilibrium; if anyone sells, payoffs degrade — cooperation enforced only by belief.
+
+## 03 · Formulas
+
+```text
+// rebase supply growth
+supply(t+1) = supply(t) · (1 + r_epoch)
+APY = (1 + r_epoch)^1095 − 1     3 epochs/day
+
+// bond discount ROI
+ROI = (P_market − P_bond) / P_bond
+
+// premium over backing
+premium = P_market / backing_per_OHM − 1
+```
+
+## 04 · Edge cases & risks
+
+- **Reflexive unwind** — Jan 2022: premium compressed, leveraged stakers (OHM as collateral elsewhere) liquidated, −90%+. (3,3) has no enforcement mechanism — it's (−3,−3) on the way down.
+- **APY illusion** — rebase yield is denominated in OHM; if price falls faster than supply grows, real return is negative regardless of quoted APY.
+- **The durable idea** — POL itself survived the crash: protocol-owned liquidity is now standard treasury strategy across DeFi.

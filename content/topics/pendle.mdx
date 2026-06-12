@@ -1,0 +1,44 @@
+---
+title: "Pendle"
+slug: "pendle"
+era: "v2"
+track: "frontier"
+order: 3
+prereqs: ["aave-v1", "compound"]
+related: ["ptyt-zero-coupon"]
+tradfiAnchor: "Bond stripping (STRIPS) + rate swaps"
+summary: "Yield tokenization: split yield-bearing assets into PT (principal) + YT (yield)."
+significance: 19
+---
+
+## 01 · Concept — what problem does it solve?
+
+Every DeFi yield is floating. Pendle imports the oldest fixed-income trick — **coupon stripping** — on-chain: take a yield-bearing asset, split it into a **Principal Token** (PT, redeems 1:1 at maturity) and a **Yield Token** (YT, receives all yield until maturity). Buy PT at a discount → locked fixed rate. Buy YT → leveraged long on the yield itself. A yield curve, term structure, and rates market for DeFi.
+
+## 02 · Mechanics
+
+- **SY wrapper:** any yield source (stETH, aUSDC, GLP…) is standardized into SY, then split: `SY → PT + YT`.
+- **PT:** trades below par, converges to par at maturity — discount = implied fixed yield.
+- **YT:** streams the underlying yield to its holder; decays toward zero at maturity.
+- **AMM:** custom curve with time-decaying curvature concentrates liquidity around the fair PT price as maturity approaches; quotes are effectively interest-rate quotes.
+
+## 03 · Formulas
+
+```text
+// conservation
+PT + YT = SY (1 unit of underlying)
+
+// zero-coupon pricing
+P_PT ≈ 1 / (1 + r)ᵗ
+implied_APY = (1 / P_PT)^(1/t) − 1
+
+// YT as the residual
+P_YT = 1 − P_PT
+```
+
+## 04 · Edge cases & risks
+
+- **YT → 0 at maturity** — YT is a pure decaying claim; holding past the point where accrued yield covers the purchase price is a guaranteed loss.
+- **Fragmented liquidity** — every (asset, maturity) pair is its own market; long-dated maturities trade thin.
+- **Underlying risk passes through** — a stETH depeg or aUSDC freeze hits PT/YT holders; the fixed rate is fixed only in underlying terms.
+- Full ZCB/swap mapping in [Pendle PT Tokens as Zero-Coupon Bonds](/learn/ptyt-zero-coupon).

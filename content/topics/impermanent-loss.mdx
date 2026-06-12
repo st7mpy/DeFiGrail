@@ -1,0 +1,44 @@
+---
+title: "Impermanent Loss (Divergence Loss)"
+slug: "impermanent-loss"
+era: "esoteric"
+track: "esoteric"
+order: 2
+prereqs: ["mm-primer", "uniswap-v2"]
+related: ["uniswap-v3"]
+tradfiAnchor: "Short-gamma inventory P&L"
+summary: "Divergence loss: why LPs underperform holding. IL = 2√P/(1+P) − 1."
+significance: 14
+---
+
+## 01 · Concept — what problem does it solve?
+
+An LP's pool share automatically rebalances *against* the trend: as a token pumps, the pool sells it; as it dumps, the pool buys more. So an LP always ends up holding less of the winner and more of the loser than if they had just held — that shortfall versus holding is **impermanent loss**. "Impermanent" because it vanishes if price returns to entry; permanent the moment you withdraw at a diverged price.
+
+It is exactly the short-gamma inventory loss from the [TradFi Market Making primer](/learn/mm-primer) — realized via arbitrageurs who do the rebalancing at the LP's expense.
+
+## 02 · Mechanics
+
+- **Driver:** price *divergence* from entry ratio, in either direction. Symmetric: 2× up hurts the same as 2× down (−5.7%).
+- **Volatility link:** expected IL grows with realized variance — LPs are short volatility; fees are the option premium they collect.
+- **Profitability condition:** `fees earned > IL realized`. High-volume/low-volatility pairs (stable pairs) are best; volatile, drifting pairs are worst.
+- **v3 amplification:** concentration multiplies both fees and IL; a narrow range is a leveraged short straddle.
+
+## 03 · Formulas
+
+```text
+// P = current_price / entry_price
+V_hodl = ½(1 + P)        normalized
+V_lp   = √P
+IL(P)  = V_lp/V_hodl − 1 = 2√P/(1+P) − 1
+
+// reference points
+P=1.25 → −0.6%   P=2 → −5.7%
+P=1.5  → −2.0%   P=3 → −13.4%
+P=4    → −20.0%  P=5 → −25.5%
+```
+
+## 04 · Edge cases & risks
+
+- **LVR refinement** — modern research (loss-versus-rebalancing) separates IL into hedgeable inventory drift + unhedgeable losses to arbitrageurs. LVR is the true cost of LPing.
+- **IL can exceed fees forever** — in trending markets no fee tier compensates; "impermanent" is marketing.

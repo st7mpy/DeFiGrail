@@ -1,0 +1,44 @@
+---
+title: "MakerDAO"
+slug: "makerdao"
+era: "v0"
+track: "foundations"
+order: 2
+prereqs: []
+related: []
+tradfiAnchor: "Collateralized repo + currency board"
+summary: "CDP-backed DAI stablecoin. On-chain repo desk with code-enforced margin calls."
+significance: 22
+---
+
+## 01 · Concept — what problem does it solve?
+
+DeFi needs a dollar that doesn't depend on a bank. MakerDAO mints **DAI**, a soft-pegged stablecoin, against overcollateralized on-chain debt positions — a repo desk where the borrower is anonymous, the haircut is enforced by code, and margin calls are executed by liquidation keepers instead of a credit officer.
+
+## 02 · Mechanics
+
+- **Vault (CDP):** lock collateral (ETH, wBTC, LP tokens…), mint DAI up to the collateral ratio floor.
+- **Stability fee:** continuously compounding interest on minted DAI, set by MKR governance per collateral type.
+- **Liquidation:** if CR falls below the liquidation ratio, the vault is auctioned (collateral sold for DAI) plus a penalty (~13%).
+- **Peg defense:** DAI Savings Rate (DSR) modulates demand; the Peg Stability Module swaps USDC↔DAI 1:1 at the margin.
+
+## 03 · Formulas
+
+```text
+// collateralization ratio — must hold
+CR = (collateral · price_oracle) / debt ≥ LR
+   e.g. LR(ETH-A) ≈ 145–170% over time
+
+// stability fee accrual (per-second compounding)
+debt(t) = debt₀ · (1 + fee)ᵗ
+
+// max mintable DAI
+DAI_max = collateral · price / LR
+```
+
+## 04 · Edge cases & risks
+
+- **Black Thursday (Mar 2020)** — ETH −50%, gas spiked, keepers stalled; zero-bid auctions liquidated vaults for ~$0. Led to auction redesign (Liquidations 2.0).
+- **Oracle risk** — the whole system is downstream of the price feed; Maker uses delayed (1hr) oracle security modules to allow reaction time.
+- **Governance risk** — MKR holders control parameters; a malicious vote could mint unbacked DAI (mitigated by the GSM pause delay).
+- **Emergency Shutdown** — final backstop: freeze system, let DAI holders redeem collateral pro-rata.

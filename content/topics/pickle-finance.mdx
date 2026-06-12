@@ -1,0 +1,42 @@
+---
+title: "Pickle Finance"
+slug: "pickle-finance"
+era: "v1"
+track: "composability"
+order: 1
+prereqs: ["compound", "uniswap-v2"]
+related: []
+tradfiAnchor: "Fund-of-funds with auto-reinvestment"
+summary: "pJar yield optimizer — auto-harvesting strategy vaults with DILL ve-governance."
+significance: 15
+---
+
+## 01 · Concept — what problem does it solve?
+
+Yield in DeFi Summer was fragmented across dozens of farms, and compounding it manually burned gas. Pickle pooled deposits into **pJars** — strategy vaults that harvest reward tokens, sell them, and reinvest automatically. Socialized gas costs, professionalized strategy management, passive depositors. The yield-aggregator pattern (with Yearn) that every "vault" product since descends from.
+
+## 02 · Mechanics
+
+- **pJars:** deposit LP tokens or single assets → strategy contract deploys them into Compound, Curve, Uniswap farms → harvests & compounds.
+- **Strategy pattern:** jar (accounting) and strategy (capital deployment) are separate contracts — strategies are swappable by governance.
+- **DILL:** vote-escrowed PICKLE (lock up to 4 years) boosts farm rewards and directs emissions — the ve-tokenomics pattern.
+- **Fees:** performance fee on harvested yield funds the protocol and DILL lockers.
+
+## 03 · Formulas
+
+```text
+// jar share price (ratio) only grows with harvests
+ratio = totalAssets / totalShares
+
+// compounding APY from periodic harvest APR
+APY = (1 + APR/n)ⁿ − 1      n = harvests/yr
+
+// DILL boost (ve-model)
+boost ∝ min(deposit, 0.4·deposit + 0.6·pool·share_DILL)
+```
+
+## 04 · Edge cases & risks
+
+- **Nov 2020 exploit** — $19.7M DAI drained via a fake "evil jar" passed to a swap function that didn't validate jar addresses. Canonical lesson: COMPOSABILITY = INHERITED ATTACK SURFACE.
+- **Strategy risk stacking** — a pJar on a Curve LP inherits Curve risk + underlying stablecoin risk + Pickle contract risk, multiplicatively.
+- **Aftermath** — merged into the Yearn ecosystem weeks after the hack; consolidation as a survival strategy.
