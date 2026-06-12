@@ -1,0 +1,46 @@
+---
+title: "Multi-Utilization Liquidity Layers"
+slug: "multi-utilization"
+era: "esoteric"
+track: "esoteric"
+order: 5
+prereqs: ["compound", "uniswap-v2", "fluid"]
+related: []
+tradfiAnchor: "Rehypothecation + cross-margining"
+summary: "One collateral pool, many simultaneous jobs — rehypothecation with public books."
+significance: 13
+---
+
+## 01 · Concept — what problem does it solve?
+
+Isolated protocols give every dollar one job. A multi-utilization layer gives every dollar **several simultaneous jobs**: the same collateral pool backs lending markets, vault positions, and DEX liquidity at once. This is rehypothecation — the engine of TradFi prime brokerage — rebuilt with on-chain transparency instead of trust in a broker's books.
+
+## 02 · Mechanics
+
+Efficiency comparison:
+
+```text
+// isolated stack: $300 to run 3 functions
+lend $100 + LP $100 + collateral $100
+
+// multi-utilization: ~$100–150 runs all 3
+same $100: earns lend yield
+           + earns swap fees (smart collateral)
+           + backs a borrow position
+
+capital_efficiency ≈ 2–3× isolated baseline
+```
+
+## 03 · Formulas
+
+Risk propagation mechanics:
+
+- **Shared failure domain:** a bug in any consumer protocol is a claim on the same pot — risk is no longer compartmentalized per product.
+- **Liquidity races:** under stress, lenders withdrawing, LPs exiting, and liquidators seizing all compete for the same exit liquidity simultaneously.
+- **Correlation amplification:** the events that spike one demand spike them all (volatility → withdrawals + liquidations + swap volume at once).
+
+## 04 · Edge cases & risks
+
+The TradFi lesson:
+
+Rehypothecation works until the run. 2008's prime-brokerage chains collapsed because nobody could see how many claims existed on the same collateral. On-chain layers make the claim graph **public and provable** — the leverage is the same, but the opacity isn't. Whether transparency alone prevents runs is DeFi's open experiment. Ceilings, per-product caps, and aggregated liquidations are the current mitigations.

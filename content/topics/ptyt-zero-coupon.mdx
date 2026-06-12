@@ -1,0 +1,47 @@
+---
+title: "Pendle PT Tokens as Zero-Coupon Bonds"
+slug: "ptyt-zero-coupon"
+era: "esoteric"
+track: "esoteric"
+order: 3
+prereqs: ["pendle"]
+related: []
+tradfiAnchor: "ZCB + interest rate swap"
+summary: "Pendle PT as zero-coupon bond, YT as the floating leg of an interest rate swap."
+significance: 13
+---
+
+## 01 · Concept — what problem does it solve?
+
+The TradFi fixed-income toolkit, rebuilt on-chain. Every Pendle instrument maps exactly to a classic rate product:
+
+- **PT ≡ zero-coupon bond:** buy below par, redeem at par at maturity, no coupons in between. The discount *is* the yield. A PT-stETH at 0.96 maturing in 6 months is a 6-month zero yielding ~8.4% annualized.
+- **YT ≡ receive-floating leg of an interest rate swap:** pay fixed up front (the YT price), receive the floating yield stream until maturity. Profitable iff realized yield exceeds implied yield at purchase.
+- **PT + YT ≡ the underlying:** the swap decomposition identity — par = principal leg + interest leg.
+
+## 02 · Mechanics
+
+- **Discounting:** PT trades at the present value of par under the market's implied rate; the AMM quote ↔ implied APY are the same number in two units.
+- **Convergence:** PT price grinds deterministically toward 1.0 at maturity ("pull to par") regardless of rate moves in between.
+- **Carry trade view:** long YT = long realized-vs-implied yield spread; long PT = short it (plus the fixed rate).
+
+## 03 · Formulas
+
+```text
+// zero-coupon pricing (t years to maturity)
+P_PT = 1 / (1 + r)ᵗ
+r    = (1/P_PT)^(1/t) − 1     implied APY
+
+// duration — rate sensitivity
+D ≈ t   (zeros: duration = maturity)
+ΔP/P ≈ −D · Δr
+
+// YT breakeven
+realized_yield(t→T) ≷ P_YT paid
+```
+
+## 04 · Edge cases & risks
+
+- **Duration risk is real** — long-dated PTs swing hard when implied yields reprice (e.g., points-meta hype inflating then deflating implied APYs).
+- **The DeFi yield curve** — plotting implied APY across Pendle maturities gives a true on-chain term structure; it inverts when near-term yield hype exceeds long-run expectations.
+- **Credit ≠ risk-free** — TradFi zeros discount against a risk-free curve; PT discounts embed smart-contract and underlying-protocol risk premia.

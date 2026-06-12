@@ -1,0 +1,43 @@
+---
+title: "Fluid"
+slug: "fluid"
+era: "v2"
+track: "frontier"
+order: 4
+prereqs: ["aave-v1"]
+related: ["multi-utilization"]
+tradfiAnchor: "Prime brokerage cross-margining"
+summary: "Unified liquidity layer — one pool of capital serving lending, vaults and DEX at once."
+significance: 17
+---
+
+## 01 · Concept — what problem does it solve?
+
+DeFi fragments capital: the same USDC sits idle separately in a lending pool, a DEX pool, and a vault. Fluid builds one **shared liquidity layer** that every product (lending, vaults, DEX) draws from — so a single unit of capital can simultaneously earn lending yield, back a borrow position, and provide swap liquidity. "Smart collateral" earns trading fees; "smart debt" gets cheaper as traders swap through it.
+
+## 02 · Mechanics
+
+- **Liquidity layer:** single contract holding all assets; protocols on top get allowances and ceilings, not separate pools.
+- **Smart collateral:** vault collateral doubles as DEX liquidity — borrowers earn LP fees that offset borrow rates.
+- **Smart debt:** debt positions double as swap liquidity on the debt side; swap fees reduce effective borrow APR.
+- **Liquidation engine:** liquidates in aggregated tranches against the DEX itself — up to ~95% LTV with penalties as low as ~0.1%.
+
+## 03 · Formulas
+
+```text
+// capital efficiency vs isolated pools
+eff = Σ utilizationsᵢ of one $ across i functions
+   isolated: $1 → 1 job; Fluid: $1 → 2–3 jobs
+
+// effective borrow rate with smart debt
+r_eff = r_borrow − feeAPR_swaps_through_debt
+
+// vault safety
+LTV ≤ ~95% · penalty ≥ ~0.1% (range-based liq.)
+```
+
+## 04 · Edge cases & risks
+
+- **Risk propagation** — one shared layer means one shared failure domain; a bug or bad-debt event in any product can stress every product. Full treatment in [Multi-Utilization Liquidity Layers](/learn/multi-utilization).
+- **Utilization spikes** — multiple products competing for the same exit liquidity can gate withdrawals under stress (ceilings mitigate).
+- **Liquidation dependency** — liquidations route through the in-house DEX; its depth in a crash is the binding constraint.

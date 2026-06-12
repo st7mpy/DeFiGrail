@@ -1,0 +1,45 @@
+---
+title: "Compound"
+slug: "compound"
+era: "v0"
+track: "foundations"
+order: 3
+prereqs: []
+related: []
+tradfiAnchor: "Money market fund, rate set by utilization"
+summary: "Algorithmic money market — interest rates set purely by pool utilization."
+significance: 21
+---
+
+## 01 · Concept — what problem does it solve?
+
+A money market with no rate desk: interest rates are a pure function of **utilization**. Lenders deposit into a shared pool and receive **cTokens**; borrowers draw from the pool against collateral. When the pool runs dry, rates spike until lenders arrive or borrowers repay — supply and demand cleared by formula, block by block.
+
+## 02 · Mechanics
+
+- **cTokens:** interest-bearing receipts. The exchange rate vs. the underlying only ever increases as interest accrues.
+- **Kinked rate model:** rates rise gently up to a target utilization ("kink", e.g. 80%), then steeply — protecting exit liquidity.
+- **Collateral factors:** each asset has a max borrow LTV; cross-asset borrowing against a portfolio of collateral.
+- **COMP governance:** token-holder voting on listings, factors, rate models — the template every protocol copied.
+
+## 03 · Formulas
+
+```text
+// utilization
+U = borrows / (cash + borrows − reserves)
+
+// kinked borrow rate
+r_b = base + U·m₁                   U ≤ kink
+r_b = base + kink·m₁ + (U−kink)·m₂  U > kink
+
+// supply rate & cToken exchange rate
+r_s = r_b · U · (1 − reserveFactor)
+rate = (cash + borrows − reserves) / cTokenSupply
+```
+
+## 04 · Edge cases & risks
+
+- **100% utilization** — lenders cannot withdraw and liquidators cannot seize; the steep slope above the kink exists to make this state self-correcting.
+- **Oracle manipulation** — Nov 2020: DAI printed 30% high on Coinbase Pro feed → ~$89M of positions wrongly liquidatable.
+- **Token distribution farming** — COMP emissions briefly made borrowing net-profitable, inflating utilization with circular positions.
+- **Governance latency** — a buggy Proposal 62 (2021) mis-distributed ~$80M COMP; the timelock meant no fast fix existed.

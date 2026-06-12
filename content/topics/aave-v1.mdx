@@ -1,0 +1,42 @@
+---
+title: "Aave v1"
+slug: "aave-v1"
+era: "v0"
+track: "foundations"
+order: 4
+prereqs: ["compound"]
+related: []
+tradfiAnchor: "Prime broker + intraday credit line"
+summary: "Pooled lending + flash loans: uncollateralized atomic credit, repaid or reverted."
+significance: 21
+---
+
+## 01 · Concept — what problem does it solve?
+
+Aave generalized pooled lending and introduced DeFi's only truly novel primitive: the **flash loan** — uncollateralized credit of any size, valid for exactly one transaction. If the loan plus fee isn't repaid by the end of the transaction, the entire transaction reverts as if it never happened. Credit risk is replaced by **atomicity**.
+
+## 02 · Mechanics
+
+- **aTokens:** rebasing receipts pegged 1:1 to the underlying; your wallet balance literally grows every block via a liquidity index.
+- **Flash loans:** borrow → arbitrary logic → repay + 0.09% fee, all inside one atomic transaction.
+- **Rate switching:** borrowers can toggle between variable and "stable" (slow-moving) rates — an on-chain fixed/floating choice.
+- **Health factor:** portfolio-level liquidation threshold across all collateral and debt.
+
+## 03 · Formulas
+
+```text
+// flash loan repayment condition (atomic)
+repay = principal · (1 + 0.0009)   else REVERT
+
+// aToken balance via liquidity index
+balance(t) = principal · index(t) / index(t₀)
+
+// health factor — liquidatable below 1
+HF = Σ(collateralᵢ · liqThresholdᵢ) / Σ debtⱼ
+```
+
+## 04 · Edge cases & risks
+
+- **Flash loans weaponized** — they democratize whale-sized capital: most oracle-manipulation and governance attacks since 2020 are flash-loan funded. The primitive is neutral; the integrations were not.
+- **Stable rates aren't fixed** — they can be rebalanced upward if pool conditions degrade; users mistaking them for true fixed rates get surprised.
+- **Shared-pool contagion** — one bad collateral listing endangers the whole pool (the lesson Euler/Fluid iterate on).

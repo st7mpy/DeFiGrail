@@ -1,0 +1,46 @@
+---
+title: "MEV — Maximal Extractable Value"
+slug: "mev"
+era: "esoteric"
+track: "esoteric"
+order: 4
+prereqs: ["uniswap-v2"]
+related: ["bot-architecture"]
+tradfiAnchor: "Front-running + payment for order flow"
+summary: "Value extracted via transaction ordering — sandwiches, salmonella traps, builder auctions."
+significance: 15
+---
+
+## 01 · Concept — what problem does it solve?
+
+Whoever orders transactions in a block can profit from that ordering. Pending transactions sit in a public **mempool**, fully readable; an AMM swap's price impact is deterministic. So a searcher can compute, to the wei, the profit from inserting their own transactions around yours. MEV is the institutionalization of this: an industrial supply chain extracting value from transaction ordering rights.
+
+## 02 · Mechanics
+
+Sandwich attack anatomy:
+
+```text
+// three transactions, one block, exact order
+1. ATTACKER BUY   push price up to victim's limit
+2. VICTIM SWAP    fills at the worst tolerated price
+3. ATTACKER SELL  unwind into post-victim price
+
+profit ≈ victim_slippage_tolerance
+       − 2·gas − pool_fees − builder_tip
+```
+
+- **Enabler:** the victim's slippage tolerance setting — the attacker consumes exactly that budget.
+
+## 03 · Formulas
+
+Salmonella — poisoning the bots:
+
+A honeypot ERC-20 whose `transfer()` silently delivers ~10% of the stated amount to any address not on the deployer's whitelist. Sandwich bots simulate the front-run, see a profitable fill, execute — and receive poisoned inventory they can't sell back. The predator's own automation becomes the attack surface. Lesson: **simulation results on adversarial contracts are not promises**.
+
+## 04 · Edge cases & risks
+
+Flashbots & the MEV supply chain:
+
+- **Private relay:** bundles go straight to block builders via `eth_sendBundle` — never touching the public mempool, so they can't be front-run; failed bundles pay nothing.
+- **Supply chain:** `searchers` (find opportunities, sign bundles) → `builders` (assemble optimal blocks) → `validators` (sell their ordering rights via MEV-Boost to the highest-bidding builder).
+- **Consequence:** ordering rights are now a transparent auction market — MEV got formalized, not eliminated. Private order flow and PFOF dynamics are re-emerging on-chain.

@@ -1,0 +1,103 @@
+---
+title: "Trading Bot Architecture"
+slug: "bot-architecture"
+era: "infra"
+track: "infrastructure"
+order: 1
+prereqs: ["mev"]
+related: ["uniswap-v2"]
+summary: "Two bot paradigms separated by two orders of magnitude of latency, and the four-stage build progression between them."
+significance: 18
+---
+
+## The two paradigms
+
+Two architectural paradigms separated by two orders of magnitude of latency — and a four-stage build progression between them. Each stage exists to remove a specific bottleneck of the previous one; read it as an engineering evolution, not a menu.
+
+### v1 — API-based (~500ms)
+
+```text
+USER TRIGGER → REST API → DEX ROUTER → BROADCAST
+    ~5ms        ~200ms      ~100ms       ~200ms
+```
+
+- **Simple, fast to build** — a weekend project in Python; the entire stack is HTTP calls.
+- **The bottleneck:** API round-trips + JSON parsing dominate; you see state seconds after the chain does.
+- **Public mempool exposure:** your transaction is visible pre-confirmation — sandwichable. See [MEV](/learn/mev).
+- **Suitable for:** prototyping, learning, non-latency-sensitive strategies (rebalancing, DCA, slow signals).
+
+### v2 — Indexed state engine (~5–50ms)
+
+```text
+MEMPOOL SUBS → STATE INDEX → O(1) COMPUTE → PRIVATE RELAY
+   stream        local RAM      no RPC call     flashbots
+```
+
+- **Own the state:** a custom indexer syncs pool reserves from event logs — reads are local memory, not RPC.
+- **O(1) computation:** swap outputs computed from indexed state with zero network calls in the hot path.
+- **Private submission:** bundles via Flashbots relay — invisible until included, immune to front-running.
+- **Suitable for:** MEV, competitive arbitrage, anything where being second is being last.
+
+## Four-stage build progression
+
+| Stage | Stack | Latency | Use case | What the upgrade buys you |
+|---|---|---|---|---|
+| 1 | Python + Web3.py + REST | ~500ms | Prototype, learning | Nothing yet — this is the baseline. Validate the strategy logic before optimizing anything. |
+| 2 | Node.js + ethers.js + WebSocket | ~100ms | Semi-serious strategies | Persistent WebSocket kills HTTP handshake overhead; event-driven beats polling 5×. |
+| 3 | Rust + ethers-rs + state indexer | ~10–50ms | Competitive arbitrage | Local state index removes RPC from the hot path entirely; native code kills GC pauses and parse cost. |
+| 4 | C++ / Rust + custom EVM + DPDK | `<1ms` | HFT-grade MEV | Kernel-bypass networking, in-process EVM simulation, colocated nodes — the TradFi HFT playbook, on-chain. |
+
+## Key infrastructure components
+
+### ① Mempool subscription
+
+Stream every pending transaction the instant it hits the node — your sensor for victim swaps and competitor moves.
+
+```js
+// persistent WebSocket to the node
+const ws = new WebSocket("wss://node.example/ws");
+ws.send(JSON.stringify({
+  id: 1, method: "eth_subscribe",
+  params: ["newPendingTransactions"]
+}));
+// each hash → fetch tx → decode calldata → classify
+```
+
+### ② State indexer
+
+Listen to `Swap` / `Mint` / `Burn` events and maintain every pool's reserves in local memory — the chain's state, queryable at RAM speed.
+
+```js
+// on each Sync event (uniswap v2 pools)
+pools[addr] = { r0: reserve0, r1: reserve1 };
+// reorg safety: track block hash, rewind on mismatch
+// cold start: eth_getLogs from pool creation block
+```
+
+### ③ O(1) swap computation
+
+Given indexed reserves, the exact swap output is pure arithmetic — no RPC call, no simulation, no waiting.
+
+```js
+function getAmountOut(dx, rIn, rOut) {
+  const dxFee = dx * 997n;
+  return (dxFee * rOut) /
+         (rIn * 1000n + dxFee);
+}  // mirrors UniswapV2Library exactly
+```
+
+### ④ Flashbots private relay
+
+Submit atomic bundles directly to builders at `relay.flashbots.net` — skip the public mempool entirely. Front-run-resistant; failed bundles cost nothing.
+
+```json
+{ "method": "eth_sendBundle",
+  "params": [{
+    "txs": ["signedTx1", "signedTx2"],
+    "blockNumber": "0x..."
+}]}
+```
+
+## Why the progression matters
+
+Each stage's bottleneck defines the next stage's design. REST round-trips (1) → persistent sockets (2); RPC reads in the hot path (2) → local state index (3); OS network stack + interpreter overhead (3) → kernel bypass and in-process EVM (4). This is the same evolutionary path TradFi HFT walked from screen-scraping to FPGAs — compressed into one ecosystem and about five years.

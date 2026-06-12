@@ -1,0 +1,52 @@
+---
+title: "TradFi ⇄ DeFi Primitives Reference"
+slug: "tradfi-mapping"
+era: "ref"
+track: "foundations"
+order: 5
+prereqs: []
+related: []
+summary: "The Rosetta stone: every DeFi primitive mapped to its TradFi equivalent, with the differences made explicit."
+significance: 16
+---
+
+## The mapping table
+
+DeFi is not novel finance — it is known finance with different settlement, custody, and access properties. This table is the Rosetta stone: find the primitive you know, read across.
+
+| TRADFI PRIMITIVE | DEFI EQUIVALENT | KEY DIFFERENCES |
+|---|---|---|
+| **Market maker** — quotes bid/ask, warehouses inventory | AMM LP ([Uniswap v2](/learn/uniswap-v2) / [Uniswap v3](/learn/uniswap-v3)) | Always on, algorithmic, no quoting — the curve is the spread; cannot pull quotes from informed flow |
+| **Repo / collateralized loan** — secured borrowing with haircut | [MakerDAO](/learn/makerdao) CDP · [Aave](/learn/aave-v1) borrow | Overcollateralized, anonymous, on-chain liquidation by keeper auction instead of margin call |
+| **Money market fund** — short-term pooled cash yield | [Compound](/learn/compound) / [Aave](/learn/aave-v1) lending pool | No maturity, variable rate set by utilization formula, receipt token is itself composable collateral |
+| **Zero-coupon bond** — buy at discount, redeem at par | [Pendle](/learn/pendle) PT token | Tokenized, transferable 24/7, sliceable to any size; discounts embed contract risk, not just rates |
+| **Interest rate swap** — fixed vs floating exchange | [Pendle](/learn/pendle) YT token | Permissionless, no counterparty/ISDA — the swap is a token; no credit risk, only contract risk |
+| **Prime brokerage** — cross-margining, rehypothecation | [Euler](/learn/euler) / [Fluid](/learn/fluid) | Permissionless, risk-tiered by code; collateral reuse is transparent on-chain rather than hidden in broker books |
+| **Central bank (lender of last resort)** — unlimited emergency liquidity | [Flash loan](/learn/aave-v1) | Atomic, zero credit risk, intra-block only — unlimited size but zero duration; reverts if unpaid |
+
+## Money-flow diagrams
+
+```text
+FLOW 01 — LENDING POOL CIRCUIT
+DEPOSITOR → deposits USDC → LENDING POOL → lends at r_b → BORROWER → interest → POOL (−reserve cut) → yield r_s → DEPOSITOR
+```
+
+```text
+FLOW 02 — AMM SWAP & FEE DISTRIBUTION
+TRADER → swap + 0.30% fee → AMM POOL (x·y=k) → fee accrues to reserves → LP SHARE VALUE ↑ → realized on burn → LIQUIDITY PROVIDER
+```
+
+```text
+FLOW 03 — YIELD VAULT LOOP
+DEPOSITOR → deposit → VAULT (pJar) → deploys → STRATEGY → farms → YIELD SOURCE → harvest → sell → reinvest ⟲ → VAULT SHARE PRICE ↑
+```
+
+## Risk concept table
+
+| RISK | WHAT IT IS | CANONICAL FAILURE | MITIGATIONS |
+|---|---|---|---|
+| **Liquidation risk** | Collateral value falls below maintenance threshold; position force-closed with penalty | Black Thursday 2020 — zero-bid Maker auctions | Conservative LTV, health-factor monitoring, partial/soft liquidations (Euler, Fluid) |
+| **Oracle risk** | Protocol acts on a manipulated or stale price feed | Compound/DAI Nov 2020 — $89M wrongful liquidations | TWAPs, multi-source medians (Chainlink), delay modules (Maker OSM), deep-liquidity feeds only |
+| **Smart contract risk** | Bug or unintended interaction in immutable code holding funds | Euler Mar 2023 — $197M via missing health check | Audits, formal verification, bug bounties, timelocked upgrades, code immutability after maturity |
+| **Governance risk** | Token-vote capture or governance error changes the rules against users | Beanstalk 2022 — $182M flash-loan governance takeover | Timelocks, quorum + delay (GSM), vote-escrow (long-term alignment), guardian multisigs |
+| **Impermanent loss risk** | LP underperformance vs holding, from price divergence + informed flow (LVR) | Any volatile pair in a trending market | Stable/correlated pairs, fee tier selection, active range management, IL hedging with options |
