@@ -1,0 +1,177 @@
+[
+  {
+    "term": "AMM",
+    "aliases": ["automated market maker"],
+    "def": "A smart-contract pool that quotes prices algorithmically using a formula (e.g. x·y=k) rather than an order book. Liquidity providers deposit tokens; traders swap against the pool 24/7 and pay fees that accrue to LPs."
+  },
+  {
+    "term": "liquidity provider",
+    "aliases": ["LP"],
+    "def": "An account that deposits token pairs into an AMM pool in exchange for a share of trading fees. LPs take on divergence loss (IL) in exchange for fee income."
+  },
+  {
+    "term": "CDP",
+    "aliases": ["collateralized debt position"],
+    "def": "A locked-collateral vault that lets you mint debt against it, used in protocols like MakerDAO. If the collateral ratio falls below the liquidation threshold the position is force-closed with a penalty."
+  },
+  {
+    "term": "flash loan",
+    "def": "Uncollateralized credit of any size, valid for exactly one transaction. If principal + fee aren't repaid before the transaction ends, the entire transaction reverts — credit risk replaced by atomicity."
+  },
+  {
+    "term": "utilization",
+    "def": "The fraction of a lending pool's supply that is currently borrowed: U = borrows / (cash + borrows − reserves). Utilization drives interest rates in protocols like Compound and Aave."
+  },
+  {
+    "term": "cToken",
+    "def": "Compound's interest-bearing receipt token. The cToken/underlying exchange rate only ever increases as interest accrues — hold cUSDC and your underlying USDC balance grows every block."
+  },
+  {
+    "term": "aToken",
+    "def": "Aave's rebasing receipt token, pegged 1:1 to the deposited asset. Balance increases directly in your wallet via a liquidity index — no exchange rate math needed."
+  },
+  {
+    "term": "rebase",
+    "def": "A token mechanism that adjusts every holder's balance proportionally each epoch instead of changing the price per token. OHM's staking rebase grows supply; aTokens rebase upward as interest accrues."
+  },
+  {
+    "term": "protocol-owned liquidity",
+    "aliases": ["POL"],
+    "def": "LP positions held permanently in the protocol treasury rather than rented from yield-chasing LPs. Pioneered by OlympusDAO: the protocol bonds LP tokens for discounted OHM, owning liquidity that can never be withdrawn."
+  },
+  {
+    "term": "principal token",
+    "aliases": ["PT"],
+    "def": "Pendle's zero-coupon token: redeems 1:1 for the underlying at maturity. Trades below par; the discount is the implied fixed yield. Duration = time to maturity."
+  },
+  {
+    "term": "yield token",
+    "aliases": ["YT"],
+    "def": "Pendle's yield-claim token: receives all floating yield on the underlying until maturity, then expires worthless. Buying YT is a leveraged long on the yield rate itself."
+  },
+  {
+    "term": "tick",
+    "def": "Uniswap v3's discrete price unit: price at tick i = 1.0001^i. LP positions are defined between two ticks; the pool uses virtual reserves within each tick range for capital efficiency."
+  },
+  {
+    "term": "concentrated liquidity",
+    "def": "An LP mechanism that lets providers specify a price range rather than supplying across the full 0–∞ curve. Capital deployed in a narrow range earns fees only when price is inside it, but does so at far higher efficiency."
+  },
+  {
+    "term": "mempool",
+    "def": "The public pending-transaction queue nodes maintain before transactions are included in a block. All pending swap data — size, slippage tolerance, target pool — is visible here to searchers."
+  },
+  {
+    "term": "sandwich attack",
+    "def": "An MEV extraction pattern: a bot inserts a buy before and a sell after a victim's swap in the same block, pushing price to the victim's slippage limit and then unwinding for profit. Profit ≈ victim's slippage tolerance minus fees and gas."
+  },
+  {
+    "term": "MEV",
+    "aliases": ["maximal extractable value"],
+    "def": "Value extracted by controlling transaction ordering within a block — sandwiches, liquidations, arbitrage, and JIT liquidity. MEV flows from searchers who find opportunities, to builders who assemble blocks, to validators who sell ordering rights."
+  },
+  {
+    "term": "TWAP",
+    "aliases": ["time-weighted average price"],
+    "def": "A price oracle that averages the spot price over a time window using cumulative accumulators. Expensive to manipulate because a sustained deviation across many blocks is required."
+  },
+  {
+    "term": "oracle",
+    "def": "An on-chain data feed that protocols use for asset prices. Compromised or stale oracles are the single largest historical attack surface in DeFi — price manipulation drives liquidations and unbacked minting."
+  },
+  {
+    "term": "liquidation",
+    "def": "The force-closure of an undercollateralized position: a keeper repays some debt and receives collateral at a discount (the liquidation bonus). Ensures lending protocols remain solvent when collateral values fall."
+  },
+  {
+    "term": "health factor",
+    "def": "Aave's portfolio-level solvency ratio: HF = Σ(collateral × liquidation threshold) / Σ debt. Falls below 1 → position is liquidatable. Analogous to a margin maintenance ratio."
+  },
+  {
+    "term": "stablecoin",
+    "def": "A token designed to maintain a stable value, usually pegged to USD. Types: custodial (USDC), CDP-backed (DAI), algorithmic (UST). The peg mechanism determines the tail risk."
+  },
+  {
+    "term": "vampire attack",
+    "def": "A protocol launch strategy that offers superior rewards to holders of a competitor's LP tokens, then atomically migrates the liquidity. SushiSwap drained ~$1B from Uniswap in two weeks via this technique."
+  },
+  {
+    "term": "ve-tokenomics",
+    "aliases": ["vote-escrow"],
+    "def": "A governance model where tokens are locked for a chosen duration in exchange for voting power and protocol fee rights. Longer locks → more ve-tokens. Aligns holders with long-run protocol health by making short-term selling costly."
+  },
+  {
+    "term": "rehypothecation",
+    "def": "Re-using collateral that has already been pledged elsewhere — depositing collateral into a lending protocol and then borrowing against it again, creating leveraged exposure. On-chain rehypothecation is transparent but compounds liquidation risk."
+  },
+  {
+    "term": "LVR",
+    "aliases": ["loss-versus-rebalancing"],
+    "def": "The theoretically correct measure of LP cost: the P&L an LP would earn by continuously rebalancing a portfolio at the true price, minus what the AMM actually delivers. LVR separates the hedgeable inventory drift from the unhedgeable loss to informed arbitrageurs."
+  },
+  {
+    "term": "slippage",
+    "def": "The difference between expected and executed price on a swap, caused by price impact and (for pending txs) price movement before inclusion. High slippage tolerance is the attacker's budget in a sandwich."
+  },
+  {
+    "term": "divergence loss",
+    "aliases": ["impermanent loss", "IL"],
+    "def": "The shortfall vs. simply holding both assets that an LP incurs when token prices diverge from entry. IL(P) = 2√P/(1+P) − 1 where P = current/entry price ratio. 'Impermanent' only if price returns to entry."
+  },
+  {
+    "term": "kink",
+    "def": "The utilization breakpoint in Compound's (and Aave's) interest rate model. Below the kink rates rise gently; above it they spike steeply, defending against 100% utilization that would trap lenders."
+  },
+  {
+    "term": "bonding",
+    "def": "OlympusDAO's mechanism for acquiring protocol-owned liquidity: users sell LP tokens or reserve assets to the treasury for discounted OHM vesting over ~5 days. Converts rented liquidity into permanent treasury assets."
+  },
+  {
+    "term": "implied yield",
+    "def": "The fixed return priced into a Pendle PT at current market price: r = (1/P_PT)^(1/t) − 1. The market's consensus on what the underlying floating yield will average out to over the remaining term."
+  },
+  {
+    "term": "searcher",
+    "def": "A bot operator in the MEV supply chain that monitors the mempool (or private order flow) for profitable opportunities, constructs transaction bundles, and bids for block inclusion via tips to builders."
+  },
+  {
+    "term": "builder",
+    "def": "An entity in the post-Flashbots supply chain that assembles optimally-ordered blocks from searcher bundles and pending txs, then auctions the block to validators (proposers) via MEV-Boost."
+  },
+  {
+    "term": "validator",
+    "def": "An Ethereum consensus participant that proposes and attests blocks. Post-Merge, validators sell their block-proposal slot to the highest-bidding builder via MEV-Boost, earning the MEV embedded in the block."
+  },
+  {
+    "term": "private relay",
+    "def": "A bundle submission endpoint (e.g. Flashbots) that routes transactions directly to builders without broadcasting to the public mempool. Failed bundles cost nothing; successful ones are front-run-proof until inclusion."
+  },
+  {
+    "term": "bundle",
+    "def": "A set of transactions submitted atomically by a searcher: either all execute in the specified order in the same block, or none do. The atomic ordering guarantee is what makes MEV strategies reliable."
+  },
+  {
+    "term": "prime brokerage",
+    "def": "A service providing cross-asset margining, securities lending, and rehypothecation — replicated on-chain by protocols like Euler and Fluid, where collateral tiers and sub-accounts enable netting across positions."
+  },
+  {
+    "term": "zero-coupon bond",
+    "def": "A bond that pays no coupons and is issued below par, returning par at maturity. The discount is the yield. Pendle PT tokens are the on-chain equivalent — price gravitates to 1.0 as maturity approaches."
+  },
+  {
+    "term": "interest rate swap",
+    "def": "A contract exchanging fixed cash flows for floating ones (or vice versa) on a notional principal. Pendle YT is the receive-floating leg: pay fixed (YT price) up front, receive the floating yield stream until maturity."
+  },
+  {
+    "term": "duration",
+    "def": "A bond's price sensitivity to interest rate changes — for a zero-coupon bond, duration equals time to maturity. A Pendle PT with 1 year to maturity moves ~1% in price for every 1% shift in implied yield."
+  },
+  {
+    "term": "yield curve",
+    "def": "A plot of implied yields across different maturities for the same underlying asset. Pendle's AMM markets for each (asset, maturity) pair collectively form an on-chain DeFi yield curve — the first true on-chain term structure."
+  },
+  {
+    "term": "collateral factor",
+    "def": "The maximum loan-to-value ratio Compound allows per asset: a 0.75 factor means you can borrow up to 75¢ of debt per $1 of that collateral. Riskier assets get lower factors."
+  }
+]
