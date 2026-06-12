@@ -15,9 +15,7 @@ significance: 15
 
 Whoever orders transactions in a block can profit from that ordering. Pending transactions sit in a public **mempool**, fully readable; an AMM swap's price impact is deterministic. So a searcher can compute, to the wei, the profit from inserting their own transactions around yours. MEV is the institutionalization of this: an industrial supply chain extracting value from transaction ordering rights.
 
-## 02 · Mechanics
-
-Sandwich attack anatomy:
+## 02 · Sandwich attack anatomy
 
 ```text
 // three transactions, one block, exact order
@@ -31,15 +29,11 @@ profit ≈ victim_slippage_tolerance
 
 - **Enabler:** the victim's slippage tolerance setting — the attacker consumes exactly that budget.
 
-## 03 · Formulas
-
-Salmonella — poisoning the bots:
+## 03 · Salmonella — poisoning the bots
 
 A honeypot ERC-20 whose `transfer()` silently delivers ~10% of the stated amount to any address not on the deployer's whitelist. Sandwich bots simulate the front-run, see a profitable fill, execute — and receive poisoned inventory they can't sell back. The predator's own automation becomes the attack surface. Lesson: **simulation results on adversarial contracts are not promises**.
 
-## 04 · Edge cases & risks
-
-Flashbots & the MEV supply chain:
+## 04 · Flashbots & the MEV supply chain
 
 - **Private relay:** bundles go straight to block builders via `eth_sendBundle` — never touching the public mempool, so they can't be front-run; failed bundles pay nothing.
 - **Supply chain:** `searchers` (find opportunities, sign bundles) → `builders` (assemble optimal blocks) → `validators` (sell their ordering rights via MEV-Boost to the highest-bidding builder).
