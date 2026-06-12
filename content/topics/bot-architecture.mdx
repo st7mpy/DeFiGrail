@@ -98,6 +98,8 @@ Submit atomic bundles directly to builders at `relay.flashbots.net` — skip the
 }]}
 ```
 
+Bundle semantics: all-or-nothing inclusion, transactions sequenced exactly as given.
+
 ## Why the progression matters
 
 Each stage's bottleneck defines the next stage's design. REST round-trips (1) → persistent sockets (2); RPC reads in the hot path (2) → local state index (3); OS network stack + interpreter overhead (3) → kernel bypass and in-process EVM (4). This is the same evolutionary path TradFi HFT walked from screen-scraping to FPGAs — compressed into one ecosystem and about five years.
