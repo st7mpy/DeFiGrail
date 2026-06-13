@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import { loadTopics, getTopic } from "@/lib/mdx";
@@ -7,6 +8,7 @@ import PrereqChain from "@/components/PrereqChain";
 import GlossaryProvider from "@/components/glossary/GlossaryProvider";
 import GlossaryTerm from "@/components/glossary/GlossaryTerm";
 import glossary from "@/content/glossary.json";
+import { nextInTrack } from "@/lib/tracks";
 
 const glossaryTerms = glossary as GlossaryEntry[];
 const glossaryDefs = Object.fromEntries(glossaryTerms.map(g => [g.term, g.def]));
@@ -26,6 +28,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
   const prereqs = topic.meta.prereqs
     .map(s => getTopic(s)).filter(Boolean)
     .map(t => ({ slug: t!.meta.slug, title: t!.meta.title }));
+  const next = nextInTrack(topic.meta.slug);
   return (
     <GlossaryProvider defs={glossaryDefs}>
       <article className="prose-defigrail mx-auto max-w-3xl pt-10">
@@ -46,6 +49,13 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
             },
           }}
         />
+        {next && (
+          <div className="mt-12 border-t border-line pt-5">
+            <Link href={`/learn/${next.slug}`} className="font-mono text-xs tracking-wider text-v2 hover:underline">
+              NEXT IN TRACK → {next.title.toUpperCase()}
+            </Link>
+          </div>
+        )}
       </article>
     </GlossaryProvider>
   );
