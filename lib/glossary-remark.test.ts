@@ -49,4 +49,13 @@ describe("remarkGlossary", () => {
     const out = await run("Please help me.", [{ term: "LP", def: "x" }]);
     expect(out).not.toContain("GlossaryTerm");
   });
+
+  it("links two different terms that share one text node, in document order", async () => {
+    const out = await run("An AMM and a flash loan.", [
+      { term: "AMM", def: "x" },
+      { term: "flash loan", def: "y" },
+    ]);
+    expect(out).toContain('<GlossaryTerm term="AMM">');
+    expect(out).toContain('<GlossaryTerm term="flash loan">');
+  });
 });

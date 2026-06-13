@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { useGlossary } from "./GlossaryProvider";
 
 export default function GlossaryTerm({
@@ -13,20 +13,21 @@ export default function GlossaryTerm({
   const def = defs[term];
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
+  const panelId = useId();
 
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
     };
-    const onPointerDown = (e: MouseEvent) => {
+    const onPointerDown = (e: Event) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     };
     document.addEventListener("keydown", onKey);
-    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("pointerdown", onPointerDown);
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("pointerdown", onPointerDown);
     };
   }, [open]);
 
@@ -37,14 +38,15 @@ export default function GlossaryTerm({
       <button
         type="button"
         aria-expanded={open}
+        aria-controls={panelId}
         onClick={() => setOpen(o => !o)}
-        className="cursor-help border-b border-dotted border-v2 text-inherit"
+        className="cursor-pointer border-b border-dotted border-v2 text-inherit"
       >
         {children}
       </button>
       {open && (
         <span
-          role="tooltip"
+          id={panelId}
           className="absolute left-0 top-full z-50 mt-1 block w-72 max-w-[80vw] rounded-md border border-line2 bg-panel px-3 py-2 font-mono text-[11.5px] leading-relaxed text-dim shadow-xl"
         >
           <span className="mb-1 block text-[9.5px] font-bold tracking-[1.5px] text-v2">

@@ -28,6 +28,11 @@ export function remarkGlossary({ terms }: { terms: GlossaryEntry[] }) {
       if (!parent || index === undefined || forbidden.has(node)) return;
       const p = parent as { type: string; children: unknown[] };
       if ((FORBIDDEN_ANCESTORS as readonly string[]).includes(p.type)) return;
+
+      // Find the EARLIEST-positioned unseen match in this node so that two
+      // different terms sharing one text node are both linked in document
+      // order (ties broken by longest alias, e.g. "liquidity provider" > "LP").
+      let best: { i: number; len: number; canonical: string } | null = null;
       for (const { alias, canonical } of all) {
         if (seen.has(canonical)) continue;
         // word-boundary match so "lp" never matches inside "help"
@@ -35,24 +40,32 @@ export function remarkGlossary({ terms }: { terms: GlossaryEntry[] }) {
         const re = new RegExp(`(?<![a-zA-Z0-9])${escaped}(?![a-zA-Z0-9])`, "i");
         const m = re.exec(node.value);
         if (!m) continue;
-        const i = m.index;
-        const before = node.value.slice(0, i);
-        const hit = node.value.slice(i, i + m[0].length);
-        const after = node.value.slice(i + m[0].length);
-        const jsx = {
-          type: "mdxJsxTextElement",
-          name: "GlossaryTerm",
-          attributes: [{ type: "mdxJsxAttribute", name: "term", value: canonical }],
-          children: [{ type: "text", value: hit }],
-        };
-        const repl: unknown[] = [];
-        if (before) repl.push({ type: "text", value: before });
-        repl.push(jsx);
-        if (after) repl.push({ type: "text", value: after });
-        p.children.splice(index, 1, ...repl);
-        seen.add(canonical);
-        return [SKIP, index + repl.length];
+        if (!best || m.index < best.i || (m.index === best.i && m[0].length > best.len)) {
+          best = { i: m.index, len: m[0].length, canonical };
+        }
       }
+      if (!best) return;
+
+      const before = node.value.slice(0, best.i);
+      const hit = node.value.slice(best.i, best.i + best.len);
+      const after = node.value.slice(best.i + best.len);
+      const jsx = {
+        type: "mdxJsxTextElement",
+        name: "GlossaryTerm",
+        attributes: [{ type: "mdxJsxAttribute", name: "term", value: best.canonical }],
+        children: [{ type: "text", value: hit }],
+      };
+      // `before` holds no unseen-term match (we picked the earliest), so it is
+      // safe to skip. Resume ON the `after` node so remaining terms there are
+      // still linked.
+      const repl: unknown[] = [];
+      if (before) repl.push({ type: "text", value: before });
+      repl.push(jsx);
+      if (after) repl.push({ type: "text", value: after });
+      p.children.splice(index, 1, ...repl);
+      seen.add(best.canonical);
+      // index of the trailing `after` node, if any, so visit re-scans it
+      return [SKIP, after ? index + repl.length - 1 : index + repl.length];
     });
   };
 }
