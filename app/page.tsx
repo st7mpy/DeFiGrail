@@ -1,13 +1,17 @@
 import Link from "next/link";
 import TrackSection from "@/components/home/TrackSection";
 import { topicCards, trackViews } from "@/lib/topic-cards";
-import { FEATURED, MARKET, NEWS_ITEMS } from "@/lib/site-data";
+import { FEATURED } from "@/lib/site-data";
+import { getNewsData } from "@/lib/news";
 import glossary from "@/content/glossary.json";
 
-export default function Home() {
+export const revalidate = 1800;
+
+export default async function Home() {
   const topics = topicCards();
   const tracks = trackViews();
   const glossaryCount = (glossary as unknown[]).length;
+  const market = await getNewsData();
 
   return (
     <>
@@ -56,7 +60,7 @@ export default function Home() {
         </div>
         <div className="market-grid">
           <div className="news-list">
-            {NEWS_ITEMS.slice(0, 4).map((h, i) => (
+            {market.headlines.slice(0, 4).map((h, i) => (
               <div className="news-row" key={i}>
                 <span className="news-source">{h.source}</span>
                 <span className="news-title">{h.title}</span>
@@ -67,10 +71,10 @@ export default function Home() {
           <div className="tvl-card">
             <div className="tvl-label">TVL by chain</div>
             <div className="tvl-rows">
-              {MARKET.chains.map((c) => (
+              {market.chains.map((c) => (
                 <div key={c.name}>
                   <div className="tvl-row-top"><span>{c.name}</span><span className="tvl-row-val">{c.tvl}</span></div>
-                  <div className="tvl-bar"><div className="tvl-bar-fill" style={{ width: `${c.share * 1.7}%` }} /></div>
+                  <div className="tvl-bar"><div className="tvl-bar-fill" style={{ width: `${Math.min(100, c.share)}%` }} /></div>
                 </div>
               ))}
             </div>
