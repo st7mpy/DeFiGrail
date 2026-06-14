@@ -37,6 +37,8 @@ r_s = r_b · U · (1 − reserveFactor)
 rate = (cash + borrows − reserves) / cTokenSupply
 ```
 
+<KinkedRate />
+
 ## 04 · Edge cases & risks
 
 - **100% utilization** — lenders cannot withdraw and liquidators cannot seize; the steep slope above the kink exists to make this state self-correcting.
