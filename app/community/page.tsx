@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import CommunityForm from "@/components/community/CommunityForm";
-import { SUBMISSIONS } from "@/lib/site-data";
+import { listApproved } from "@/lib/submissions";
 
 export const metadata: Metadata = { title: "Community" };
+export const revalidate = 300;
 
-export default function CommunityPage() {
+export default async function CommunityPage() {
+  const approved = await listApproved();
   return (
     <div className="community-layout">
       <div className="page-head">
@@ -13,21 +16,25 @@ export default function CommunityPage() {
       </div>
 
       <div style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(26,24,19,.5)", marginBottom: 14 }}>
-        Submissions
+        Featured pieces
       </div>
-      {SUBMISSIONS.map((s) => (
-        <div className="submission-card" key={s.id}>
-          <div className="submission-header">
-            <div>
-              <span className={`status-badge ${s.status}`}>{s.status}</span>
-              <span style={{ fontSize: 11, color: "rgba(26,24,19,.45)", marginLeft: 10 }}>{s.category} · {s.date}</span>
-            </div>
-            <span style={{ fontSize: 11, color: "rgba(26,24,19,.5)" }}>by {s.author}</span>
-          </div>
-          <div className="submission-title">{s.title}</div>
-          <div className="submission-body">{s.body}</div>
+
+      {approved.length === 0 ? (
+        <p style={{ fontFamily: "var(--font-serif)", fontSize: 17, color: "rgba(26,24,19,.6)", marginBottom: 8 }}>
+          No published pieces yet — be the first to submit one below.
+        </p>
+      ) : (
+        <div className="featured-grid" style={{ paddingBottom: 8 }}>
+          {approved.map((f) => (
+            <Link key={f.slug} href={`/featured/${f.slug}`} className="featured-card" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
+              <div className="featured-card-top"><span>{f.category}</span><span>{f.read}</span></div>
+              <h3 className="featured-title">{f.title}</h3>
+              <p className="featured-blurb">{f.blurb}</p>
+              <div className="featured-byline">by {f.author} · {f.date}</div>
+            </Link>
+          ))}
         </div>
-      ))}
+      )}
 
       <CommunityForm />
     </div>
