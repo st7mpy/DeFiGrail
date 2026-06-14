@@ -1,13 +1,12 @@
-// Placeholder market/news/featured data for the design checkpoint.
-// Replaced by real backends in later plan tasks:
-//   MARKET + NEWS_ITEMS  → Tasks 22–24 (DefiLlama/CoinGecko/RSS via cron cache)
-//   FEATURED + SUBMISSIONS → Tasks 18–21 (Neon submissions pipeline)
+// Graceful-fallback data, used only when the live sources are unreachable:
+//   MARKET + NEWS_ITEMS → fallback for lib/news (CoinGecko/DefiLlama/RSS)
+//   FEATURED            → fallback for the home featured grid before the first
+//                         community piece is approved (real data: Neon submissions)
 
 export type MarketAsset = { sym: string; price: string; chg: string; up: boolean };
 export type Chain = { name: string; tvl: string; share: number };
 export type NewsItem = { source: string; title: string; time: string };
 export type Featured = { slug: string; title: string; author: string; date: string; category: string; blurb: string; read: string };
-export type Submission = { id: string; title: string; author: string; category: string; status: "pending" | "approved"; date: string; body: string };
 
 export const MARKET = {
   asOf: "14:00 UTC",
@@ -38,10 +37,4 @@ export const FEATURED: Featured[] = [
   { slug: "lvr-vs-il", title: "LVR is the number IL was hiding from you", author: "0xMercator", date: "2026-06-08", category: "Esoteric", blurb: "Impermanent loss measures the wrong baseline. Loss-versus-rebalancing prices what arbitrageurs actually take from LPs each block — and it's bigger.", read: "6 min" },
   { slug: "oracle-free-lending", title: "What an oracle-free lending market would actually need", author: "liang.eth", date: "2026-06-05", category: "Modern Frontier", blurb: "Every lending hack of the last cycle traces back to a price feed. A thought experiment on building margin without trusting an oracle.", read: "9 min" },
   { slug: "sandwich-economics", title: "The economics of getting sandwiched (and how to stop)", author: "mempool_maxi", date: "2026-06-02", category: "Esoteric", blurb: "A from-scratch walk through a sandwich bundle, the searcher's P&L, and exactly which slippage setting makes you a target.", read: "7 min" },
-];
-
-export const SUBMISSIONS: Submission[] = [
-  { id: "s_104", title: "Why ve(3,3) keeps getting forked", author: "curve_curious", category: "Composability", status: "pending", date: "2026-06-11", body: "veTokenomics locks governance power; the (3,3) layer adds a bribe market on top. Together they create a flywheel where emissions follow bribes follow fees. The fork-ability comes from how cleanly the three pieces separate." },
-  { id: "s_103", title: "A gentle intro to intent-based trading", author: "intentful", category: "Infrastructure", status: "pending", date: "2026-06-10", body: "Intents flip the model: you sign what you want, solvers compete to deliver it. This note maps intents back to the classic request-for-quote desk and where the analogy breaks." },
-  { id: "s_102", title: "Stablecoin trilemma, illustrated", author: "peg_keeper", category: "Foundations", status: "approved", date: "2026-06-07", body: "Decentralization, capital efficiency, stability — pick two. A tour from DAI to algorithmic failures and back." },
 ];
