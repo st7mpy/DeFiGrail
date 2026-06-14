@@ -3,6 +3,7 @@ import TrackSection from "@/components/home/TrackSection";
 import { topicCards, trackViews } from "@/lib/topic-cards";
 import { FEATURED } from "@/lib/site-data";
 import { getNewsData } from "@/lib/news";
+import { listApproved } from "@/lib/submissions";
 import glossary from "@/content/glossary.json";
 
 export const revalidate = 1800;
@@ -12,6 +13,11 @@ export default async function Home() {
   const tracks = trackViews();
   const glossaryCount = (glossary as unknown[]).length;
   const market = await getNewsData();
+  const approved = await listApproved(3);
+  // fall back to placeholder copy only until the first piece is approved
+  const featured = approved.length > 0
+    ? approved.map((a) => ({ slug: a.slug, title: a.title, author: a.author, date: a.date, category: a.category, blurb: a.blurb, read: a.read, href: `/featured/${a.slug}` }))
+    : FEATURED.map((f) => ({ ...f, href: "/community" }));
 
   return (
     <>
@@ -42,13 +48,13 @@ export default async function Home() {
           <Link className="section-link" href="/community">SUBMIT YOURS →</Link>
         </div>
         <div className="featured-grid">
-          {FEATURED.map((f) => (
-            <div className="featured-card" key={f.slug}>
+          {featured.map((f) => (
+            <Link key={f.slug} href={f.href} className="featured-card" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
               <div className="featured-card-top"><span>{f.category}</span><span>{f.read}</span></div>
               <h3 className="featured-title">{f.title}</h3>
               <p className="featured-blurb">{f.blurb}</p>
               <div className="featured-byline">by {f.author} · {f.date}</div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
