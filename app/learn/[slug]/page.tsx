@@ -7,6 +7,10 @@ import { remarkGlossary, type GlossaryEntry } from "@/lib/glossary-remark";
 import PrereqChain from "@/components/PrereqChain";
 import GlossaryProvider from "@/components/glossary/GlossaryProvider";
 import GlossaryTerm from "@/components/glossary/GlossaryTerm";
+import ILCurve from "@/components/charts/ILCurve";
+import KinkedRate from "@/components/charts/KinkedRate";
+import RangeLiquidity from "@/components/charts/RangeLiquidity";
+import PTDecay from "@/components/charts/PTDecay";
 import glossary from "@/content/glossary.json";
 import { nextInTrack } from "@/lib/tracks";
 
@@ -42,7 +46,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
         <PrereqChain items={prereqs} />
         <MDXRemote
           source={topic.body}
-          components={{ GlossaryTerm }}
+          components={{ GlossaryTerm, ILCurve, KinkedRate, RangeLiquidity, PTDecay }}
           options={{
             mdxOptions: {
               remarkPlugins: [remarkGfm, [remarkGlossary, { terms: glossaryTerms }]],
