@@ -1,26 +1,43 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const TABS = [
-  { href: "/", label: "HOME", color: "var(--color-v0)" },
-  { href: "/learn/uniswap-v2", label: "LEARN", color: "var(--color-v2)" },
-  { href: "/news", label: "NEWS", color: "var(--color-ref)" },
-  { href: "/featured", label: "FEATURED", color: "var(--color-v1)" },
-  { href: "/submit", label: "SUBMIT", color: "var(--color-esoteric)" },
+  { href: "/learn", label: "Learn", key: "learn" },
+  { href: "/graph", label: "Graph", key: "graph" },
+  { href: "/charts", label: "Charts", key: "charts" },
+  { href: "/glossary", label: "Glossary", key: "glossary" },
+  { href: "/news", label: "News", key: "news" },
+  { href: "/community", label: "Community", key: "community" },
 ];
 
 export default function SiteNav() {
+  const pathname = usePathname() || "/";
+  const seg = pathname.split("/")[1] || "home";
+
   return (
-    <nav className="sticky top-0 z-50 flex h-13 items-center gap-1 border-b border-line bg-bg/90 px-5 backdrop-blur font-mono text-xs tracking-wider">
-      <Link href="/" className="mr-5 flex items-center gap-2 font-bold">
-        <span className="h-2 w-2 rounded-xs bg-v0 shadow-[0_0_10px_var(--color-v0)]" />
-        DEFI/GRAIL <span className="font-normal text-faint">EDU TERMINAL</span>
-      </Link>
-      {TABS.map(t => (
-        <Link key={t.href} href={t.href} className="px-3 py-2 text-dim hover:text-txt">
-          <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full align-middle" style={{ background: t.color }} />
-          {t.label}
+    <nav className="dg-nav">
+      <div className="nav-inner">
+        <Link href="/" className="nav-logo">
+          <span className="nav-logo-dot" />
+          <span className="nav-logo-text">DeFiGrail</span>
         </Link>
-      ))}
+        <div className="nav-links">
+          {TABS.map((t) => (
+            <Link key={t.key} href={t.href} className={`nav-link${seg === t.key ? " active" : ""}`}>
+              {t.label}
+            </Link>
+          ))}
+        </div>
+        <div className="nav-spacer" />
+        <button
+          className="nav-search"
+          onClick={() => window.dispatchEvent(new CustomEvent("dg:open-search"))}
+        >
+          <span>Search</span>
+          <kbd>⌘K</kbd>
+        </button>
+      </div>
     </nav>
   );
 }
