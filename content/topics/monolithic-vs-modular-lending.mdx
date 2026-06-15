@@ -1,0 +1,43 @@
+---
+title: "Monolithic vs. Modular Lending"
+slug: "monolithic-vs-modular-lending"
+era: "esoteric"
+track: "lending"
+order: 4
+prereqs: ["lending-borrowing"]
+related: ["aave-architecture", "morpho", "multi-utilization"]
+tradfiAnchor: "Universal bank vs. ring-fenced subsidiaries"
+summary: "One shared pool or many isolated markets — the architecture choice that decides whether bad debt is contained or contagious."
+significance: 18
+---
+
+## 01 · Concept — what problem does it solve?
+
+Every lending protocol must answer one structural question: do all assets share one pool, or does each market stand alone? **Monolithic** designs (Aave v3, Compound) pool everything together — deep liquidity, maximum capital efficiency, but a single shared risk surface. **Modular** designs (Morpho Blue, Euler v2) deploy many minimal, isolated markets — risk is ring-fenced, listing is permissionless, but liquidity fragments. The whole industry is drifting modular; understanding why is understanding the core trade-off in DeFi credit.
+
+## 02 · Mechanics
+
+- **Monolithic — one pool:** all lenders' capital co-mingles; USDC suppliers earn from every borrower at once; governance must vote to list each asset and set its parameters.
+- **Monolithic upside:** deep, passive-friendly liquidity and high utilization — one big book serving ETH, BTC, stables, and LSTs simultaneously.
+- **Monolithic downside:** a bad-debt event in *one* collateral can be socialized across *all* depositors; new-asset listing is a slow governance bottleneck.
+- **Modular — many markets:** each market fixes one collateral, one loan asset, one oracle, one LTV at deploy time. Anyone can create one permissionlessly for a few hundred dollars of gas.
+- **Modular upside:** total risk isolation (bad debt can't cross markets) and instant long-tail/RWA listing without governance.
+- **Modular downside:** liquidity is fragmented (every new market starts at zero) and passive lenders need a **curation layer** (vaults) to pick markets for them.
+
+## 03 · Formulas
+
+```text
+// both price money the same way — utilization → rate
+U = borrowed / supplied        // monolithic: pool-wide;  modular: per-market
+
+// the difference is the blast radius of a failure
+monolithic:  bad_debt → socialized across the whole pool
+modular:     bad_debt → capped at that single isolated market
+```
+
+## 04 · Edge cases & risks
+
+- **The CRV bad-debt lesson (Aave, 2022–23):** an oversized CRV borrow left ~$1.6M bad debt socialized across Aave's shared USDC suppliers, and a later $63M position threatened far more. Monolithic contagion, made concrete — and the reason borrow caps exist.
+- **Modular's cold-start problem:** a well-designed isolated market with no liquidity is useless; bootstrapping needs incentives or a curator's allocation.
+- **Curation moves the trust, not removes it:** modular shifts risk assessment from protocol governance to vault curators (Gauntlet, Steakhouse). You now trust *them* to pick safe markets and oracles.
+- **The convergence:** [Aave v4](/learn/aave-architecture) adds a modular hub-and-spoke layer; [Morpho](/learn/morpho) aggregates isolated markets under vaults. Both are reaching for "deep liquidity *and* contained risk" from opposite directions.

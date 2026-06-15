@@ -1,12 +1,14 @@
 {
-  "foundations":    { "label": "Foundations",        "era": "v0",         "topics": ["uniswap-v2", "makerdao", "compound", "aave-v1", "tradfi-mapping"] },
-  "lending":        { "label": "Lending & Borrowing", "era": "v0",        "topics": ["lending-borrowing", "interest-rate-models", "liquidations"] },
-  "liquidity":      { "label": "Liquidity",           "era": "ref",       "topics": ["understanding-liquidity", "curve-stableswap", "dex-aggregators"] },
+  "markets-101":    { "label": "Markets 101",         "era": "ref",       "topics": ["what-is-money", "what-is-a-stock", "order-books-and-exchanges", "what-is-a-blockchain", "wallets-and-keys", "tokens-and-standards", "crypto-vs-stocks"] },
+  "foundations":    { "label": "Foundations",         "era": "v0",        "topics": ["uniswap-v2", "makerdao", "compound", "aave-v1", "tradfi-mapping"] },
+  "lending":        { "label": "Lending & Borrowing", "era": "v0",        "topics": ["lending-borrowing", "interest-rate-models", "liquidations", "monolithic-vs-modular-lending", "aave-architecture", "morpho"] },
+  "liquidity":      { "label": "Liquidity",           "era": "ref",       "topics": ["understanding-liquidity", "curve-stableswap", "dex-aggregators", "liquidity-and-pricing", "amm-pricing-math"] },
   "stablecoins":    { "label": "Stablecoins",         "era": "v0",        "topics": ["stablecoin-design", "algorithmic-stablecoins"] },
   "composability":  { "label": "Composability",       "era": "v1",        "topics": ["pickle-finance", "sushiswap"] },
   "frontier":       { "label": "Modern Frontier",     "era": "v2",        "topics": ["uniswap-v3", "ohm-olympusdao", "pendle", "fluid", "euler"] },
   "staking":        { "label": "Staking & Restaking", "era": "v2",        "topics": ["liquid-staking", "restaking"] },
   "derivatives":    { "label": "Derivatives",         "era": "v2",        "topics": ["perpetual-futures", "defi-options"] },
+  "ecosystem":      { "label": "Ecosystem & Frontier","era": "v2",        "topics": ["rwa", "dao-governance", "yield-vaults", "account-abstraction", "defi-risk-taxonomy"] },
   "esoteric":       { "label": "Esoteric",            "era": "esoteric",  "topics": ["mm-primer", "impermanent-loss", "ptyt-zero-coupon", "mev", "multi-utilization"] },
   "infrastructure": { "label": "Infrastructure",      "era": "infra",     "topics": ["bot-architecture", "oracles", "bridges"] }
 }

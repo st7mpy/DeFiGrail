@@ -1,0 +1,44 @@
+---
+title: "Tokens & Standards"
+slug: "tokens-and-standards"
+era: "v0"
+track: "markets-101"
+order: 6
+prereqs: ["what-is-a-blockchain"]
+related: ["what-is-a-stock", "rwa"]
+tradfiAnchor: "Casino chips (fungible) vs. trading cards (unique)"
+summary: "ERC-20 made every token speak the same language — the standard that turned Ethereum into a financial Lego set."
+significance: 18
+---
+
+## 01 · Concept — what problem does it solve?
+
+A token is an entry in a smart contract that says "this address owns N of this thing." The breakthrough wasn't tokens themselves — it was **standards**. Ethereum's **ERC-20** specified a handful of functions every token must implement (`balanceOf`, `transfer`, `approve`). Once every token spoke the same interface, any wallet, exchange, or protocol could handle *any* token without custom code. That interoperability is what made DeFi composable — money Legos that snap together because they share a plug shape.
+
+## 02 · Mechanics
+
+- **Fungible (ERC-20):** every unit is identical and interchangeable, like dollars or casino chips. Stablecoins, governance tokens, and wrapped assets are all ERC-20.
+- **Non-fungible (ERC-721):** each token is unique with its own ID, like a trading card or a deed. NFTs use this — art, but also Uniswap v3 LP positions.
+- **Semi-fungible (ERC-1155):** one contract managing many token types, fungible or not — efficient for games and batches.
+- **`approve` / `transferFrom`:** the two-step that lets a protocol move your tokens *on your behalf* after you grant an allowance. Powerful, and the source of "approval drain" exploits.
+- **Wrapping:** ETH itself predates ERC-20, so "wrapped ETH" (WETH) is an ERC-20 version of it, used everywhere a standard token is required.
+
+## 03 · Formulas
+
+```text
+// the ERC-20 core interface (simplified)
+balanceOf(owner) → uint
+transfer(to, amount) → bool
+approve(spender, amount) → bool        // grant an allowance
+transferFrom(from, to, amount) → bool  // spender pulls within allowance
+
+// a token balance is just a number in the contract's ledger:
+balances[your_address] = 1500
+```
+
+## 04 · Edge cases & risks
+
+- **A token is only what its contract says:** "USDC" on an unknown contract may be a worthless look-alike. Always verify the contract address, not the ticker.
+- **Infinite approvals:** dapps often request unlimited allowances for convenience; a later contract bug or exploit can then drain the whole balance. Revoke unused approvals.
+- **Tokens ≠ shares:** an ERC-20 confers whatever rights its contract and the law grant — usually none of the ownership/dividend/vote rights of [a stock](/learn/what-is-a-stock).
+- **Fee-on-transfer & rebasing quirks:** non-standard tokens that take a cut on transfer or change balances silently break naive integrations — a recurring source of bugs.

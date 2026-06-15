@@ -1,0 +1,41 @@
+---
+title: "Wallets & Keys"
+slug: "wallets-and-keys"
+era: "v0"
+track: "markets-101"
+order: 5
+prereqs: ["what-is-a-blockchain"]
+related: ["tokens-and-standards", "account-abstraction"]
+tradfiAnchor: "Safe-deposit box + a signature"
+summary: "A wallet doesn't hold coins — it holds the keys that prove they're yours. Lose the key, lose the funds. There is no reset."
+significance: 18
+---
+
+## 01 · Concept — what problem does it solve?
+
+On a blockchain there are no accounts at a bank you can call. Ownership is proven by cryptography: every address has a **private key**, and only someone holding that key can authorize moving its funds. A "wallet" is just software that stores your keys and signs transactions with them. The coins never leave the chain — the wallet holds the *authority* over them. This is the radical part of crypto: **self-custody**. You are your own bank, with all the freedom and all the danger that implies.
+
+## 02 · Mechanics
+
+- **Key pair:** a private key (secret) and a public key derived from it. Your **address** is derived from the public key — share it freely to receive funds.
+- **Signing:** to spend, your wallet signs the transaction with the private key. The network verifies the signature against the address — no key, no spend.
+- **Seed phrase:** 12–24 words that encode your private key(s) in human-readable form. Anyone with the words has the funds. Write it down offline; never type it into a website.
+- **Hot vs. cold:** hot wallets (MetaMask, phone apps) are online and convenient; cold wallets (Ledger, paper) keep keys offline for safety. Most people use both — small balances hot, savings cold.
+- **Custodial vs. self-custodial:** an exchange wallet holds *your* keys for you (convenient, but "not your keys, not your coins"); a self-custodial wallet means only you can sign.
+
+## 03 · Formulas
+
+```text
+private_key → (one-way) → public_key → (hash) → address
+   // easy left-to-right, computationally impossible to reverse
+
+sign(transaction, private_key) → signature
+verify(transaction, signature, address) → true / false
+```
+
+## 04 · Edge cases & risks
+
+- **No undo, no recovery:** lose the seed phrase and the funds are gone forever — there is no password reset and no support desk. Billions in BTC are permanently locked behind lost keys.
+- **Phishing & approvals:** most "hacks" are users tricked into signing a malicious transaction or granting a token approval that drains them. The chain did exactly what the signature said.
+- **Seed-phrase theft:** a photo of your words in cloud storage, or typing them into a fake site, is the single most common total loss.
+- **The UX problem:** self-custody is hard, which is why [account abstraction](/learn/account-abstraction) (social recovery, spending limits, gas sponsorship) exists — to keep the security without the foot-guns.

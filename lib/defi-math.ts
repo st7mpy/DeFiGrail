@@ -16,3 +16,13 @@ export function v3Amounts(L: number, P: number, Pa: number, Pb: number) {
   if (P >= Pb) return { x: 0, y: L * (sb - sa) };
   return { x: L * (sb - sp) / (sp * sb), y: L * (sp - sa) };
 }
+
+// Constant-product price impact: buying dx of token X from reserves (x, y).
+// Returns the fraction the execution price sits above spot — the cost of
+// trading into finite liquidity. dx as a share of reserve x drives it.
+export function priceImpact(dxFraction: number): number {
+  if (dxFraction < 0 || dxFraction >= 1) throw new RangeError("dxFraction in [0,1)");
+  // spot = y/x; exec price for removing dx = y / (x - dx); with dx = f·x:
+  // exec/spot = 1/(1 - f)  → impact = f/(1 - f)
+  return dxFraction / (1 - dxFraction);
+}

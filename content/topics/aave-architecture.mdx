@@ -1,0 +1,45 @@
+---
+title: "Aave: v3 to v4 Architecture"
+slug: "aave-architecture"
+era: "v2"
+track: "lending"
+order: 5
+prereqs: ["lending-borrowing"]
+related: ["monolithic-vs-modular-lending", "aave-v1", "liquidations"]
+tradfiAnchor: "Commercial bank → bank holding company"
+summary: "DeFi's largest lender, from its monolithic v3 pool (isolation, eMode, caps) to the modular hub-and-spoke v4 launched in 2026."
+significance: 20
+---
+
+## 01 · Concept — what problem does it solve?
+
+Aave is the largest DeFi lending protocol — roughly $14B TVL and ~60% of the lending market in 2026. Its history is the industry's history in miniature: a **monolithic** shared pool (v3) hardened with risk controls after early bad-debt scares, now extending into a **modular** hub-and-spoke design (v4, live since March 2026). Studying Aave is studying how DeFi credit grew up.
+
+## 02 · Mechanics — v3 (monolithic, the workhorse)
+
+- **One pool, aTokens:** suppliers receive interest-bearing aTokens that appreciate automatically; all assets share the pool.
+- **Isolation Mode:** a risky new asset can be listed as isolated collateral — capped debt ceiling, borrowable only against approved stablecoins, not combinable with other collateral. Contains long-tail risk.
+- **eMode (efficiency mode):** for correlated assets (stETH/ETH, USDC/USDT) LTV rises toward ~93–97%, enabling capital-efficient leverage loops where collateral and debt move together.
+- **Supply & borrow caps:** per-asset ceilings added precisely to prevent the v2 CRV-style incidents.
+- **GHO & Umbrella:** Aave's overcollateralized stablecoin (GHO, ~$580M) and the **Umbrella** safety system — ERC-4626 vaults that auto-slash to cover bad debt without a governance vote.
+
+## 03 · Mechanics — v4 (modular, hub-and-spoke)
+
+```text
+            ┌─────────────────────┐
+   Spokes → │   LIQUIDITY HUB     │ ← unified capital + accounting
+ (markets)  │  credit/debit lines │
+            └─────────────────────┘
+   Lido · EtherFi · Ethena · RWA · stables — each a configurable Spoke
+```
+
+- **Hub:** the central capital pool. **Spokes:** individual markets that draw liquidity from the Hub via a granted *credit line* and supply via a *debit line*.
+- **Decoupled governance:** the Hub sets baselines; Spokes self-configure risk within those limits — faster iteration, partitioned blast radius.
+- Users interact with Spokes, never the Hub directly. (Live on mainnet since March 2026, but still nascent — v3 holds ~96% of TVL.)
+
+## 04 · Edge cases & risks
+
+- **KelpDAO contagion (Apr 2026):** a $293M exploit at an *adjacent* protocol triggered a multi-billion-dollar Aave TVL flight in two days — in a monolithic pool, *perceived* systemic risk drives withdrawals even without direct loss.
+- **eMode correlation risk:** ~97% LTV is safe only while the pair stays correlated; an LST [depeg](/learn/liquid-staking) erases the thin margin fast.
+- **GHO peg history:** GHO traded below $1 for long stretches after launch until rate policy and the stability module corrected it — collateral-backed stables aren't automatically pegged.
+- **v4 partitions risk, doesn't delete it:** a Spoke with a large credit line that gets exploited exposes the Hub up to that line. Modularity caps the blast radius; it doesn't remove it.

@@ -1,0 +1,42 @@
+---
+title: "DAO Governance"
+slug: "dao-governance"
+era: "v2"
+track: "ecosystem"
+order: 2
+prereqs: []
+related: ["ohm-olympusdao", "curve-stableswap", "defi-risk-taxonomy"]
+tradfiAnchor: "Shareholder voting, automated and on-chain"
+summary: "Who controls a protocol after launch? Token-holders, voting on-chain — with timelocks, delegation, and a long history of governance attacks."
+significance: 17
+---
+
+## 01 · Concept — what problem does it solve?
+
+A protocol launches immutable — but parameters need tuning, treasuries need spending, and upgrades need deciding. A **DAO** (Decentralized Autonomous Organization) puts those decisions to a token-weighted vote executed on chain. It is the shareholder meeting rebuilt as code: proposals, votes, and a timelock before execution. Done well it decentralizes control; done badly it concentrates it in whales or exposes the treasury to attack.
+
+## 02 · Mechanics
+
+- **Governance tokens:** voting power is proportional to tokens held (or delegated). One token, one vote — which means capital, not people, decides.
+- **Proposal lifecycle:** temperature-check → formal proposal → voting period → **timelock** delay → execution. The timelock is the safety valve, giving users time to exit if a malicious proposal passes.
+- **Delegation:** holders delegate votes to active representatives, fighting voter apathy (most token-holders never vote).
+- **Vote-escrow (ve-models):** lock tokens longer for more voting power (veCRV) — aligns incentives but concentrates control in long-term lockers and spawns [bribe markets](/learn/curve-stableswap).
+- **Off-chain + on-chain:** signaling often happens on Snapshot (gasless) while binding execution runs on-chain through a Governor contract.
+
+## 03 · Formulas
+
+```text
+voting_power = tokens_held (or delegated)        // plutocracy by default
+ve_power     = tokens_locked × (lock_time / max_lock)   // time-weighted
+
+// proposal passes if
+votes_for > quorum  AND  votes_for > votes_against
+// then waits out the timelock before it can execute
+```
+
+## 04 · Edge cases & risks
+
+- **Flash-loan governance attack (Beanstalk, 2022):** an attacker borrowed a fortune, bought enough governance tokens in one transaction to pass a malicious proposal, and drained ~$182M — then repaid the loan. The reason emissions-bought voting power plus no timelock is fatal.
+- **Plutocracy:** one-token-one-vote means a whale or a coordinated cartel can steer the protocol; "decentralized" governance is often functionally controlled by a handful of addresses.
+- **Voter apathy:** turnout is chronically low, so a small motivated minority routinely decides outcomes for everyone.
+- **Governance as attack surface:** a treasury controlled by a vote is only as safe as the vote — quorum, timelocks, and guardian multisigs exist precisely because the vote itself can be captured.

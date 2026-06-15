@@ -1,0 +1,40 @@
+---
+title: "Order Books & Exchanges"
+slug: "order-books-and-exchanges"
+era: "ref"
+track: "markets-101"
+order: 3
+prereqs: []
+related: ["understanding-liquidity", "dex-aggregators"]
+summary: "Bid, ask, and the matching engine — how every exchange (TradFi or crypto CEX) actually sets a price."
+significance: 16
+---
+
+## 01 · Concept — what problem does it solve?
+
+How does a market decide what something costs *right now*? An exchange runs an **order book**: a live, sorted list of everyone's buy orders (bids) and sell orders (asks). A matching engine pairs them the instant a bid meets an ask, and the price of the last match is "the price." This is how the NYSE, Nasdaq, Binance, and Coinbase all work under the hood — the same machinery, whether the asset is Apple stock or Bitcoin.
+
+## 02 · Mechanics
+
+- **Bid / ask:** the bid is the highest price a buyer will pay; the ask is the lowest a seller will take. The **spread** between them is the cost of trading instantly.
+- **Market order:** execute now at the best available price — guarantees a fill, not a price. It *takes* liquidity off the book.
+- **Limit order:** name your price and wait — guarantees a price, not a fill. It *provides* liquidity, resting in the book until matched.
+- **Matching engine:** pairs orders on **price-time priority** — best price first, earliest order wins ties.
+- **Market makers:** firms that quote both a bid and an ask continuously, earning the spread. They supply most of the resting liquidity on major pairs; without them, spreads widen and trading gets expensive.
+
+## 03 · Formulas
+
+```text
+spread = best_ask − best_bid
+   // BTC at bid $60,000 / ask $60,010 → $10 spread = 0.017%
+
+// a market buy "walks the book": it fills against the cheapest asks
+// first, then progressively worse ones — thin books = big slippage
+```
+
+## 04 · Edge cases & risks
+
+- **The "best price" illusion:** a large market order on a thin book eats through many price levels, so your *average* fill is far worse than the top quote. This is slippage — the order-book cousin of an AMM's [price impact](/learn/understanding-liquidity).
+- **Custody risk on a CEX:** while you trade on a centralized exchange, *it* holds your assets. FTX (2022) showed what happens when that trust fails.
+- **AMMs replace the book with a formula:** decentralized exchanges (Uniswap) have no order book — a curve prices every trade automatically. Same goal, different machine. See [DEX Aggregators](/learn/dex-aggregators).
+- **24/7, no breakers:** crypto venues never close and usually have no circuit breakers, so dislocations can run further than in equities.

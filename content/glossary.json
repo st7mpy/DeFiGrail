@@ -243,5 +243,75 @@
   {
     "term": "intent",
     "def": "A signed statement of a desired outcome (e.g. 'swap X for ≥ Y') rather than an explicit transaction path. Solvers compete to fill it with best execution, often netting trades peer-to-peer."
+  },
+  {
+    "term": "fiat",
+    "def": "Government-issued money with no intrinsic value, accepted because the state declares it legal tender and everyone agrees to use it. The dollar is fiat; money as shared belief."
+  },
+  {
+    "term": "market cap",
+    "aliases": ["market capitalization"],
+    "def": "Price per unit times units outstanding — the market's total price tag for a company (shares) or token (circulating supply)."
+  },
+  {
+    "term": "dividend",
+    "def": "A discretionary cash payout of company profits to shareholders. Not guaranteed; the TradFi cousin of crypto 'yield', though yield usually comes from fees or emissions, not profit."
+  },
+  {
+    "term": "order book",
+    "def": "A live, sorted list of all buy orders (bids) and sell orders (asks) on an exchange. A matching engine pairs them on price-time priority; the last match is 'the price'."
+  },
+  {
+    "term": "spread",
+    "def": "The gap between the best bid and best ask — the cost of trading instantly, and a market maker's compensation for quoting both sides."
+  },
+  {
+    "term": "private key",
+    "def": "The secret that authorizes spending from a blockchain address. Whoever holds it controls the funds; lose it and they're gone forever — no reset, no recovery."
+  },
+  {
+    "term": "seed phrase",
+    "def": "12–24 words that encode a wallet's private keys in human-readable form. Anyone with the words has the funds — store it offline, never type it into a website."
+  },
+  {
+    "term": "self-custody",
+    "def": "Holding your own private keys rather than trusting an exchange to hold them. Maximum sovereignty and maximum responsibility: 'not your keys, not your coins'."
+  },
+  {
+    "term": "ERC-20",
+    "def": "The fungible-token standard on Ethereum: a shared interface (balanceOf, transfer, approve) that lets any wallet or protocol handle any token without custom code — the basis of composability."
+  },
+  {
+    "term": "gas",
+    "def": "The fee paid in a chain's native coin to get a transaction included. It floats with network demand; account abstraction lets it be sponsored or paid in other tokens."
+  },
+  {
+    "term": "consensus",
+    "def": "The mechanism by which a blockchain's nodes agree on the next valid block — Proof of Work (energy) or Proof of Stake (locked collateral). It's what makes the ledger trustless."
+  },
+  {
+    "term": "real-world asset",
+    "aliases": ["RWA"],
+    "def": "An off-chain asset (Treasuries, private credit, gold) tokenized on chain. Brings real, non-reflexive yield into DeFi — at the cost of re-introducing issuer and custodian trust."
+  },
+  {
+    "term": "DAO",
+    "def": "Decentralized Autonomous Organization: a protocol governed by token-weighted on-chain votes. The shareholder meeting rebuilt as code, with proposals, quorums, and timelocks."
+  },
+  {
+    "term": "account abstraction",
+    "def": "Making a wallet a programmable smart contract — social recovery, spending limits, gas paid in any token, batched actions. ERC-4337 and EIP-7702 deliver it."
+  },
+  {
+    "term": "paymaster",
+    "def": "A contract that sponsors transaction gas under account abstraction, so a dapp can cover your fees or let you pay them in USDC instead of ETH."
+  },
+  {
+    "term": "modular lending",
+    "def": "A lending design built from many minimal, isolated markets (Morpho Blue, Euler v2) where bad debt can't cross markets — versus a monolithic shared pool. Curation layers re-aggregate liquidity."
+  },
+  {
+    "term": "price discovery",
+    "def": "The process by which trading reveals an asset's price. There is no stored price — it's wherever the next trade clears, which depends on the liquidity sitting near the current level."
   }
 ]

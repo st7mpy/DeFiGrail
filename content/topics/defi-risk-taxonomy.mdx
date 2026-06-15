@@ -1,0 +1,45 @@
+---
+title: "The DeFi Risk Taxonomy"
+slug: "defi-risk-taxonomy"
+era: "ref"
+track: "ecosystem"
+order: 5
+prereqs: []
+related: ["mev", "oracles", "bridges", "liquidations"]
+tradfiAnchor: "Enterprise risk register"
+summary: "A capstone map of every way DeFi loses money — so you can name the risk before it names you."
+significance: 18
+---
+
+## 01 · Concept — what problem does it solve?
+
+DeFi yield is never free; it is payment for bearing a stack of risks, and most blowups happen because someone counted the yield and not the risks. This page is the field guide — the named categories of how money is lost on chain — and a pointer to the topic that covers each in depth. Internalize the taxonomy and most "how did this happen?" headlines become "of course: that's category N."
+
+## 02 · Mechanics — the risk classes
+
+- **Smart-contract risk:** a bug in immutable code holding funds. Mitigations: audits, formal verification, immutability, bug bounties. (Euler $197M, 2023.)
+- **Oracle risk:** acting on a manipulated or stale price. The root of most "hacks." See [Oracles](/learn/oracles).
+- **Liquidation / market risk:** collateral crashing faster than [liquidations](/learn/liquidations) can clear, leaving bad debt; cascades amplify it.
+- **Bridge / cross-chain risk:** the most-exploited category by far — forged messages, compromised validators. See [Bridges](/learn/bridges).
+- **MEV risk:** value extracted by transaction ordering — sandwiches, front-running. See [MEV](/learn/mev).
+- **Governance risk:** vote capture or a malicious proposal draining a treasury. (Beanstalk $182M.)
+- **Peg / depeg risk:** stablecoins and LSTs trading away from par. (UST collapse.)
+- **Counterparty / custody risk:** trusting an issuer, custodian, or CEX (USDC/SVB; FTX).
+- **Composability risk:** inherited failure — a vault is only as safe as the riskiest thing it touches.
+
+## 03 · Formulas
+
+```text
+// stacked protocols multiply failure probability
+P(loss) ≈ 1 − Π (1 − pᵢ)        over every layer i in the position
+
+// the only honest yield comparison
+real_yield = quoted_APY − expected_loss_from_all_risk_classes
+```
+
+## 04 · Edge cases & risks
+
+- **Correlation is the killer:** risks that look independent fire together in a crisis — a crash triggers liquidations *and* a depeg *and* an oracle lag *and* a liquidity flight at once.
+- **Tail risk hides in steady yield:** selling insurance (options, pegs, basis trades) looks like free money until the one event that pays out erases years of premium.
+- **"Audited" is necessary, not sufficient:** every major exploit's protocol was audited. Audits reduce smart-contract risk; they say nothing about oracle, governance, or composability risk.
+- **The meta-risk:** believing you've eliminated risk. In DeFi you relocate and re-price it — never delete it. Map it, size it, and never count yield without it.

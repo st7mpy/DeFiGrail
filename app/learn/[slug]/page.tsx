@@ -14,6 +14,7 @@ import ILCurve from "@/components/charts/ILCurve";
 import KinkedRate from "@/components/charts/KinkedRate";
 import RangeLiquidity from "@/components/charts/RangeLiquidity";
 import PTDecay from "@/components/charts/PTDecay";
+import PriceImpact from "@/components/charts/PriceImpact";
 import glossary from "@/content/glossary.json";
 
 const glossaryTerms = glossary as GlossaryEntry[];
@@ -81,7 +82,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
         <div className="prose-paper">
           <MDXRemote
             source={topic.body}
-            components={{ GlossaryTerm, ILCurve, KinkedRate, RangeLiquidity, PTDecay }}
+            components={{ GlossaryTerm, ILCurve, KinkedRate, RangeLiquidity, PTDecay, PriceImpact }}
             options={{ mdxOptions: { remarkPlugins: [remarkGfm, [remarkGlossary, { terms: glossaryTerms }]] } }}
           />
         </div>

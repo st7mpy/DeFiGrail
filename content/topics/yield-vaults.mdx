@@ -1,0 +1,44 @@
+---
+title: "Yield Vaults & Aggregators"
+slug: "yield-vaults"
+era: "v2"
+track: "ecosystem"
+order: 3
+prereqs: []
+related: ["pickle-finance", "morpho", "defi-risk-taxonomy"]
+tradfiAnchor: "Actively-managed fund / robo-advisor"
+summary: "Deposit once, let a strategy harvest and compound for you. The 'set and forget' layer — and a stack of inherited risk."
+significance: 16
+---
+
+## 01 · Concept — what problem does it solve?
+
+Chasing yield by hand is gas-expensive, attention-hungry, and easy to get wrong. **Yield vaults** (Yearn, Beefy, and the curator vaults on [Morpho](/learn/morpho)) abstract it: you deposit an asset, the vault runs a strategy — supply to a lending market, farm rewards, sell them, recompound — and your share appreciates automatically. It is the robo-advisor of DeFi, and the standardization of vaults (ERC-4626) made them snap together with everything else.
+
+## 02 · Mechanics
+
+- **ERC-4626:** the tokenized-vault standard — deposit assets, get shares; shares redeem for a growing slice of the pool. One interface every protocol understands.
+- **Auto-compounding:** the strategy periodically harvests rewards, swaps them to the base asset, and redeposits — turning simple APR into compounded APY.
+- **Strategies:** the swappable logic — lending, LP-and-farm, leveraged staking loops, basis trades. Governance or curators approve and rotate them.
+- **Curated allocation:** modern vaults (MetaMorpho) spread deposits across many isolated markets with risk caps, so a curator does the market selection passive depositors can't.
+- **Fees:** a performance fee (and sometimes management fee) on harvested yield funds the vault operator.
+
+## 03 · Formulas
+
+```text
+// share price only rises as the strategy earns
+share_price = total_assets / total_shares
+
+// compounding lift from harvesting n times a year at rate r
+APY = (1 + r/n)^n − 1        // more frequent harvest → higher APY, more gas
+
+// net yield to depositor
+net = gross_strategy_yield − performance_fee − gas
+```
+
+## 04 · Edge cases & risks
+
+- **Risk is inherited and stacked:** a vault is only as safe as the riskiest protocol its strategy touches. A vault on a lending market on an LST on a bridge stacks every layer's failure probability.
+- **The Pickle lesson (2020):** a $19.7M exploit hit a yield vault via an unvalidated strategy address — composability means inherited attack surface. See [Pickle Finance](/learn/pickle-finance).
+- **Strategy/curator trust:** depositors rarely audit the strategy; a malicious or careless operator (or an upgradeable strategy contract) can lose the whole vault.
+- **Yield-source fragility:** much DeFi yield is emissions or basis trades that evaporate or invert; a quoted APY is a snapshot, not a promise.

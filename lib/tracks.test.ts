@@ -2,12 +2,13 @@ import { describe, expect, it } from "vitest";
 import { getTrack, nextInTrack, TRACKS } from "./tracks";
 
 describe("TRACKS", () => {
-  it("exposes all 10 tracks", () => {
-    expect(Object.keys(TRACKS)).toHaveLength(10);
+  it("exposes all 12 tracks", () => {
+    expect(Object.keys(TRACKS)).toHaveLength(12);
     expect(Object.keys(TRACKS)).toEqual(
       expect.arrayContaining([
-        "foundations", "lending", "liquidity", "stablecoins", "composability",
-        "frontier", "staking", "derivatives", "esoteric", "infrastructure",
+        "markets-101", "foundations", "lending", "liquidity", "stablecoins",
+        "composability", "frontier", "staking", "derivatives", "ecosystem",
+        "esoteric", "infrastructure",
       ])
     );
   });

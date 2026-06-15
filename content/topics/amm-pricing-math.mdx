@@ -1,0 +1,49 @@
+---
+title: "AMM Pricing Math"
+slug: "amm-pricing-math"
+era: "esoteric"
+track: "liquidity"
+order: 5
+prereqs: ["uniswap-v2"]
+related: ["liquidity-and-pricing", "curve-stableswap", "impermanent-loss"]
+tradfiAnchor: "Market-impact / bonding-curve model"
+summary: "The exact arithmetic behind a swap quote: how a constant-product curve turns reserves into a price and a trade into impact."
+significance: 17
+---
+
+## 01 · Concept — what problem does it solve?
+
+An AMM has no human quoting prices — a curve does it. For a constant-product pool the curve is `x · y = k`, and *everything* about pricing falls out of that one equation: the spot price, the fill you actually get, the impact you cause, and the fee you pay. This page is the math under the hood of every [Uniswap v2](/learn/uniswap-v2)-style swap, so a quote stops being magic and becomes arithmetic you can reproduce.
+
+## 02 · Mechanics
+
+- **Spot price = reserve ratio:** the marginal price of X in terms of Y is just `y / x`. Provide more of X and X gets cheaper — the curve *is* supply and demand.
+- **The invariant holds across the trade:** add Δx of X, the pool gives you the Δy of Y that keeps `x · y = k` (minus fee). Big trades ride further down the curve → worse average price.
+- **Fee first:** the 0.30% fee is taken off your input before it touches the curve, so it stays in the pool and grows LP value.
+- **Impact is structural, not a setting:** the worse-than-spot fill is the geometry of the hyperbola, the AMM's built-in "spread." It cannot be turned off, only diluted with deeper liquidity.
+
+## 03 · Formulas
+
+```text
+// the invariant
+x · y = k
+
+// output for input Δx (with 0.30% fee = factor 997/1000)
+Δy = (y · Δx · 997) / (x · 1000 + Δx · 997)
+
+// spot (marginal) price and execution price
+spot = y / x
+exec = Δy / Δx          // always worse than spot for any real trade
+
+// price impact as a fraction of the reserve traded (fee aside)
+impact = Δx / (x + Δx) ≈ f / (1 + f)   for buying;  ~f/(1−f) for selling X out
+```
+
+<PriceImpact />
+
+## 04 · Edge cases & risks
+
+- **LP rebalancing is forced selling:** the same math means the pool always sells the winner and buys the loser — the mechanical root of [impermanent loss](/learn/impermanent-loss).
+- **Sandwichable by construction:** because the output is a deterministic function of reserves, a searcher can compute your fill to the wei and bracket it. See [MEV](/learn/mev).
+- **Different curve, different math:** [Curve's StableSwap](/learn/curve-stableswap) flattens the curve near peg (tiny impact), and v3 concentrates liquidity — same idea, different `f→impact` function.
+- **Rounding & decimals:** real implementations use integer math and per-token decimals; naive float math drifts from on-chain results.

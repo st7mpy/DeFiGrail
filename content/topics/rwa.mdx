@@ -1,0 +1,41 @@
+---
+title: "Real-World Assets (RWA)"
+slug: "rwa"
+era: "v2"
+track: "ecosystem"
+order: 1
+prereqs: []
+related: ["stablecoin-design", "tokens-and-standards", "what-is-a-stock"]
+tradfiAnchor: "Tokenized money-market fund / private credit"
+summary: "Putting off-chain assets — Treasuries, credit, gold — on chain as tokens. DeFi's bridge to trillions in traditional value."
+significance: 19
+---
+
+## 01 · Concept — what problem does it solve?
+
+DeFi's native yields are reflexive — they come from crypto borrowing crypto. **Real-world assets** break that loop by bringing off-chain cash flows on chain: a token that represents a share of a US Treasury bill fund, a private-credit loan, or a bar of gold. The token earns the *real* yield (e.g. ~4–5% from T-bills) and trades 24/7 with DeFi composability. RWAs are the fastest-growing category in DeFi, drawing in institutions (BlackRock's BUIDL, Franklin Templeton) and stretching well past $30B on chain.
+
+## 02 · Mechanics
+
+- **Tokenize → custody → redeem:** a regulated entity holds the real asset, issues tokens 1:1 against it, and honors redemptions. The token is a claim; the issuer is the trust anchor.
+- **Tokenized Treasuries:** the flagship product — on-chain shares of short-term US government debt (BUIDL, Ondo's USDY, Franklin's BENJI). Yield-bearing "cash" for DeFi treasuries.
+- **Private credit:** on-chain loans to real businesses (Maple, Centrifuge), offering higher yield for higher (and less liquid) risk.
+- **Composability:** RWA tokens become collateral — [Aave v4](/learn/aave-architecture) spokes and [MakerDAO](/learn/makerdao)/Sky allocate billions to tokenized Treasuries to back [DAI](/learn/stablecoin-design).
+- **Permissioned by necessity:** most RWAs enforce KYC/whitelists at the token level to satisfy securities law — a real departure from permissionless DeFi.
+
+## 03 · Formulas
+
+```text
+// the token tracks the underlying NAV
+token_value ≈ NAV_per_share        // yield accrues as NAV rises or via rebase
+
+// the trust chain (each link is a risk)
+real asset → legal entity → custodian → attestation → on-chain token
+```
+
+## 04 · Edge cases & risks
+
+- **Off-chain trust re-enters:** the whole point of DeFi was removing trusted intermediaries; RWAs put them back. The token is only as good as the issuer's solvency, the custodian's honesty, and the legal enforceability of redemption.
+- **Oracle & NAV risk:** pricing an illiquid real asset on chain leans on attestations and [oracles](/learn/oracles) that update slowly and can be wrong.
+- **Regulatory dependence:** RWAs live or die by securities law; a ruling can freeze a product overnight, and permissioning fragments liquidity.
+- **Liquidity mismatch:** tokenizing an illiquid loan doesn't make it liquid — promising instant on-chain redemption against a locked-up underlying is a classic run risk.

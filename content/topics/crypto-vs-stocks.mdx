@@ -1,0 +1,43 @@
+---
+title: "Crypto vs. Stocks"
+slug: "crypto-vs-stocks"
+era: "ref"
+track: "markets-101"
+order: 7
+prereqs: ["what-is-a-stock"]
+related: ["tokens-and-standards", "what-is-money", "tradfi-mapping"]
+tradfiAnchor: "Equities market ↔ crypto market"
+summary: "The honest comparison: where tokens rhyme with stocks, where the analogy quietly breaks, and what's genuinely new."
+significance: 20
+---
+
+## 01 · Concept — what problem does it solve?
+
+Newcomers reach for the nearest mental model — "a token is like a stock." Sometimes that helps; often it misleads. This page draws the comparison carefully so you keep the useful intuition and drop the dangerous parts. The short version: stocks are *legal claims on a business*, enforced by courts; most tokens are *access or governance rights to a protocol*, enforced by code — and the difference shows up exactly when something goes wrong.
+
+## 02 · Mechanics — the side-by-side
+
+- **Ownership:** a share is a legal slice of a company with rights to profits and assets. A governance token is usually a vote on a protocol's parameters — rarely a claim on its cash flows, and rarely legally enforceable.
+- **Trading hours:** stocks trade ~6.5h/day on weekdays through brokers; crypto trades 24/7/365, globally, peer-to-peer.
+- **Settlement:** equities settle T+1 (a day later) via clearinghouses; crypto settles on-chain in seconds to minutes, with no central counterparty.
+- **Custody:** a broker holds your shares in "street name"; in crypto you can self-custody with [keys](/learn/wallets-and-keys) — or hand them to an exchange.
+- **Disclosure:** public companies file audited financials with regulators; most tokens have no mandated disclosure — you read the code and the docs, or you don't know.
+- **Dividends vs. yield:** dividends are profit distributions; crypto "yield" comes from staking, fees, or emissions — economically different, and often inflationary.
+
+## 03 · Formulas
+
+```text
+// both use market cap the same way
+market_cap = price × circulating_supply
+
+// but crypto adds a second number that matters
+FDV = price × fully_diluted_supply   // includes locked/unvested tokens
+// a low cap with huge FDV = big future dilution ("unlocks") incoming
+```
+
+## 04 · Edge cases & risks
+
+- **The "it's like equity" trap:** pricing a token on a stock-style earnings multiple usually fails — most tokens have no claim on the protocol's revenue. Check whether the token actually captures value or just votes.
+- **Dilution is louder in crypto:** stock dilution is occasional and disclosed; token unlocks can dump large supply on a schedule. FDV vs. market cap is the tell.
+- **No floor of legal recourse:** a defrauded shareholder has courts; a rugged token holder usually has nothing. Code is the law, including its bugs.
+- **What's genuinely new:** composability, 24/7 global access, programmable ownership, and self-custody have no clean equities analog — the comparison is a starting point, not a destination. For the full primitive-by-primitive map, see [TradFi ⇄ DeFi](/learn/tradfi-mapping).

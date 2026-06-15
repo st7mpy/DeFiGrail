@@ -1,0 +1,40 @@
+---
+title: "Account Abstraction"
+slug: "account-abstraction"
+era: "infra"
+track: "ecosystem"
+order: 4
+prereqs: ["wallets-and-keys"]
+related: ["wallets-and-keys", "defi-risk-taxonomy"]
+tradfiAnchor: "Programmable corporate account with spending rules"
+summary: "Make a wallet a smart contract: social recovery, spending limits, gas paid in any token, batched actions. Fixing crypto's worst UX."
+significance: 17
+---
+
+## 01 · Concept — what problem does it solve?
+
+A normal Ethereum account (an EOA) is dumb: one private key controls everything, you must hold ETH to pay gas, and lose the key and it's over. **Account abstraction** makes the account a *smart contract* you can program — add social recovery, daily spending limits, multiple signers, session keys for a game, and let someone else pay your gas. It targets the single biggest barrier to mainstream crypto: self-custody being unforgiving and clunky. See [Wallets & Keys](/learn/wallets-and-keys) for the problem it fixes.
+
+## 02 · Mechanics
+
+- **ERC-4337:** account abstraction without changing the protocol. Users send **UserOperations** to a separate mempool; **bundlers** package them; a global **EntryPoint** contract executes them against each user's smart-account wallet.
+- **Paymasters:** a contract that sponsors gas — so a dapp can pay your fees, or you can pay them in USDC instead of ETH. No more "you need ETH to do anything."
+- **Smart-account features:** social recovery (guardians restore access without a seed phrase), spending limits, batched transactions (approve + swap in one click), and session keys (temporary scoped permission).
+- **EIP-7702 (Pectra, 2025):** lets a regular EOA temporarily *act as* a smart account for a transaction — bringing AA features to existing wallets without migrating.
+
+## 03 · Formulas
+
+```text
+// the ERC-4337 flow (no protocol change required)
+UserOperation → alt-mempool → Bundler → EntryPoint → SmartAccount.execute()
+
+// gas can be sponsored or paid in any token
+gas_payer = Paymaster (dapp sponsors)  OR  user pays in USDC
+```
+
+## 04 · Edge cases & risks
+
+- **Smart accounts have bugs:** a programmable wallet is code, and code can be exploited — a flawed recovery or module can lose funds an EOA never could. More power, more surface.
+- **Guardian trust:** social recovery shifts risk to your guardians — collude or get compromised and they can seize the account.
+- **Paymaster abuse:** sponsored gas is a denial-of-service and griefing vector if not carefully metered; bundlers must price the risk.
+- **Session-key scope creep:** an over-broad session key (for convenience) is a standing approval an attacker can ride — the same lesson as token approvals, one layer up.

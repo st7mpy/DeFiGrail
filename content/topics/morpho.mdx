@@ -1,0 +1,44 @@
+---
+title: "Morpho — Primitive + Curation"
+slug: "morpho"
+era: "v2"
+track: "lending"
+order: 6
+prereqs: ["lending-borrowing"]
+related: ["monolithic-vs-modular-lending", "yield-vaults", "euler"]
+tradfiAnchor: "Clearing utility + asset managers"
+summary: "A minimal, immutable lending primitive plus a curation layer — the architecture that grew to ~$7B by separating the engine from the risk management."
+significance: 18
+---
+
+## 01 · Concept — what problem does it solve?
+
+Morpho's thesis: split lending into two layers that shouldn't be entangled. The bottom layer, **Morpho Blue**, is a tiny (~650 lines), immutable, permissionless primitive for creating isolated markets — no admin keys, no upgrades, nothing to govern. The top layer, **MetaMorpho vaults**, is where professional curators allocate passive depositors' capital across those markets. Users who want a managed product use a vault; users who want raw access go direct. The split powered a run from ~$200M to ~$7B TVL, helped by Coinbase routing USDC lending through a curated Morpho vault.
+
+## 02 · Mechanics
+
+- **A market = five immutable parameters:** loan token, collateral token, oracle, interest-rate model, and LLTV (liquidation loan-to-value). Set once at deploy, never changed.
+- **Total isolation:** bad debt in a wstETH/USDC market cannot touch a cbBTC/USDC market — contagion between markets is structurally impossible.
+- **Immutability as a security stance:** no admin can pause or upgrade Blue, so there's no privileged key to compromise — a deliberate answer to the upgradeable-contract exploit class (e.g. Euler's 2023 hack).
+- **MetaMorpho vaults (ERC-4626):** curators (Steakhouse, Gauntlet, Re7) enable markets and set allocation caps; allocators rebalance; passive depositors just hold the vault token.
+- **"Aggregated, not just modular":** vaults aggregate liquidity *across* isolated markets, recovering the depth that pure isolation would fragment.
+
+## 03 · Formulas
+
+```text
+// a market is identified by its five params
+marketId = hash(loanToken, collateralToken, oracle, irm, LLTV)
+
+// fixed liquidation incentive (not governed)
+LIF = 1.15 / (LLTV + 0.13)
+   // at LLTV 86%:  1.15 / 0.99 ≈ 1.162  → liquidator gets ~16.2% bonus
+
+// permissionless: anyone calls createMarket(...) for ~a few hundred $ gas
+```
+
+## 04 · Edge cases & risks
+
+- **Permissionless oracle = permissionless risk:** any creator can wire any oracle, including a manipulable one. A bad-oracle market is live and can attract deposits, and immutability means no admin can pause it. Curation is the intended shield — but only if you stay inside curated vaults.
+- **Curator concentration:** a vault's curator chooses its markets and can upgrade the vault contract; a compromised or careless curator puts the whole vault's TVL at risk. You traded protocol-governance trust for curator trust.
+- **Cold-start liquidity:** a sound market with no depositors is useless; bootstrapping still requires incentives or a curator's allocation.
+- **The modular lesson, banked:** Euler v1's $197M exploit (2023) was an upgradeable-contract failure; Morpho's immutability is the design response — at the cost of never being able to fix a flawed market in place.

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { impermanentLoss, kinkedRate, ptPrice, v3Amounts } from "./defi-math";
+import { impermanentLoss, kinkedRate, ptPrice, v3Amounts, priceImpact } from "./defi-math";
 
 describe("impermanentLoss — IL = 2√P/(1+P) − 1", () => {
   it("is 0 at P=1", () => expect(impermanentLoss(1)).toBeCloseTo(0, 10));
@@ -31,5 +31,16 @@ describe("v3Amounts", () => {
   it("in-range position holds both assets", () => {
     const { x, y } = v3Amounts(1, 1500, 1000, 2000);
     expect(x).toBeGreaterThan(0); expect(y).toBeGreaterThan(0);
+  });
+});
+
+describe("priceImpact — f/(1−f)", () => {
+  it("is ~0 for a tiny trade", () => expect(priceImpact(0.001)).toBeCloseTo(0.001, 3));
+  it("is 100% impact when trade = half the reserve", () => expect(priceImpact(0.5)).toBeCloseTo(1, 10));
+  it("grows super-linearly with size", () =>
+    expect(priceImpact(0.2)).toBeGreaterThan(2 * priceImpact(0.1)));
+  it("throws outside [0,1)", () => {
+    expect(() => priceImpact(1)).toThrow(RangeError);
+    expect(() => priceImpact(-0.1)).toThrow(RangeError);
   });
 });

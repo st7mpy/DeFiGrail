@@ -1,0 +1,42 @@
+---
+title: "What Is a Blockchain?"
+slug: "what-is-a-blockchain"
+era: "v0"
+track: "markets-101"
+order: 4
+prereqs: []
+related: ["wallets-and-keys", "tokens-and-standards"]
+tradfiAnchor: "A shared, tamper-evident ledger"
+summary: "A database thousands of strangers maintain together, where no one can quietly edit the past — the substrate all of DeFi runs on."
+significance: 20
+---
+
+## 01 · Concept — what problem does it solve?
+
+Every financial system needs a ledger — a record of who owns what. Normally one trusted party (a bank) keeps it. A **blockchain** removes that party: it is a ledger replicated across thousands of independent computers, where transactions are batched into **blocks** that are cryptographically chained together, so altering an old record breaks every block after it visibly. The result is a database no single entity controls and no one can rewrite — *trustless* by construction. That property is the entire foundation DeFi is built on.
+
+## 02 · Mechanics
+
+- **Blocks & the chain:** each block holds a batch of transactions, a timestamp, and the hash of the previous block. Change anything in the past and the hash chain no longer matches.
+- **Consensus** decides which new block is valid:
+  - **Proof of Work** (Bitcoin): miners burn energy solving a puzzle to earn the right to add a block. Secure, slow (~7 tx/s), energy-hungry.
+  - **Proof of Stake** (Ethereum, since 2022): validators lock up ETH as collateral and are chosen to propose blocks; misbehavior is slashed. ~99.9% less energy.
+- **Immutability:** rewriting history needs majority control of the network's work or stake — economically absurd on a large chain.
+- **Gas:** users pay a fee in the chain's native coin (ETH, BTC) to get a transaction included; the fee floats with demand.
+
+## 03 · Formulas
+
+```text
+block_N.prev_hash == hash(block_N-1)   // the link that makes tampering visible
+
+// attack cost: control > 50% of hashpower (PoW) or stake (PoS)
+// Ethereum 2026: ~897k validators, ~38.9M ETH staked (~32% of supply)
+// Ethereum gas: often well under $0.20 for a simple transfer
+```
+
+## 04 · Edge cases & risks
+
+- **"Blockchain = unhackable" is wrong:** the ledger is tamper-evident, but the things *on top* — smart contracts, [bridges](/learn/bridges), and user [keys](/learn/wallets-and-keys) — get exploited constantly. The base layer being secure does not make the application layer safe.
+- **Decentralization is a spectrum:** a chain with ten validators is barely more trustless than a database. Real security needs hundreds to thousands of independent ones.
+- **Public vs. permissioned:** "enterprise blockchains" with one admin keep the buzzword but drop the trustless property — they are just databases with extra steps.
+- **Irreversibility:** there is no undo and no support line. A confirmed transaction is final.

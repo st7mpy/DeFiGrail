@@ -1,0 +1,43 @@
+---
+title: "How Liquidity Affects Pricing"
+slug: "liquidity-and-pricing"
+era: "ref"
+track: "liquidity"
+order: 4
+prereqs: ["understanding-liquidity"]
+related: ["amm-pricing-math", "uniswap-v2", "order-books-and-exchanges"]
+tradfiAnchor: "Market impact & price discovery"
+summary: "Price isn't a number a protocol stores — it's an emergent result of where liquidity sits. Thin books move on a whisper; deep ones absorb a shout."
+significance: 19
+---
+
+## 01 · Concept — what problem does it solve?
+
+A common beginner assumption: an asset "has a price." It doesn't. Price is *discovered* — it is wherever the next trade clears, and that depends entirely on how much liquidity sits near the current level. The same $1M order is a rounding error in a deep ETH/USDC pool and a 30% candle in a thin altcoin. Understanding pricing means understanding that **liquidity is the denominator of every price move**: impact scales with your size *relative to the liquidity behind the price*, not your size in dollars.
+
+## 02 · Mechanics
+
+- **Price discovery:** in an order book, price is the last match; in an [AMM](/learn/uniswap-v2), it's the reserve ratio. Either way it moves only when someone trades, and how far depends on depth.
+- **Depth sets the slope:** deep liquidity = a flat local curve = small moves per trade. Thin liquidity = a steep curve = violent moves. The chart below shows it directly.
+- **Your trade IS price discovery:** a market buy walks up the book / along the curve, and the new resting price is *higher because of you*. There is no passive way to take size.
+- **Arbitrage propagates price:** when one venue moves, arbitrageurs trade the laggards back in line — which is why liquidity *anywhere* affects price *everywhere*.
+- **Oracles inherit this:** a price feed is only as trustworthy as the liquidity behind the market it reads — thin liquidity is the root of most [oracle](/learn/oracles) manipulation.
+
+## 03 · Formulas
+
+```text
+// constant-product price impact (f = trade as a fraction of the reserve)
+impact = f / (1 − f)
+   //  f = 1%  → ~1.0% impact      (deep relative to trade)
+   //  f = 10% → ~11.1% impact
+   //  f = 33% → ~50%  impact      (thin relative to trade)
+```
+
+<PriceImpact />
+
+## 04 · Edge cases & risks
+
+- **Headline price lies under size:** the quoted mid-price applies to an infinitesimal trade. The price *you* get degrades with every unit — always think in average fill, not top-of-book.
+- **Liquidity is reflexive:** depth thins exactly in a crash, so the same dollar order that barely moved price yesterday gaps it today. Price discovery is least reliable when it matters most.
+- **Manipulation is cheap where liquidity is thin:** skewing a low-liquidity market for one block is the entire basis of flash-loan oracle attacks. See [Oracles](/learn/oracles).
+- **Concentration changes the math:** [Uniswap v3](/learn/uniswap-v3) and [Curve](/learn/curve-stableswap) reshape where liquidity sits, so impact depends on the *shape* of the curve, not just total TVL.
