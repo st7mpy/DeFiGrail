@@ -3,7 +3,6 @@ import { JetBrains_Mono, Newsreader } from "next/font/google";
 import SiteNav from "@/components/SiteNav";
 import Ticker from "@/components/Ticker";
 import SiteFooter from "@/components/SiteFooter";
-import AmbientRain from "@/components/AmbientRain";
 import Splash from "@/components/Splash";
 import SearchPalette from "@/components/SearchPalette";
 import { topicCards } from "@/lib/topic-cards";
@@ -35,7 +34,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${newsreader.variable} ${mono.variable}`}>
       <body>
         <Splash />
-        <AmbientRain />
         <div id="app">
           <SiteNav />
           <Ticker />

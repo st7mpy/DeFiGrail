@@ -211,6 +211,12 @@ footer.dg-footer{border-top:1px solid rgba(26,24,19,.14);margin-top:30px}
 .connected-chip:hover{background:#1a1813;color:#e8e3d6;border-color:#1a1813}
 .prereq-chip{font-size:11.5px;padding:6px 12px;border:1px dashed rgba(26,24,19,.28);border-radius:100px;background:transparent;color:rgba(26,24,19,.7);transition:background .15s,color .15s;text-decoration:none;display:inline-block}
 .prereq-chip:hover{background:#1a1813;color:#e8e3d6;border-color:#1a1813}
+.topic-nav-btns{display:flex;gap:16px;margin-top:40px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.mark-read{display:inline-flex;align-items:center;gap:10px;background:none;border:none;padding:6px 2px;color:#1a1813;font-family:var(--font-mono);font-size:12.5px;cursor:pointer}
+.mark-read-box{width:18px;height:18px;flex:none;border:1.5px solid rgba(26,24,19,.4);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:1;transition:background .15s,border-color .15s}
+.mark-read:hover .mark-read-box{border-color:#1a1813}
+.mark-read.done .mark-read-box{background:#1a1813;border-color:#1a1813;color:#e8e3d6}
+.mark-read-label{white-space:nowrap}
 
 /* ─── MDX PROSE (editorial) — rendered topic bodies ─── */
 .prose-paper h2{font-family:var(--font-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(26,24,19,.45);margin:34px 0 12px}
@@ -237,7 +243,7 @@ footer.dg-footer{border-top:1px solid rgba(26,24,19,.14);margin-top:30px}
 .next-track a:hover{text-decoration:underline}
 
 /* ─── GRAPH ─── */
-.graph-screen{position:relative;height:calc(100vh - 100px);margin:0 -28px;overflow:hidden}
+.graph-screen{position:relative;height:calc(100vh - 100px);width:100vw;margin-left:calc(-50vw + 50%);overflow:hidden}
 .graph-canvas{display:block;width:100%;height:100%;touch-action:none}
 .graph-header{position:absolute;top:28px;left:34px;pointer-events:none;z-index:5}
 .graph-title{font-size:12px;letter-spacing:.42em;font-weight:600;text-transform:uppercase}

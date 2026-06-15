@@ -54,9 +54,9 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
     }));
 
     function geom() {
-      const cx = W * 0.44, cy = H * 0.46;
-      const Rx = Math.min(W * 0.38, H * 0.6);
-      const Ry = Math.min(H * 0.32, W * 0.3);
+      const cx = W * 0.5, cy = H * 0.48;
+      const Rx = Math.min(W * 0.46, H * 0.95);
+      const Ry = Math.min(H * 0.42, W * 0.42);
       return { cx, cy, Rx, Ry };
     }
 
@@ -71,7 +71,7 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
         const within = (k + 0.5) / counts[n.era];
         const ang = (ei / eras.length) * TAU + (within - 0.5) * 1.4;
         const zig = k % 2 === 0 ? 1.08 : 0.8;
-        const R = Math.min(g.Rx, g.Ry) * 0.82;
+        const R = Math.min(g.Rx, g.Ry) * 0.92;
         n.x = g.cx + Math.cos(ang) * R * zig + (Math.random() - 0.5) * 8;
         n.y = g.cy + Math.sin(ang) * R * zig * (g.Ry / g.Rx) + (Math.random() - 0.5) * 8;
       });
@@ -100,10 +100,10 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
           const b = sims[j];
           let dx = a.x - b.x, dy = a.y - b.y;
           let d2 = dx * dx + dy * dy; if (d2 < 1) d2 = 1;
-          const f = 9000 / d2, d = Math.sqrt(d2);
+          const f = 14000 / d2, d = Math.sqrt(d2);
           fx += (dx / d) * f; fy += (dy / d) * f;
         }
-        fx += (cx - a.x) * 0.0012; fy += (cy - a.y) * 0.003;
+        fx += (cx - a.x) * 0.0011; fy += (cy - a.y) * 0.0026;
         a.fx = fx; a.fy = fy;
       }
       for (const e of edges) {

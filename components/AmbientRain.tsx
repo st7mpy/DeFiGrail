@@ -1,13 +1,26 @@
 "use client";
 import { useEffect, useRef } from "react";
 
-// Translucent formula rain — 1:1 from the design's initRain().
+// Translucent "cryptic numbers" rain for the landing page only.
 // Respects prefers-reduced-motion and pauses when the tab is hidden.
-const RAIN_GLYPHS = [
-  "x·y = k", "(3,3)", "IL = 2√P/(1+P)−1", "PT = par/(1+y)ᵗ",
-  "L = Δx/(1/√Pa − 1/√Pb)", "rate = f(util)", "aToken", "cToken",
-  "MEV", "√P", "Δy/Δx", "0.30%", "asset = PT + YT", "tick", "k", "y", "APY",
-];
+
+// Cryptic number string: hex hashes, long decimals, padded digit clusters.
+function crypticNumber(): string {
+  const r = Math.random();
+  if (r < 0.42) {
+    const len = 6 + ((Math.random() * 8) | 0);
+    let s = "0x";
+    for (let i = 0; i < len; i++) s += "0123456789abcdef"[(Math.random() * 16) | 0];
+    return s;
+  }
+  if (r < 0.72) {
+    return (Math.random() * 10 ** (2 + ((Math.random() * 6) | 0))).toFixed(Math.random() < 0.5 ? 2 : 6);
+  }
+  const len = 6 + ((Math.random() * 8) | 0);
+  let s = "";
+  for (let i = 0; i < len; i++) s += "0123456789"[(Math.random() * 10) | 0];
+  return s;
+}
 
 export default function AmbientRain() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -29,13 +42,13 @@ export default function AmbientRain() {
     resize();
     window.addEventListener("resize", resize);
 
-    const drops = Array.from({ length: 46 }, () => ({
+    const drops = Array.from({ length: 52 }, () => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      v: 0.18 + Math.random() * 0.42,
-      g: RAIN_GLYPHS[(Math.random() * RAIN_GLYPHS.length) | 0],
+      v: 0.16 + Math.random() * 0.4,
+      g: crypticNumber(),
       sz: 11 + ((Math.random() * 7) | 0),
-      a: 0.032 + Math.random() * 0.028,
+      a: 0.03 + Math.random() * 0.03,
     }));
     const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -48,7 +61,7 @@ export default function AmbientRain() {
             if (d.y > window.innerHeight + 20) {
               d.y = -20;
               d.x = Math.random() * window.innerWidth;
-              d.g = RAIN_GLYPHS[(Math.random() * RAIN_GLYPHS.length) | 0];
+              d.g = crypticNumber();
             }
           }
           ctx!.font = d.sz + "px var(--font-jetbrains), monospace";

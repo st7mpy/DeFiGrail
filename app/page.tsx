@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AmbientRain from "@/components/AmbientRain";
 import TrackSection from "@/components/home/TrackSection";
 import { topicCards, trackViews } from "@/lib/topic-cards";
 import { FEATURED } from "@/lib/site-data";
@@ -21,6 +22,7 @@ export default async function Home() {
 
   return (
     <>
+      <AmbientRain />
       <section className="home-hero">
         <div className="hero-eyebrow">An interactive DeFi curriculum</div>
         <h1 className="hero-h1">Learn DeFi the way a trading desk would teach it.</h1>
