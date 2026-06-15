@@ -1,0 +1,43 @@
+---
+title: "Oracles & Price Feeds"
+slug: "oracles"
+era: "infra"
+track: "infrastructure"
+order: 2
+prereqs: []
+related: ["makerdao", "liquidations", "mev"]
+tradfiAnchor: "Market-data feed / reference rate"
+summary: "How off-chain prices get on chain — and why a bad feed is the root cause of most DeFi hacks."
+significance: 17
+---
+
+## 01 · Concept — what problem does it solve?
+
+A smart contract can't see the outside world. But lending, liquidations, perps, and stablecoins all need to know *what is ETH worth right now?* An **oracle** brings that answer on chain. It is also the single most attacked surface in DeFi: if you can lie to the oracle for one transaction, you can borrow against worthless collateral, trigger false [liquidations](/learn/liquidations), or drain a pool. Most "DeFi hacks" are really oracle-manipulation attacks.
+
+## 02 · Mechanics
+
+- **Push oracles (Chainlink):** a decentralized network of node operators aggregates prices from many sources and writes the median on chain on a schedule or deviation threshold. Manipulating it means corrupting a majority of independent nodes — expensive.
+- **Pull oracles (Pyth):** prices are signed off-chain and *pulled* on chain by the user at the moment of use — lower latency, fresher, the consumer pays the update gas.
+- **TWAP (on-chain):** derive a price from a DEX's own time-weighted average (Uniswap v3 accumulators). No external trust, but only as deep as the pool.
+- **Aggregation & deviation:** good feeds take a median across many sources and only update on meaningful moves, filtering single-venue spikes.
+
+## 03 · Formulas
+
+```text
+// decentralized median feed
+price_onchain = median(node₁, node₂, … nodeₙ)   // corrupt > n/2 to move it
+
+// time-weighted average price (manipulation cost ∝ duration × depth)
+TWAP = (cumulativePrice_now − cumulativePrice_then) / (t_now − t_then)
+
+// attack math
+single-block spike → cheap for spot, but TWAP needs sustained capital
+```
+
+## 04 · Edge cases & risks
+
+- **Flash-loan spot manipulation** — borrow a fortune, slam a thin pool to skew its spot price, exploit a protocol reading that spot, repay — all in one transaction. The classic oracle attack; the reason naive `getPrice()` from a single DEX is fatal.
+- **TWAP ≠ safe** — TWAP resists one-block spikes but is still beatable by multi-block manipulation, and it lags fast crashes (liquidations fire late → bad debt).
+- **Stale / frozen feeds** — if a feed stops updating in a crash (or an L2 sequencer halts), protocols act on a stale price; good integrations check feed freshness.
+- **Centralization of "decentralized" feeds** — if too many protocols read the same oracle, that oracle is a systemic single point of failure for the whole ecosystem.

@@ -1,0 +1,45 @@
+---
+title: "DeFi Options & Structured Vaults"
+slug: "defi-options"
+era: "esoteric"
+track: "derivatives"
+order: 2
+prereqs: ["understanding-liquidity"]
+related: ["perpetual-futures", "impermanent-loss"]
+tradfiAnchor: "Listed options & structured products desk"
+summary: "On-chain calls and puts, and the vaults that auto-sell them for yield — convexity as a composable primitive."
+significance: 13
+---
+
+## 01 · Concept — what problem does it solve?
+
+Options give asymmetric, non-linear payoffs — the right but not the obligation to buy (call) or sell (put) at a strike. On-chain they are harder than perps: pricing needs volatility, and liquidity is thin. The breakout product wasn't trading options directly but **DeFi Option Vaults (DOVs)** — deposit an asset, the vault systematically sells covered calls or cash-secured puts and pays you the premium. Structured, automated convexity for passive depositors.
+
+## 02 · Mechanics
+
+- **Calls & puts:** a call profits as price rises above strike; a put as it falls below. Buyers pay a premium for the optionality; sellers collect it and take the tail risk.
+- **Covered-call vault:** holds the asset, sells out-of-the-money calls weekly, distributes premium. You earn yield but cap your upside.
+- **Pricing needs vol:** option value depends on implied volatility (Black–Scholes intuition); on-chain oracles for IV are immature, so most venues auction options rather than quote a continuous surface.
+- **AMM options (Lyra):** price options off a pooled AMM with automated delta/vega hedging so LPs aren't naked short volatility.
+- **LP ≈ short option:** providing AMM liquidity already *is* a short-volatility, short-gamma position — see [Impermanent Loss](/learn/impermanent-loss). Options make that exposure explicit and tradable.
+
+## 03 · Formulas
+
+```text
+// payoffs at expiry (strike K)
+call_buyer = max(spot − K, 0) − premium
+put_buyer  = max(K − spot, 0) − premium
+
+// covered-call vault yield
+yield ≈ Σ premiums_collected   (upside above K is forgone)
+
+// value depends on implied volatility
+option_value = f(spot, K, time, rate, σ)   // σ = implied vol
+```
+
+## 04 · Edge cases & risks
+
+- **Capped upside, full downside** — covered-call vaults underperform badly in a sharp rally (calls get assigned) while still eating the drawdown if price falls.
+- **Pin & expiry games** — when large open interest sits near a strike, price can gravitate ("pin") to it as hedgers rebalance into expiry.
+- **Thin liquidity, wide spreads** — on-chain options markets are shallow; realized execution often diverges from the theoretical fair value.
+- **Vol is the hidden variable** — selling options is selling insurance; a single volatility spike can erase months of collected premium.

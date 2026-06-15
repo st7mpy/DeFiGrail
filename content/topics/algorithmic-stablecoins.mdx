@@ -1,0 +1,41 @@
+---
+title: "Algorithmic Stablecoins"
+slug: "algorithmic-stablecoins"
+era: "esoteric"
+track: "stablecoins"
+order: 2
+prereqs: ["stablecoin-design"]
+related: ["ohm-olympusdao", "stablecoin-design"]
+tradfiAnchor: "Unbacked currency peg defense (and its bank runs)"
+summary: "Holding a peg with mechanism instead of collateral — elegant on paper, reflexive in a crisis. The UST/LUNA case study."
+significance: 14
+---
+
+## 01 · Concept — what problem does it solve?
+
+The dream: a decentralized dollar with no costly collateral and no centralized issuer — peg held purely by an algorithm that expands and contracts supply. The reality is that an undercollateralized peg is a confidence game, and confidence is **reflexive**: the same feedback loop that holds the peg up in calm markets accelerates its collapse in a panic. Algorithmic designs are the most instructive failures in DeFi.
+
+## 02 · Mechanics
+
+- **Seigniorage / two-token (UST ↔ LUNA):** the stablecoin is always redeemable for $1 of a volatile "absorber" token. Mint/burn arbitrage between them is supposed to defend the peg.
+- **Rebase (Ampleforth):** every wallet's balance expands or contracts to push price toward target — moves the peg problem into supply rather than price.
+- **Fractional-algorithmic (early Frax):** part collateral, part algorithmic — a hybrid that dials backing up or down with confidence.
+- **The reflexive loop:** the absorber token only has value because the system has value; if the peg slips and the absorber falls, redemption mints *more* absorber, crashing it further — a death spiral.
+
+## 03 · Formulas
+
+```text
+// seigniorage redemption (UST/LUNA style)
+burn $1 of UST  → mint $1 of LUNA   (and vice versa)
+
+// the death spiral
+UST < $1 → arb burns UST for LUNA → LUNA supply ↑ → LUNA price ↓
+       → confidence ↓ → more UST sold → UST ↓↓   (self-reinforcing)
+```
+
+## 04 · Edge cases & risks
+
+- **Terra/UST collapse (May 2022)** — a ~$18B stablecoin and its ~$40B absorber (LUNA) went to near-zero in days once the peg broke and the spiral engaged. The canonical algo-stable failure.
+- **Yield as the real peg** — UST's peg was effectively propped by Anchor's unsustainable ~20% yield; when yield-seeking deposits fled, the mechanism had nothing left to hold.
+- **Reflexivity, not a bug** — the failure mode is structural, not an exploit. The mechanism that defends the peg *is* the mechanism that destroys it.
+- **The (3,3) cousin** — [OlympusDAO](/learn/ohm-olympusdao)'s rebase model shares the same reflexive DNA: glorious on the way up, brutal on the way down.

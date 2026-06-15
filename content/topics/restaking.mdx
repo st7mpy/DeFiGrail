@@ -1,0 +1,44 @@
+---
+title: "Restaking & EigenLayer"
+slug: "restaking"
+era: "v2"
+track: "staking"
+order: 2
+prereqs: ["liquid-staking"]
+related: ["liquid-staking", "multi-utilization"]
+tradfiAnchor: "Rehypothecated collateral securing multiple obligations"
+summary: "Reuse staked ETH to secure other protocols for extra yield — pooled security, stacked slashing risk."
+significance: 17
+---
+
+## 01 · Concept — what problem does it solve?
+
+A new protocol (a bridge, an oracle, a data-availability layer) needs its own expensive trust network. **Restaking**, pioneered by EigenLayer, lets ETH that is *already* staked be re-pledged to secure these extra services — called **AVSs** (Actively Validated Services). Stakers earn additional rewards for taking on additional slashing conditions; new services rent Ethereum's economic security instead of bootstrapping their own. It is [rehypothecation](/learn/multi-utilization) applied to trust — and it carries the same efficiency-versus-contagion trade-off. As of 2026 EigenLayer holds ~$18B and the vast majority of the restaking market.
+
+## 02 · Mechanics
+
+- **Opt-in to AVSs:** a restaker (or [LST](/learn/liquid-staking) holder) deposits into EigenLayer and chooses which AVSs to help secure. Each AVS adds its own slashing rules.
+- **Liquid restaking tokens (LRTs):** protocols like ether.fi/Renzo wrap the whole flow — stake → restake → manage AVS selection — into one liquid token, so the position stays usable in DeFi.
+- **Yield stacking:** base staking (~3–4%) + LST rewards + AVS rewards (~1–3% more) — paid in ETH or the AVS's token.
+- **Shared security:** instead of each new protocol minting a token and praying for a deep validator set, it buys security from a pool of restaked ETH.
+- **Slashing went live:** AVS slashing is now active — misbehavior against an AVS's rules confiscates part of the restaked ETH.
+
+## 03 · Formulas
+
+```text
+// stacked yield
+total ≈ base_staking + LST_rewards + Σ AVS_rewardsᵢ
+
+// stacked slashing exposure
+max_loss = Σ slashable_fractionᵢ   over every AVS opted into
+
+// the LRT chain
+ETH → stETH (Lido) → restaked (EigenLayer) → LRT (ether.fi) → DeFi collateral
+```
+
+## 04 · Edge cases & risks
+
+- **Correlated slashing** — opting one stake into many AVSs means one bad event, or several at once, can compound losses far beyond a single validator fault.
+- **Leverage tower** — ETH → LST → LRT → lending collateral → borrow → repeat. Each wrapper adds smart-contract and depeg risk; an unwind cascades down the whole stack.
+- **AVS quality is uneven** — rewards tempt restakers into securing services whose slashing conditions they don't fully understand; the yield is paid before the risk is proven.
+- **Systemic reflexivity** — restaking concentrates risk back onto Ethereum's own validator set; a large correlated slashing could feed back into consensus security itself.

@@ -1,0 +1,41 @@
+---
+title: "DEX Aggregators & Intents"
+slug: "dex-aggregators"
+era: "v2"
+track: "liquidity"
+order: 3
+prereqs: ["uniswap-v2", "understanding-liquidity"]
+related: ["mev", "understanding-liquidity"]
+tradfiAnchor: "Smart order router / best execution"
+summary: "Liquidity is fragmented across hundreds of pools; aggregators and solvers find best execution and shield you from MEV."
+significance: 14
+---
+
+## 01 · Concept — what problem does it solve?
+
+DeFi liquidity is scattered across hundreds of pools, versions, fee tiers, and chains. A single venue is rarely the best price for any size. **Aggregators** (1inch, Matcha, Jupiter) split an order across many pools to minimize total [price impact](/learn/understanding-liquidity). **Intent-based** systems (CoW Swap, UniswapX) go further: you sign *what you want*, not *how to get it*, and a competitive market of solvers finds the route — often netting your trade against someone else's so no AMM is touched at all.
+
+## 02 · Mechanics
+
+- **Path-finding:** the router searches the graph of pools for the route (often split across several) that maximizes output after gas and fees.
+- **Order splitting:** large orders fracture across venues so each leg stays in shallow-impact territory.
+- **Intents & solvers:** the user signs a desired outcome with a limit; solvers compete to fill it and keep any surplus they can find — best execution as an auction.
+- **Coincidence of wants (CoW):** if two users want opposite trades, a solver matches them directly at the mid-price, bypassing the AMM and its fees entirely.
+- **MEV protection:** because solvers settle in batches at a uniform clearing price, there is no ordering edge to exploit — structurally sandwich-resistant. See [MEV](/learn/mev).
+
+## 03 · Formulas
+
+```text
+// aggregator objective: maximize output net of costs
+maximize  Σ out(routeᵢ) − gas − fees   subject to Σ in = amount_in
+
+// uniform clearing price in a batch auction (CoW-style)
+all trades in a batch settle at one price p*  ⇒  no intra-batch ordering edge
+```
+
+## 04 · Edge cases & risks
+
+- **Solver trust & centralization** — you rely on solvers to actually return best execution; a thin or colluding solver set can quietly skim surplus.
+- **Gas vs. savings** — splitting across many pools costs gas; for small trades the routing overhead can exceed the price improvement.
+- **Approval surface** — aggregator routers hold broad token approvals; a router bug or malicious upgrade is a fat target (several historical approval-drain incidents).
+- **Stale quotes** — the route is computed off-chain on a snapshot; if state moves before inclusion, the realized fill drifts from the quote (slippage limits cap the damage).

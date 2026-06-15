@@ -1,0 +1,47 @@
+---
+title: "Perpetual Futures"
+slug: "perpetual-futures"
+era: "v2"
+track: "derivatives"
+order: 1
+prereqs: ["understanding-liquidity"]
+related: ["defi-options", "mev", "understanding-liquidity"]
+tradfiAnchor: "Futures with no expiry, pegged by funding"
+summary: "Leveraged exposure that never expires, tied to spot by a funding rate — the highest-volume product in crypto."
+significance: 21
+---
+
+## 01 · Concept — what problem does it solve?
+
+Traders want leveraged, perpetual exposure to a price without ever taking delivery. A **perpetual future** ("perp") is a futures contract with no expiry — but a futures price with no settlement date would drift away from spot. The fix is the **funding rate**: a periodic payment between longs and shorts that mechanically tethers the perp's mark price to the underlying index. Perps are the highest-volume instrument in all of crypto, and on-chain venues like Hyperliquid and GMX now rival centralized exchanges.
+
+## 02 · Mechanics
+
+- **Mark vs. index:** the perp trades at its mark price; the index is the real spot. Funding closes the gap.
+- **Funding rate:** if mark is above index, longs pay shorts (discouraging longs); if below, shorts pay longs. Paid continuously or every ~8h depending on venue.
+- **Margin & leverage:** post margin, take exposure many times larger; an underwater position is liquidated like any [leveraged loan](/learn/liquidations).
+- **Two on-chain designs:** *orderbook* perps (Hyperliquid — its own L1 matching engine) vs. *pool/oracle* perps (GMX — traders take the other side of a shared LP vault, priced off an [oracle](/learn/oracles)).
+- **vAMM:** earlier designs (Perpetual Protocol) priced perps off a *virtual* AMM curve with no real reserves — pure price discovery, settled in a vault.
+
+## 03 · Formulas
+
+```text
+// funding rate (premium + interest component)
+funding = (mark − index) / index + interest_component
+
+// who pays whom
+mark > index → longs pay shorts      mark < index → shorts pay longs
+
+// payment each interval on notional
+payment = funding · position_notional
+
+// liquidation (same as leveraged lending)
+liquidate when margin_ratio < maintenance_margin
+```
+
+## 04 · Edge cases & risks
+
+- **Funding can dwarf the move** — in a crowded long, funding bleeds longs continuously; "right direction, wrong funding" is a real way to lose.
+- **Liquidation cascades** — high leverage means a small adverse move triggers liquidations that move price further, liquidating more. Perps amplify volatility both ways.
+- **LP is the counterparty (GMX-style)** — the liquidity vault is short whatever traders are long; in a strong trend, LPs pay out and oracle-priced entries can be gamed.
+- **Oracle dependence** — pool-based perps liquidate and price off an oracle; a manipulated or laggy feed is an attack surface (several historical perp exploits).

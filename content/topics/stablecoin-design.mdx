@@ -1,0 +1,45 @@
+---
+title: "Stablecoin Design"
+slug: "stablecoin-design"
+era: "v0"
+track: "stablecoins"
+order: 1
+prereqs: []
+related: ["makerdao", "algorithmic-stablecoins", "curve-stableswap"]
+tradfiAnchor: "Currency board / money-market fund share"
+summary: "How a token holds a dollar: fiat-backed, crypto-backed, or algorithmic — and what each one risks."
+significance: 22
+---
+
+## 01 · Concept — what problem does it solve?
+
+Crypto needs a stable unit of account — somewhere to sit between trades, a denominator for loans, a medium for payments — without leaving the chain. A stablecoin is any token engineered to hold a peg (almost always $1). The whole design space is one trade-off: **what backs the peg, and who do you have to trust for it to hold?** As of 2026 stablecoins are a ~$320B asset class, the most clearly product-market-fit thing crypto has produced.
+
+## 02 · Mechanics
+
+- **Fiat-backed (USDT ~$190B, USDC ~$78B):** one token, one dollar of reserves (T-bills, cash) held by a company. Tightest peg, simplest model — but centralized: you trust the issuer's reserves and their freeze switch.
+- **Crypto-backed (DAI / USDS, Sky):** mint against over-collateralized on-chain crypto via a [CDP](/learn/makerdao). Decentralized and transparent, but capital-inefficient (150–200% collateral) and exposed to collateral crashes.
+- **Algorithmic:** hold peg via supply-and-incentive mechanics with little or no hard backing — historically fragile. See [Algorithmic Stablecoins](/learn/algorithmic-stablecoins).
+- **Yield-bearing / synthetic (e.g. USDe):** back the peg with a delta-neutral hedge (spot collateral + short perp) so the float earns the [funding rate](/learn/perpetual-futures). New, powerful, and carrying exchange/funding risk.
+- **The peg arbitrage:** redemption keeps the peg honest — if the token trades below $1, arbitrageurs buy cheap and redeem for $1; the **Peg Stability Module** does this at the margin for DAI.
+
+## 03 · Formulas
+
+```text
+// fiat-backed solvency
+reserves ≥ tokens_outstanding · $1        // trust the attestation
+
+// crypto-backed (CDP) collateralization
+CR = collateral_value / debt ≥ liquidation_ratio   // e.g. ≥ 150%
+
+// peg-restoring arbitrage
+price < $1 → buy token, redeem for $1 → supply falls → price ↑
+price > $1 → mint token, sell for >$1 → supply rises → price ↓
+```
+
+## 04 · Edge cases & risks
+
+- **USDC depeg (Mar 2023)** — $3.3B of reserves were stuck in the failed Silicon Valley Bank; USDC fell to ~$0.88 over a weekend. "Fully backed" still carries *where the backing is held* risk.
+- **Centralized freeze risk** — fiat issuers can and do blacklist addresses; the decentralization of anything built on USDC/USDT is capped by that switch.
+- **Collateral correlation** — crypto-backed coins fail when their collateral crashes faster than [liquidations](/learn/liquidations) can clear (MakerDAO's Black Thursday).
+- **Reserve opacity** — attestations are point-in-time and not full audits; the market periodically reprices issuer trust, and that repricing *is* a depeg.

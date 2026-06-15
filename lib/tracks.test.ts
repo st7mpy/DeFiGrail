@@ -2,10 +2,13 @@ import { describe, expect, it } from "vitest";
 import { getTrack, nextInTrack, TRACKS } from "./tracks";
 
 describe("TRACKS", () => {
-  it("exposes all 5 tracks", () => {
-    expect(Object.keys(TRACKS)).toHaveLength(5);
+  it("exposes all 10 tracks", () => {
+    expect(Object.keys(TRACKS)).toHaveLength(10);
     expect(Object.keys(TRACKS)).toEqual(
-      expect.arrayContaining(["foundations", "composability", "frontier", "esoteric", "infrastructure"])
+      expect.arrayContaining([
+        "foundations", "lending", "liquidity", "stablecoins", "composability",
+        "frontier", "staking", "derivatives", "esoteric", "infrastructure",
+      ])
     );
   });
 });
@@ -46,8 +49,12 @@ describe("nextInTrack", () => {
     expect(next!.title).toBeDefined();
   });
 
-  it("returns null for bot-architecture (last and only in infrastructure)", () => {
-    expect(nextInTrack("bot-architecture")).toBeNull();
+  it("advances within infrastructure: bot-architecture → oracles", () => {
+    expect(nextInTrack("bot-architecture")?.slug).toBe("oracles");
+  });
+
+  it("returns null for bridges (last in infrastructure)", () => {
+    expect(nextInTrack("bridges")).toBeNull();
   });
 
   it("returns null for tradfi-mapping (last in foundations)", () => {

@@ -1,0 +1,47 @@
+---
+title: "Interest Rate Models"
+slug: "interest-rate-models"
+era: "esoteric"
+track: "lending"
+order: 2
+prereqs: ["lending-borrowing"]
+related: ["compound", "aave-v1"]
+tradfiAnchor: "Money-market rate curve set by supply/demand"
+summary: "How a pool prices money with no rate desk: utilization in, borrow APR out."
+significance: 15
+---
+
+## 01 · Concept — what problem does it solve?
+
+A lending pool has no trader quoting rates. Instead the rate is a deterministic function of one number — **utilization**, the fraction of supplied capital currently borrowed. Low utilization means idle capital, so rates stay cheap to attract borrowers. High utilization means exit liquidity is thin, so rates climb steeply to pull in lenders and push out borrowers. The curve *is* the rate desk.
+
+## 02 · Mechanics
+
+- **Utilization U:** borrows ÷ available liquidity. The single input to the model.
+- **The kink:** below a target utilization (often 80–90%) rates rise gently along a shallow slope; above it, a steep "jump" slope kicks in to defend the last of the liquidity.
+- **Why the kink exists:** it keeps borrowing cheap in normal conditions while making 100% utilization economically self-correcting — runaway rates force repayment.
+- **Supply rate is derived:** lenders earn the borrow rate scaled by utilization, minus a reserve factor the protocol keeps.
+- **Reactive / PID models:** Aave and Euler tune the curve dynamically, targeting a utilization band rather than hard-coding one fixed slope.
+
+## 03 · Formulas
+
+```text
+// utilization
+U = borrows / (cash + borrows − reserves)
+
+// kinked (two-slope) borrow rate
+r_b = base + U·slope₁                        U ≤ kink
+r_b = base + kink·slope₁ + (U−kink)·slope₂   U > kink   // slope₂ ≫ slope₁
+
+// supply rate (what lenders actually earn)
+r_s = r_b · U · (1 − reserveFactor)
+```
+
+<KinkedRate />
+
+## 04 · Edge cases & risks
+
+- **Above the kink it bites fast** — past ~90% utilization the jump slope can take borrow APRs from single digits to triple digits within a point or two of utilization.
+- **Incentives distort the curve** — token rewards can make net borrowing *profitable*, driving circular borrow-loops that pin utilization high and inflate apparent demand.
+- **Fixed rates are a different animal** — protocols like [Pendle](/learn/pendle) and Notional build fixed rates on top by tokenizing or auctioning the floating stream; the base pool rate stays variable underneath.
+- **Stale parameters** — a rate curve calibrated for calm markets misprices risk in a crisis; governance updates lag the conditions they are meant to handle.

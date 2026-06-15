@@ -1,0 +1,43 @@
+---
+title: "Cross-Chain Bridges"
+slug: "bridges"
+era: "infra"
+track: "infrastructure"
+order: 3
+prereqs: []
+related: ["oracles", "stablecoin-design"]
+tradfiAnchor: "Cross-border correspondent settlement"
+summary: "Moving value between chains that can't see each other — DeFi's most-exploited category by far."
+significance: 15
+---
+
+## 01 · Concept — what problem does it solve?
+
+Each blockchain is an island; a contract on Ethereum cannot read Solana. A **bridge** lets value move between them — and in doing so becomes the place where the most money is held with the weakest guarantees. Bridges are consistently the single most exploited category in DeFi: in 2026 they keep accounting for an outsized share of monthly hack losses despite holding a fraction of total value, because the security of moving an asset is only as strong as the messaging layer between two chains that fundamentally cannot verify each other.
+
+## 02 · Mechanics
+
+- **Lock-and-mint:** lock the asset in a contract on chain A, mint a wrapped representation on chain B; burn on B to unlock on A. The wrapped token is only worth as much as the lock is secure.
+- **Liquidity / burn-and-mint pools:** pre-funded liquidity on both sides; you withdraw native asset on the destination from a pool rather than minting a wrapper.
+- **The trust model is everything:** who attests that the lock happened? A multisig, an external validator set, an optimistic challenge window, or a light-client/ZK proof — in increasing order of trustlessness and difficulty.
+- **Message passing:** generalized bridges (LayerZero, CCIP, Wormhole) carry arbitrary messages, not just tokens — and inherit the same verification risk.
+
+## 03 · Formulas
+
+```text
+// lock-and-mint invariant (must always hold)
+wrapped_supply_on_B == locked_on_A     // break this → infinite mint
+
+// trust spectrum (weakest → strongest)
+multisig  <  external validator set  <  optimistic + fraud proof  <  light client / ZK
+
+// the failure that recurs
+forge a "lock happened" message on B  →  mint with no real lock  →  drain
+```
+
+## 04 · Edge cases & risks
+
+- **Ronin ($625M, 2022)** — five of nine validator keys compromised; the attacker forged withdrawals. The largest DeFi hack ever, and a pure trust-model failure.
+- **Wormhole ($325M, 2022)** — a signature-verification flaw let the attacker mint 120k wETH on Solana with nothing locked behind it.
+- **Mint-function bugs persist** — 2026 bridge exploits keep targeting the same class: forge an off-chain message, mint on the destination with no matching lock. The math is simple; the verification is hard.
+- **Bridged assets are derivatives** — "USDC on chain X" via an unofficial bridge is an IOU on that bridge's solvency; if the bridge is drained, the wrapped token depegs to zero.

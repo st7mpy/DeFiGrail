@@ -1,0 +1,47 @@
+---
+title: "Understanding Liquidity"
+slug: "understanding-liquidity"
+era: "ref"
+track: "liquidity"
+order: 1
+prereqs: []
+related: ["uniswap-v2", "uniswap-v3", "curve-stableswap", "impermanent-loss"]
+tradfiAnchor: "Order-book depth & market impact"
+summary: "Depth, slippage, and price impact — why a $1M trade in one pool is free and ruinous in another."
+significance: 20
+---
+
+## 01 · Concept — what problem does it solve?
+
+Liquidity is the answer to a single question: *how much can you trade before the price moves against you?* A deep market absorbs size with little movement; a thin one lurches on the first decent order. Everything downstream in DeFi — a swap quote, a liquidation, an oracle, a stablecoin peg — ultimately rests on whether there is enough liquidity at the right price when it is needed.
+
+"TVL" (total value locked) is the headline number, but TVL spread across a wide price range is shallow where it matters. What you actually care about is **depth near the current price**.
+
+## 02 · Mechanics
+
+- **Depth:** how much capital sits within X% of the mid-price. Deep books/pools quote tight; thin ones gap.
+- **Price impact:** the move *your own trade* causes by walking up the curve. Grows with trade size relative to reserves — it is the AMM's version of a spread.
+- **Slippage:** the gap between the quoted price and the executed price — price impact plus any adverse move between signing and inclusion. Your slippage tolerance is also a [sandwich](/learn/mev) attacker's budget.
+- **Provision shape matters:** [Uniswap v2](/learn/uniswap-v2) spreads liquidity across all prices (shallow everywhere); [Uniswap v3](/learn/uniswap-v3) concentrates it; [Curve](/learn/curve-stableswap) flattens the curve for pegged assets so depth pools near parity.
+- **Mercenary vs. sticky liquidity:** emissions rent depth that leaves when rewards stop; fees and protocol-owned liquidity make it stay.
+
+## 03 · Formulas
+
+```text
+// constant-product price impact for buying Δx of token X
+exec_price = y / (x − Δx)          // worse than spot y/x
+impact     = exec_price / (y/x) − 1
+
+// rule of thumb: in an x·y=k pool, trading p% of a reserve
+// moves price ≈ p% (small trades) and far more as p grows
+
+// slippage tolerance caps the worst fill you will accept
+min_out = quote · (1 − tolerance)
+```
+
+## 04 · Edge cases & risks
+
+- **TVL ≠ usable depth** — a pool can show huge TVL but be shallow at the current price (wide v3 ranges, idle capital); always look at depth, not the headline.
+- **Liquidity is reflexive** — it evaporates exactly when you need it. In a crash, LPs withdraw and arbitrageurs widen, so the depth that priced your risk yesterday is gone today.
+- **Fragmentation** — the same pair split across chains, versions, and fee tiers means no single venue is deep; aggregators exist to stitch it back together. See [DEX aggregators](/learn/dex-aggregators).
+- **Providing liquidity is not passive income** — LPs are short volatility and lose to informed flow. See [Impermanent Loss](/learn/impermanent-loss).

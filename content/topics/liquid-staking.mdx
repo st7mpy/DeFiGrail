@@ -1,0 +1,44 @@
+---
+title: "Liquid Staking"
+slug: "liquid-staking"
+era: "v2"
+track: "staking"
+order: 1
+prereqs: []
+related: ["restaking", "stablecoin-design"]
+tradfiAnchor: "Tradable receipt on a term deposit"
+summary: "Stake ETH to secure the chain, get a liquid receipt (stETH) that keeps earning while you use it everywhere else."
+significance: 20
+---
+
+## 01 · Concept — what problem does it solve?
+
+Staking ETH secures Ethereum and earns a yield — but native staking locks the capital and demands 32 ETH and validator ops. **Liquid staking** pools any amount, runs the validators for you, and hands back a token (stETH, rETH) that represents your staked ETH plus accruing rewards. That token stays liquid: you can lend it, LP it, or use it as collateral while it keeps earning. It is the base yield layer the rest of DeFi composes on top of. As of 2026 Lido alone holds ~$27B and ~47% of liquid-staked ETH.
+
+## 02 · Mechanics
+
+- **Deposit → LST:** send ETH, receive a liquid staking token. **Rebasing** (stETH) grows your balance daily; **reward-bearing** (rETH, wstETH) grows the token's redemption value instead.
+- **Validator set:** the protocol delegates pooled ETH across many node operators; rewards = consensus issuance + priority fees + MEV.
+- **Yield stack:** base issuance ~3–4%, plus MEV/tips on top — the reference "risk-free rate" of crypto.
+- **Peg by redemption:** post-Merge withdrawals let anyone redeem stETH for ETH ~1:1, which arbitrages the secondary-market price back toward parity.
+- **Composability:** LSTs are the most-used collateral in DeFi — Aave eMode, Curve LST pools, and the entire [restaking](/learn/restaking) stack are built on them.
+
+## 03 · Formulas
+
+```text
+// rebasing LST (stETH): balance tracks rewards
+balance(t) = staked · (1 + staking_yield)^t        // ~1:1 with ETH
+
+// reward-bearing LST (rETH/wstETH): rate appreciates
+rETH_per_ETH grows over time; redeem value = shares · rate
+
+// secondary price held near peg by redemption arbitrage
+stETH < ETH → buy stETH, redeem for ETH → price → peg
+```
+
+## 04 · Edge cases & risks
+
+- **The stETH "depeg" (2022)** — during the Terra/3AC unwind, stETH traded to ~0.94 ETH. Not a protocol failure — withdrawals weren't live yet, so leveraged holders forced to exit could only sell into thin secondary liquidity.
+- **Centralization of consensus** — one liquid-staking protocol controlling a large share of validators is a systemic risk to Ethereum itself; ~33% is the threshold where it starts to matter.
+- **Slashing pass-through** — if operators misbehave, validators are slashed and the loss flows back to LST holders (mitigated by operator diversification and insurance).
+- **Leverage loops** — supply stETH, borrow ETH, restake, repeat. The yield is real; so is the cascade risk if the LST wobbles off peg.

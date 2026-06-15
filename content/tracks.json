@@ -1,7 +1,12 @@
 {
-  "foundations":    { "label": "Foundations",     "era": "v0",       "topics": ["uniswap-v2", "makerdao", "compound", "aave-v1", "tradfi-mapping"] },
-  "composability":  { "label": "Composability",   "era": "v1",       "topics": ["pickle-finance", "sushiswap"] },
-  "frontier":       { "label": "Modern Frontier", "era": "v2",       "topics": ["uniswap-v3", "ohm-olympusdao", "pendle", "fluid", "euler"] },
-  "esoteric":       { "label": "Esoteric",        "era": "esoteric", "topics": ["mm-primer", "impermanent-loss", "ptyt-zero-coupon", "mev", "multi-utilization"] },
-  "infrastructure": { "label": "Infrastructure",  "era": "infra",    "topics": ["bot-architecture"] }
+  "foundations":    { "label": "Foundations",        "era": "v0",         "topics": ["uniswap-v2", "makerdao", "compound", "aave-v1", "tradfi-mapping"] },
+  "lending":        { "label": "Lending & Borrowing", "era": "v0",        "topics": ["lending-borrowing", "interest-rate-models", "liquidations"] },
+  "liquidity":      { "label": "Liquidity",           "era": "ref",       "topics": ["understanding-liquidity", "curve-stableswap", "dex-aggregators"] },
+  "stablecoins":    { "label": "Stablecoins",         "era": "v0",        "topics": ["stablecoin-design", "algorithmic-stablecoins"] },
+  "composability":  { "label": "Composability",       "era": "v1",        "topics": ["pickle-finance", "sushiswap"] },
+  "frontier":       { "label": "Modern Frontier",     "era": "v2",        "topics": ["uniswap-v3", "ohm-olympusdao", "pendle", "fluid", "euler"] },
+  "staking":        { "label": "Staking & Restaking", "era": "v2",        "topics": ["liquid-staking", "restaking"] },
+  "derivatives":    { "label": "Derivatives",         "era": "v2",        "topics": ["perpetual-futures", "defi-options"] },
+  "esoteric":       { "label": "Esoteric",            "era": "esoteric",  "topics": ["mm-primer", "impermanent-loss", "ptyt-zero-coupon", "mev", "multi-utilization"] },
+  "infrastructure": { "label": "Infrastructure",      "era": "infra",     "topics": ["bot-architecture", "oracles", "bridges"] }
 }

@@ -1,0 +1,44 @@
+---
+title: "Liquidations"
+slug: "liquidations"
+era: "esoteric"
+track: "lending"
+order: 3
+prereqs: ["lending-borrowing"]
+related: ["makerdao", "aave-v1", "mev"]
+tradfiAnchor: "Margin call + forced position close-out"
+summary: "The backstop that keeps lending pools solvent: when health factor drops below 1, keepers seize collateral at a discount."
+significance: 16
+---
+
+## 01 · Concept — what problem does it solve?
+
+Over-collateralization only works if someone actually closes positions before they go underwater. Liquidation is that enforcement: when a borrower's **health factor** falls below 1, anyone may repay part of the debt and seize the borrower's collateral at a discount. The discount (the **liquidation bonus**) is the bounty that makes a competitive market of bots — *keepers* — race to do the protocol's risk management for free.
+
+## 02 · Mechanics
+
+- **Trigger:** health factor below 1 — collateral value × liquidation threshold no longer covers the debt.
+- **Close factor:** how much of the debt a single liquidation may repay. Aave v3 allows up to 100% when health factor is below 0.95 (raised from the old 50% cap) so deeply unhealthy positions clear in one shot.
+- **Liquidation bonus:** the liquidator repays debt and receives collateral worth slightly more (e.g. +5–10%). That spread is their profit and the borrower's penalty.
+- **Dutch-auction / soft liquidations:** newer designs (Euler, crvUSD) ramp the discount from near zero upward, or de-risk continuously, minimizing the penalty instead of charging a fixed bonus.
+- **Keepers are MEV actors:** liquidations are some of the most contested [MEV](/learn/mev) on chain; bots monitor every position and bid gas to win the bounty.
+
+## 03 · Formulas
+
+```text
+// liquidation condition
+HF = Σ(collateralᵢ · priceᵢ · liqThresholdᵢ) / Σ debtⱼ < 1
+
+// collateral seized for repaying `repaid` of debt
+seized = repaid · (1 + liquidationBonus) / collateralPrice
+
+// max repayable in one call
+repaid ≤ debt · closeFactor
+```
+
+## 04 · Edge cases & risks
+
+- **Black Thursday (Mar 2020)** — ETH crashed, gas spiked, and MakerDAO keepers stalled; some auctions cleared at **$0**, leaving the system with bad debt and forcing an MKR mint to recapitalize.
+- **Liquidation cascades** — forced collateral sales push the price down, which liquidates more positions, which sells more collateral. Thin liquidity turns a dip into a spiral.
+- **Keeper absence** — if a bounty is too small or gas too high, no one liquidates, and the position rots into bad debt the pool must absorb.
+- **Oracle latency** — liquidations fire on the [oracle](/learn/oracles) price; a lagging feed liquidates too late (bad debt) or a manipulated one liquidates healthy users.

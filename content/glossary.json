@@ -173,5 +173,75 @@
   {
     "term": "collateral factor",
     "def": "The maximum loan-to-value ratio Compound allows per asset: a 0.75 factor means you can borrow up to 75¢ of debt per $1 of that collateral. Riskier assets get lower factors."
+  },
+  {
+    "term": "loan-to-value",
+    "aliases": ["LTV"],
+    "def": "The maximum fraction of collateral value you may borrow against. ETH at 80% LTV means $80 borrowable per $100 supplied; riskier assets get lower LTV."
+  },
+  {
+    "term": "liquidation threshold",
+    "def": "The collateralization level at which a position becomes liquidatable — set slightly above LTV. The gap between LTV and the threshold is the borrower's safety margin."
+  },
+  {
+    "term": "close factor",
+    "def": "The maximum share of a borrower's debt a single liquidation may repay. Aave v3 allows up to 100% when the health factor is below 0.95, otherwise a partial cap."
+  },
+  {
+    "term": "liquidation bonus",
+    "def": "The discount a liquidator receives on seized collateral — their profit and the borrower's penalty. The bounty that makes keepers compete to keep pools solvent."
+  },
+  {
+    "term": "amplification coefficient",
+    "aliases": ["amplifier"],
+    "def": "Curve's StableSwap dial (A): high values keep the curve flat (near-zero slippage) across a wide band around peg, falling back to constant-product as the pool skews."
+  },
+  {
+    "term": "funding rate",
+    "def": "A periodic payment between perpetual-futures longs and shorts that tethers the perp's mark price to spot. Mark above index → longs pay shorts, and vice versa."
+  },
+  {
+    "term": "perpetual futures",
+    "aliases": ["perpetual", "perp", "perps"],
+    "def": "A futures contract with no expiry, kept aligned to spot by the funding rate. The highest-volume instrument in crypto."
+  },
+  {
+    "term": "mark price",
+    "def": "The price a perpetual contract trades at on the venue, as opposed to the index (real spot). Funding closes the gap between mark and index."
+  },
+  {
+    "term": "open interest",
+    "def": "The total notional value of derivative contracts currently open. Concentrated open interest near an option strike can 'pin' price to it into expiry."
+  },
+  {
+    "term": "liquid staking token",
+    "aliases": ["LST"],
+    "def": "A liquid receipt for staked ETH (stETH, rETH) that keeps earning staking rewards while remaining usable across DeFi as collateral or liquidity."
+  },
+  {
+    "term": "liquid restaking token",
+    "aliases": ["LRT"],
+    "def": "A liquid token wrapping a restaked position: ETH staked, restaked via EigenLayer to secure AVSs, and returned as one composable, yield-stacking asset."
+  },
+  {
+    "term": "restaking",
+    "def": "Re-pledging already-staked ETH to secure additional protocols (AVSs) for extra yield — rehypothecated trust, with stacked slashing risk. Pioneered by EigenLayer."
+  },
+  {
+    "term": "AVS",
+    "aliases": ["actively validated service"],
+    "def": "An Actively Validated Service: a protocol (bridge, oracle, DA layer) that rents Ethereum's economic security from restakers instead of bootstrapping its own validator set."
+  },
+  {
+    "term": "slashing",
+    "def": "The protocol-enforced confiscation of part of a validator's (or restaker's) stake as a penalty for misbehavior. Restaking stacks slashing conditions across every AVS opted into."
+  },
+  {
+    "term": "depeg",
+    "def": "When a token meant to track a reference (usually $1) trades away from it. Caused by reserve doubts, collateral crashes, or liquidity flight; for algo-stables it can be terminal."
+  },
+  {
+    "term": "intent",
+    "def": "A signed statement of a desired outcome (e.g. 'swap X for ≥ Y') rather than an explicit transaction path. Solvers compete to fill it with best execution, often netting trades peer-to-peer."
   }
 ]

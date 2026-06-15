@@ -1,0 +1,48 @@
+---
+title: "Lending & Borrowing, End to End"
+slug: "lending-borrowing"
+era: "ref"
+track: "lending"
+order: 1
+prereqs: []
+related: ["compound", "aave-v1", "liquidations", "interest-rate-models"]
+tradfiAnchor: "Secured margin lending desk"
+summary: "The whole loop: supply collateral, borrow against it, stay above your health factor, or get liquidated."
+significance: 21
+---
+
+## 01 · Concept — what problem does it solve?
+
+DeFi lending lets a stranger borrow your capital, and lets you borrow without ever meeting a loan officer — because the collateral, not the borrower, is the credit. There is no identity, no credit score, and no recourse. Solvency is enforced by **over-collateralization** plus an automated **liquidation** backstop: you must always post more value than you borrow, and if your buffer erodes, the protocol sells your collateral before the loan can go underwater.
+
+The whole design exists to answer one question every block: *is every loan still fully backed?* If yes, the pool is solvent and lenders can be made whole. If a position drifts toward "no," liquidators are paid to drag it back.
+
+## 02 · Mechanics
+
+- **Supply → receipt token:** deposit an asset into a shared pool, receive an interest-bearing receipt (cToken, aToken). Your balance grows as borrowers pay interest.
+- **Collateral & LTV:** each asset has a max **loan-to-value** — e.g. ETH at ~80% means $80 borrowable per $100 supplied. Riskier assets get lower LTV.
+- **Liquidation threshold:** sits *above* LTV (e.g. ETH ~83% on Aave v3). Cross it and the position is liquidatable — the gap between LTV and threshold is your safety margin.
+- **Health factor:** the single solvency number. Above 1 you are safe; below 1 you can be liquidated. See [Liquidations](/learn/liquidations).
+- **Variable rates:** interest is set by [pool utilization](/learn/interest-rate-models), not negotiated. Borrow demand up → rate up.
+- **eMode (correlated assets):** Aave v3 groups assets that move together (e.g. stablecoins, ETH/LSTs) for much higher LTV — leverage that is only safe because the pair barely diverges.
+
+## 03 · Formulas
+
+```text
+// loan-to-value and the safety margin
+max_borrow = Σ (collateralᵢ · price · LTVᵢ)
+margin     = liquidation_threshold − LTV   // your buffer
+
+// health factor — liquidatable below 1
+HF = Σ (collateralᵢ · priceᵢ · liqThresholdᵢ) / Σ debtⱼ
+
+// example: 10 ETH @ $3,000, threshold 0.83, debt $18,000
+HF = (10 · 3000 · 0.83) / 18000 = 1.38
+```
+
+## 04 · Edge cases & risks
+
+- **The price feed is the whole game** — health factor is only as honest as the oracle. A bad feed liquidates healthy users or lets bad debt accrue. See [Oracles](/learn/oracles).
+- **Utilization spikes lock withdrawals** — if borrows approach 100% of supply, lenders cannot exit until borrowers repay or rates climb enough to attract supply.
+- **Correlation breaks in eMode** — high-LTV correlated positions are safe until the correlation snaps (an LST depeg, a stablecoin wobble), at which point the thin margin is gone.
+- **Bad debt is socialized** — if a crash outruns the liquidators, the shortfall lands on the pool: lenders, a safety module, or the protocol treasury absorb it.

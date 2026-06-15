@@ -1,0 +1,43 @@
+---
+title: "Curve & the StableSwap Invariant"
+slug: "curve-stableswap"
+era: "v1"
+track: "liquidity"
+order: 2
+prereqs: ["uniswap-v2", "understanding-liquidity"]
+related: ["understanding-liquidity", "stablecoin-design"]
+tradfiAnchor: "FX desk for pegged pairs"
+summary: "An AMM tuned for assets that should trade 1:1 — flat curve near parity, deep stable liquidity, the engine of the Curve wars."
+significance: 19
+---
+
+## 01 · Concept — what problem does it solve?
+
+Constant-product (`x·y=k`) is wasteful for assets that *should* trade near 1:1 — two dollar stablecoins, or ETH and an ETH derivative. A v2 pool prices real slippage even at parity, because its curve is always bending. Curve's **StableSwap** invariant fixes this: it behaves like a flat constant-sum curve (zero slippage) while the pool is balanced, and only bends toward constant-product as the pool skews far from peg. The result is extremely deep liquidity exactly where pegged assets trade.
+
+## 02 · Mechanics
+
+- **Hybrid invariant:** StableSwap blends constant-sum (flat, no slippage) and constant-product (always solvent) curves into one equation.
+- **Amplification coefficient A:** the dial. High A keeps the curve flat across a wider band around peg (great while pegged); as the pool skews, the constant-product term takes over so it can never be fully drained.
+- **Why it matters:** a stable pair on Curve quotes far tighter than the same pair on a v2 AMM — the whole point is low slippage for things that move together.
+- **veCRV & the Curve wars:** lock CRV for vote-escrowed veCRV to direct emissions ("gauge weight") to chosen pools. Protocols then *bribe* veCRV holders for that flow — the bribe economy that defined a whole era of DeFi.
+- **crvUSD:** Curve's own stablecoin uses "LLAMMA," a soft-liquidation AMM that continuously converts collateral instead of a hard [liquidation](/learn/liquidations).
+
+## 03 · Formulas
+
+```text
+// StableSwap invariant (n coins, balances xᵢ, amplifier A)
+A·nⁿ·Σxᵢ  +  D  =  A·nⁿ·D  +  Dⁿ⁺¹ / (nⁿ · Πxᵢ)
+//      ▲ constant-sum term        ▲ constant-product term
+// D = total pool value when balanced; solved iteratively
+
+// balanced  → curve ≈ constant sum  → ~0 slippage
+// skewed    → curve → constant product → stays solvent
+```
+
+## 04 · Edge cases & risks
+
+- **A is a peg bet** — a high amplifier assumes the assets stay pegged. If one constituent depegs, the flat curve means LPs absorb the bad asset fast and end up holding the loser (amplified [impermanent loss](/learn/impermanent-loss)).
+- **Governance capture** — the veCRV gauge system concentrates power in whoever locks the most CRV; emissions can be steered to pools that benefit large holders.
+- **2023 reentrancy** — a Vyper compiler bug enabled a reentrancy exploit draining ~$70M from several Curve pools, a reminder that the math being sound does not make the implementation safe.
+- **Stable depth is conditional** — the deep liquidity exists *only* near peg; in a real depeg the usable depth collapses precisely when traders want out.
