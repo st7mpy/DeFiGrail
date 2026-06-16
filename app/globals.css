@@ -139,11 +139,11 @@ footer.dg-footer{border-top:1px solid rgba(26,24,19,.14);margin-top:30px}
 .hero-stats{display:flex;gap:30px;margin-top:46px;flex-wrap:wrap;justify-content:center}
 
 /* hero pixel-assembly */
-.hero-pixels{position:relative;width:100%;display:flex;justify-content:center}
-.hero-pixels canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.hero-pixels .hero-h1{opacity:0;transition:opacity .35s ease}
+.hero-pixels{position:relative;width:100%}
+.hero-pixels canvas{position:absolute;pointer-events:none;opacity:1;transition:opacity .4s ease}
+.hero-pixels .hero-h1{opacity:0;transition:opacity .5s ease}
 .hero-pixels.revealed .hero-h1{opacity:1}
-.hero-pixels.revealed canvas{opacity:0;transition:opacity .35s ease}
+.hero-pixels.revealed canvas{opacity:0}
 @media (prefers-reduced-motion: reduce){
   .hero-pixels .hero-h1{opacity:1}
   .hero-pixels canvas{display:none}

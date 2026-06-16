@@ -23,14 +23,18 @@ export default function HeroPixels({ text }: { text: string }) {
 
     const run = () => {
       if (cancelled) return;
+      const wrapRect = wrap.getBoundingClientRect();
       const rect = h1.getBoundingClientRect();
       const W = Math.ceil(rect.width), H = Math.ceil(rect.height);
       if (W < 10 || H < 10) { reveal(); return; }
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const ctx = cv.getContext("2d");
       if (!ctx) { reveal(); return; }
-      cv.width = W * dpr; cv.height = H * dpr;
+      // overlay the canvas exactly on the heading's box so pixels land on the text
+      cv.style.left = (rect.left - wrapRect.left) + "px";
+      cv.style.top = (rect.top - wrapRect.top) + "px";
       cv.style.width = W + "px"; cv.style.height = H + "px";
+      cv.width = W * dpr; cv.height = H * dpr;
       ctx.scale(dpr, dpr);
 
       // render the text once to read its pixel mask, matching the h1's font
