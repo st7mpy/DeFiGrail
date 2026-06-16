@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Newsreader } from "next/font/google";
+import { JetBrains_Mono, Inter } from "next/font/google";
 import SiteNav from "@/components/SiteNav";
 import Ticker from "@/components/Ticker";
 import SiteFooter from "@/components/SiteFooter";
@@ -8,11 +8,10 @@ import SearchPalette from "@/components/SearchPalette";
 import { topicCards } from "@/lib/topic-cards";
 import "./globals.css";
 
-const newsreader = Newsreader({
+const inter = Inter({
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  weight: ["400", "500", "600"],
-  variable: "--font-newsreader",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
 });
 const mono = JetBrains_Mono({
   subsets: ["latin"],
@@ -31,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     slug: t.slug, name: t.name, era: t.era, tradfi: t.tradfi, summary: t.summary,
   }));
   return (
-    <html lang="en" className={`${newsreader.variable} ${mono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${mono.variable}`}>
       <body>
         <Splash />
         <div id="app">

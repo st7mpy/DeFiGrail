@@ -1,5 +1,5 @@
 import Link from "next/link";
-import AmbientRain from "@/components/AmbientRain";
+import HeroPixels from "@/components/home/HeroPixels";
 import TrackSection from "@/components/home/TrackSection";
 import { topicCards, trackViews } from "@/lib/topic-cards";
 import { FEATURED } from "@/lib/site-data";
@@ -22,10 +22,9 @@ export default async function Home() {
 
   return (
     <>
-      <AmbientRain />
       <section className="home-hero">
         <div className="hero-eyebrow">An interactive DeFi curriculum</div>
-        <h1 className="hero-h1">Learn DeFi the way a trading desk would teach it.</h1>
+        <HeroPixels text="DeFi, For Everyone" />
         <p className="hero-sub">
           Every protocol anchored to its TradFi equivalent, every formula made interactive, every
           advanced idea preceded by exactly what you must read first.
@@ -33,11 +32,12 @@ export default async function Home() {
         <div className="hero-ctas">
           <Link className="btn-primary" href="/learn/uniswap-v2">Start the Foundations track →</Link>
           <Link className="btn-secondary" href="/graph">Open the knowledge graph</Link>
+          <Link className="btn-secondary" href="/community">Submit your content →</Link>
         </div>
         <div className="hero-stats">
           <div><div className="stat-num">{topics.length}</div><div className="stat-label">Topics</div></div>
           <div><div className="stat-num">{tracks.length}</div><div className="stat-label">Tracks</div></div>
-          <div><div className="stat-num">4</div><div className="stat-label">Live charts</div></div>
+          <div><div className="stat-num">5</div><div className="stat-label">Interactive tools</div></div>
           <div><div className="stat-num">{glossaryCount}</div><div className="stat-label">Glossary terms</div></div>
         </div>
       </section>

@@ -12,7 +12,12 @@ export default function SiteFooter() {
             static-first reference with a community pipeline.
           </div>
         </div>
-        <div className="footer-tag">CONCEPT → MECHANICS → FORMULAS → EDGE CASES</div>
+        <div className="footer-side">
+          <div className="footer-tag">CONCEPT → MECHANICS → FORMULAS → EDGE CASES</div>
+          <a className="footer-made" href="https://s7ddharth-portfolio.vercel.app" target="_blank" rel="noopener noreferrer">
+            Made by Siddharth →
+          </a>
+        </div>
       </div>
     </footer>
   );

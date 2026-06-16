@@ -1,12 +1,14 @@
 @import "tailwindcss";
 
 /* ============================================================
-   DeFiGrail design system — "paper terminal" (1:1 port)
-   Warm editorial palette · Newsreader serif + JetBrains Mono
+   DeFiGrail design system — warm "paper" palette
+   Stripe-style sans (Inter) + JetBrains Mono accents.
    Monochrome; era distinguished by glyph shape, not color.
    ============================================================ */
 @theme {
-  --font-serif: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  /* Stripe-style clean grotesque (Inter as the free Söhne stand-in) */
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-serif: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-paper: #e8e3d6;
@@ -35,7 +37,7 @@ html,body{height:100%}
 body{
   background:#e8e3d6;
   color:#1a1813;
-  font-family:var(--font-mono);
+  font-family:var(--font-sans);
   -webkit-font-smoothing:antialiased;
 }
 ::selection{background:#1a1813;color:#e8e3d6}
@@ -58,7 +60,13 @@ button{font-family:inherit;cursor:pointer}
 .splash-sub{font-size:11px;letter-spacing:.18em;margin-top:14px;color:rgba(26,24,19,.5);animation:splashPulse 1.4s ease-in-out infinite}
 
 /* ─── RAIN ─── */
-#rain{position:fixed;inset:0;z-index:0;pointer-events:none}
+.pg-grid{display:flex;flex-direction:column;gap:16px}
+.pg-tool{background:#efeadd;border:1px solid rgba(26,24,19,.12);border-radius:11px;padding:22px}
+.pg-tool-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.pg-tool-title{font-family:var(--font-sans);font-size:20px;font-weight:600}
+.pg-tool-blurb{font-size:13px;color:rgba(26,24,19,.62);margin-top:4px;max-width:560px}
+.pg-tool-link{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:rgba(26,24,19,.6);text-decoration:none;white-space:nowrap}
+.pg-tool-link:hover{color:#1a1813;text-decoration:underline}
 
 #app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
 
@@ -99,7 +107,10 @@ footer.dg-footer{border-top:1px solid rgba(26,24,19,.14);margin-top:30px}
 .footer-dot{width:11px;height:11px;border-radius:50%;background:#1a1813;flex:none}
 .footer-brand{font-size:12px;letter-spacing:.32em;font-weight:700;text-transform:uppercase}
 .footer-copy{font-size:11px;color:rgba(26,24,19,.5);margin-top:10px;max-width:420px;line-height:1.5}
+.footer-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 .footer-tag{font-size:10.5px;letter-spacing:.1em;color:rgba(26,24,19,.42);text-align:right}
+.footer-made{font-size:11px;letter-spacing:.06em;color:rgba(26,24,19,.6);text-decoration:none;font-family:var(--font-mono)}
+.footer-made:hover{color:#1a1813;text-decoration:underline}
 
 /* ─── SEARCH OVERLAY ─── */
 .search-overlay{position:fixed;inset:0;z-index:50;background:rgba(232,227,214,.7);backdrop-filter:blur(6px);animation:overlayIn .2s ease;display:flex;align-items:flex-start;justify-content:center;padding-top:120px}
@@ -116,16 +127,27 @@ footer.dg-footer{border-top:1px solid rgba(26,24,19,.14);margin-top:30px}
 .search-empty{padding:24px 18px;font-size:13px;color:rgba(26,24,19,.45);text-align:center}
 
 /* ─── HOME ─── */
-.home-hero{padding:78px 0 64px;animation:fadeUp .5s ease}
+.home-hero{padding:96px 0 72px;text-align:center;display:flex;flex-direction:column;align-items:center}
 .hero-eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:rgba(26,24,19,.5)}
-.hero-h1{font-family:var(--font-serif);font-weight:500;font-size:clamp(38px,5vw,62px);line-height:1.02;letter-spacing:-.02em;margin-top:20px;max-width:880px}
-.hero-sub{font-family:var(--font-serif);font-size:21px;line-height:1.5;color:rgba(26,24,19,.72);margin-top:22px;max-width:620px}
-.hero-ctas{display:flex;gap:13px;margin-top:34px;flex-wrap:wrap}
+.hero-h1{font-family:var(--font-sans);font-weight:700;font-size:clamp(44px,7vw,84px);line-height:1.04;letter-spacing:-.035em;margin:18px auto 0;max-width:880px}
+.hero-sub{font-family:var(--font-sans);font-size:19px;line-height:1.55;color:rgba(26,24,19,.66);margin:20px auto 0;max-width:560px}
+.hero-ctas{display:flex;gap:13px;margin-top:34px;flex-wrap:wrap;justify-content:center}
 .btn-primary{background:#1a1813;color:#e8e3d6;border:none;border-radius:7px;padding:14px 22px;font-size:13px;font-weight:600;letter-spacing:.02em;transition:background .15s;text-decoration:none;display:inline-block}
 .btn-primary:hover{background:#2c2920}
 .btn-secondary{background:none;color:#1a1813;border:1px solid rgba(26,24,19,.26);border-radius:7px;padding:14px 22px;font-size:13px;font-weight:600;transition:border-color .15s;text-decoration:none;display:inline-block}
 .btn-secondary:hover{border-color:#1a1813}
-.hero-stats{display:flex;gap:30px;margin-top:46px;flex-wrap:wrap}
+.hero-stats{display:flex;gap:30px;margin-top:46px;flex-wrap:wrap;justify-content:center}
+
+/* hero pixel-assembly */
+.hero-pixels{position:relative;width:100%;display:flex;justify-content:center}
+.hero-pixels canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero-pixels .hero-h1{opacity:0;transition:opacity .35s ease}
+.hero-pixels.revealed .hero-h1{opacity:1}
+.hero-pixels.revealed canvas{opacity:0;transition:opacity .35s ease}
+@media (prefers-reduced-motion: reduce){
+  .hero-pixels .hero-h1{opacity:1}
+  .hero-pixels canvas{display:none}
+}
 .stat-num{font-family:var(--font-serif);font-size:34px}
 .stat-label{font-size:11px;letter-spacing:.1em;color:rgba(26,24,19,.5);text-transform:uppercase;margin-top:2px}
 
