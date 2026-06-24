@@ -1,0 +1,247 @@
+[
+  {
+    "id": "q01",
+    "type": "theory",
+    "prompt": "What property makes a unit of money \"fungible\"?",
+    "options": [
+      "Every unit is interchangeable with every other unit of the same kind",
+      "It can only be spent once",
+      "It is backed by a government",
+      "It increases in value over time"
+    ],
+    "answer": 0,
+    "explanation": "Fungibility means one unit is indistinguishable from and interchangeable with another — one dollar is as good as any other dollar. It is independent of backing or scarcity.",
+    "topic": "what-is-money"
+  },
+  {
+    "id": "q02",
+    "type": "theory",
+    "prompt": "What does a blockchain fundamentally provide?",
+    "options": [
+      "A faster database hosted by one company",
+      "A shared, append-only ledger whose state is secured by consensus",
+      "A way to make websites load faster",
+      "Free transactions with no validators"
+    ],
+    "answer": 1,
+    "explanation": "A blockchain is a replicated, append-only ledger. No single party controls it; participants agree on its state through a consensus mechanism, which is what makes it trust-minimized.",
+    "topic": "what-is-a-blockchain"
+  },
+  {
+    "id": "q03",
+    "type": "quant",
+    "prompt": "A constant-product pool holds 100 ETH and 200,000 USDC. What is the marginal price of ETH?",
+    "options": ["200 USDC", "2,000 USDC", "20,000 USDC", "0.0005 USDC"],
+    "answer": 1,
+    "explanation": "In an x*y=k pool the price of ETH is the ratio of reserves: 200,000 USDC / 100 ETH = 2,000 USDC per ETH.",
+    "topic": "uniswap-v2"
+  },
+  {
+    "id": "q04",
+    "type": "quant",
+    "prompt": "Same pool (100 ETH, 200,000 USDC, k=20,000,000). Ignoring fees, roughly how much USDC does it cost to buy 10 ETH?",
+    "options": ["~20,000 USDC", "~18,000 USDC", "~22,222 USDC", "~2,000 USDC"],
+    "answer": 2,
+    "explanation": "After buying 10 ETH the pool holds 90 ETH, so USDC must rise to k/90 = 222,222. You pay the difference: 222,222 − 200,000 ≈ 22,222 USDC — well above 10 × 2,000 because of price impact.",
+    "topic": "liquidity-and-pricing"
+  },
+  {
+    "id": "q05",
+    "type": "quant",
+    "prompt": "An LP holds a 50/50 pool position. One asset's price doubles relative to the other. Approximately how much impermanent loss versus simply holding?",
+    "options": ["~0%", "~5.7%", "~25%", "~50%"],
+    "answer": 1,
+    "explanation": "IL = 2·√r/(1+r) − 1 with r=2 gives 2·1.414/3 − 1 ≈ −5.7%. A 2x divergence costs an LP about 5.7% relative to holding.",
+    "topic": "impermanent-loss"
+  },
+  {
+    "id": "q06",
+    "type": "analytical",
+    "prompt": "An LP's pair diverges sharply, then the price returns exactly to where they entered. What happens to the impermanent loss?",
+    "options": [
+      "It is locked in permanently",
+      "It roughly disappears, and any fees earned along the way are kept",
+      "It doubles",
+      "It converts into a borrowing fee"
+    ],
+    "answer": 1,
+    "explanation": "Impermanent loss is 'impermanent' precisely because it tracks divergence from entry. If price returns to entry, the loss reverts to ~0 while trading fees collected in between remain — that's the LP's net gain.",
+    "topic": "impermanent-loss"
+  },
+  {
+    "id": "q07",
+    "type": "theory",
+    "prompt": "Concentrated liquidity (Uniswap v3) lets a liquidity provider do what?",
+    "options": [
+      "Lend their tokens to borrowers",
+      "Allocate capital to a chosen price range for higher capital efficiency",
+      "Avoid impermanent loss entirely",
+      "Earn a guaranteed fixed yield"
+    ],
+    "answer": 1,
+    "explanation": "v3 lets LPs concentrate liquidity within a price band instead of across the whole curve, earning far more fees per dollar — at the cost of more active management and amplified IL if price leaves the range.",
+    "topic": "uniswap-v3"
+  },
+  {
+    "id": "q08",
+    "type": "analytical",
+    "prompt": "A v3 LP sets a range, and the market price rises above its upper bound. What is the position now?",
+    "options": [
+      "Split 50/50 and still earning fees",
+      "Entirely in one asset and earning no fees until price re-enters the range",
+      "Automatically closed and withdrawn",
+      "Earning double fees"
+    ],
+    "answer": 1,
+    "explanation": "Once price exits above the range, the position has been fully converted into the 'sold' asset and sits idle — it earns no fees until price moves back inside the chosen band.",
+    "topic": "uniswap-v3"
+  },
+  {
+    "id": "q09",
+    "type": "theory",
+    "prompt": "In an overcollateralized lending protocol, a borrower must:",
+    "options": [
+      "Pass a credit check",
+      "Deposit collateral worth more than the amount they borrow",
+      "Borrow only stablecoins",
+      "Repay within 24 hours"
+    ],
+    "answer": 1,
+    "explanation": "Permissionless on-chain lending has no credit scores, so loans are overcollateralized: the collateral value must exceed the debt, giving the protocol a buffer to liquidate if the loan goes underwater.",
+    "topic": "lending-borrowing"
+  },
+  {
+    "id": "q10",
+    "type": "quant",
+    "prompt": "Collateral is worth $15,000 with an 80% liquidation threshold; debt is $9,000. What is the health factor?",
+    "options": ["0.83", "1.33", "1.67", "0.60"],
+    "answer": 1,
+    "explanation": "Health factor = (collateral × threshold) / debt = (15,000 × 0.80) / 9,000 = 12,000 / 9,000 ≈ 1.33. Above 1 is safe; below 1 is liquidatable.",
+    "topic": "liquidations"
+  },
+  {
+    "id": "q11",
+    "type": "analytical",
+    "prompt": "A borrower's health factor falls below 1. What happens?",
+    "options": [
+      "The protocol forgives the loan",
+      "The position becomes liquidatable: liquidators repay debt and seize collateral at a discount",
+      "Interest stops accruing",
+      "The collateral is returned to the borrower"
+    ],
+    "answer": 1,
+    "explanation": "A health factor under 1 means the collateral no longer safely covers the debt. Liquidators can repay part of the debt in exchange for the borrower's collateral plus a bonus, restoring the protocol's solvency.",
+    "topic": "liquidations"
+  },
+  {
+    "id": "q12",
+    "type": "quant",
+    "prompt": "A kinked rate model: base 0%, slope1 4% up to an 80% utilization kink, slope2 75% above it. What is the borrow rate at 90% utilization?",
+    "options": ["8%", "37.5%", "41.5%", "75%"],
+    "answer": 2,
+    "explanation": "At the kink the rate is 4%. Above it: 4% + ((0.90 − 0.80)/(1 − 0.80)) × 75% = 4% + 0.5 × 75% = 4% + 37.5% = 41.5%. The steep second slope punishes high utilization to pull deposits back.",
+    "topic": "interest-rate-models"
+  },
+  {
+    "id": "q13",
+    "type": "theory",
+    "prompt": "A fiat-collateralized stablecoin (e.g. USDC) holds its peg primarily by:",
+    "options": [
+      "An algorithm that mints and burns a volatile token",
+      "Holding off-chain reserves redeemable roughly 1:1",
+      "Overcollateralized crypto vaults",
+      "Staking rewards"
+    ],
+    "answer": 1,
+    "explanation": "Fiat-backed stablecoins keep cash and cash-equivalents in reserve so each token can be redeemed for ~$1. The peg rests on trust in those reserves and the redemption guarantee.",
+    "topic": "stablecoin-design"
+  },
+  {
+    "id": "q14",
+    "type": "analytical",
+    "prompt": "Why can an undercollateralized algorithmic stablecoin enter a 'death spiral'?",
+    "options": [
+      "Because its reserves are too large",
+      "A falling price erodes confidence; redemptions mint more of the volatile token, pushing its price down further",
+      "Because it is overcollateralized",
+      "Because interest rates rise"
+    ],
+    "answer": 1,
+    "explanation": "When the peg slips, the design mints ever more of the absorbing/volatile token to defend it. That dilution crashes the volatile token's price, which destroys the backing — a self-reinforcing collapse (cf. UST/LUNA).",
+    "topic": "algorithmic-stablecoins"
+  },
+  {
+    "id": "q15",
+    "type": "theory",
+    "prompt": "What problem do DeFi oracles solve?",
+    "options": [
+      "They make transactions cheaper",
+      "They bring off-chain data such as asset prices on-chain reliably",
+      "They store user passwords",
+      "They replace validators"
+    ],
+    "answer": 1,
+    "explanation": "Smart contracts can't natively see the outside world. Oracles feed external data (prices, rates, events) on-chain so protocols like lenders and derivatives can act on real-world values.",
+    "topic": "oracles"
+  },
+  {
+    "id": "q16",
+    "type": "analytical",
+    "prompt": "What is a 'sandwich' MEV attack?",
+    "options": [
+      "Splitting a trade across two exchanges",
+      "Buying just before a victim's swap and selling just after, profiting from the price move it causes",
+      "Two validators sharing a block reward",
+      "Bundling many small trades into one"
+    ],
+    "answer": 1,
+    "explanation": "A searcher front-runs a pending swap with a buy (pushing the price up), lets the victim trade at the worse price, then back-runs with a sell — extracting value from the victim's slippage.",
+    "topic": "mev"
+  },
+  {
+    "id": "q17",
+    "type": "theory",
+    "prompt": "A liquid staking token (e.g. stETH) represents:",
+    "options": [
+      "A loan to a validator",
+      "A tradeable claim on staked assets plus their accruing rewards",
+      "A governance-only token with no value",
+      "A stablecoin pegged to ETH"
+    ],
+    "answer": 1,
+    "explanation": "Liquid staking issues a token for your staked position so you keep liquidity — it accrues staking rewards yet can still be traded or used as collateral across DeFi.",
+    "topic": "liquid-staking"
+  },
+  {
+    "id": "q18",
+    "type": "quant",
+    "prompt": "Ignoring fees and maintenance margin, roughly what adverse price move liquidates a 5x leveraged position?",
+    "options": ["5%", "20%", "50%", "100%"],
+    "answer": 1,
+    "explanation": "At 5x, your margin is 1/5 of the position, so a move of about 1/5 = 20% against you wipes out the margin and triggers liquidation. Higher leverage means a thinner buffer.",
+    "topic": "perpetual-futures"
+  },
+  {
+    "id": "q19",
+    "type": "analytical",
+    "prompt": "A perpetual future trades persistently above the spot index. The funding rate is positive — what does that mean?",
+    "options": [
+      "Shorts pay longs",
+      "Longs pay shorts, nudging the perp price back toward spot",
+      "The exchange pays both sides",
+      "Funding has no effect on price"
+    ],
+    "answer": 1,
+    "explanation": "Funding keeps the perp tethered to spot. When the perp trades at a premium, longs periodically pay shorts, discouraging longs and encouraging shorts until the gap closes.",
+    "topic": "perpetual-futures"
+  },
+  {
+    "id": "q20",
+    "type": "quant",
+    "prompt": "A principal token (PT) redeems for 1 unit at maturity. It trades at 0.92 with 6 months left. What is the approximate simple annualized yield?",
+    "options": ["~0.9%", "~4.3%", "~8.7%", "~17.4%"],
+    "answer": 3,
+    "explanation": "Return to maturity = 1/0.92 − 1 ≈ 8.7% over half a year. Annualized simply: 8.7% / 0.5 ≈ 17.4%. Buying the PT locks in that fixed yield as its price pulls to par.",
+    "topic": "pendle"
+  }
+]
