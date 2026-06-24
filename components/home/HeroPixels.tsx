@@ -15,7 +15,6 @@ export default function HeroPixels({ text }: { text: string }) {
 
     const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     const reveal = () => wrap.classList.add("revealed");
-
     if (reduced || window.innerWidth < 640) { reveal(); return; }
 
     let raf = 0;
@@ -30,45 +29,58 @@ export default function HeroPixels({ text }: { text: string }) {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const ctx = cv.getContext("2d");
       if (!ctx) { reveal(); return; }
+
       // overlay the canvas exactly on the heading's box so pixels land on the text
       cv.style.left = (rect.left - wrapRect.left) + "px";
       cv.style.top = (rect.top - wrapRect.top) + "px";
       cv.style.width = W + "px"; cv.style.height = H + "px";
-      cv.width = W * dpr; cv.height = H * dpr;
+      cv.width = W * dpr; cv.height = H * dpr;   // resets ctx state
       ctx.scale(dpr, dpr);
 
-      // render the text once to read its pixel mask, matching the h1's font
       const cs = getComputedStyle(h1);
-      const font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
-      ctx.font = font;
+      ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillStyle = "#1a1813";
-      ctx.fillText(text, W / 2, H / 2 + 2);
+      // match the heading's tracking so the mask aligns with the real <h1>
+      try {
+        if (!Number.isNaN(parseFloat(cs.letterSpacing))) {
+          (ctx as CanvasRenderingContext2D & { letterSpacing?: string }).letterSpacing = cs.letterSpacing;
+        }
+      } catch { /* letterSpacing unsupported — ignore */ }
 
-      const step = 5; // sample stride — the "pixel" grain
+      const drawCrisp = () => {
+        ctx.clearRect(0, 0, W, H);
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = "#1a1813";
+        ctx.fillText(text, W / 2, H / 2 + 2);
+      };
+      drawCrisp(); // render once to sample the glyph mask
+
+      const step = 4;   // finer grid → smooth strokes
+      const sz = step;  // squares tile edge-to-edge → connected letterforms
       const img = ctx.getImageData(0, 0, W * dpr, H * dpr).data;
       const targets: { tx: number; ty: number }[] = [];
       for (let y = 0; y < H; y += step) {
         for (let x = 0; x < W; x += step) {
-          const idx = ((y * dpr) * (W * dpr) + x * dpr) * 4 + 3; // alpha channel
-          if (img[idx] > 130) targets.push({ tx: x, ty: y });
+          const idx = (Math.floor(y * dpr) * (W * dpr) + Math.floor(x * dpr)) * 4 + 3; // alpha
+          if (img[idx] > 90) targets.push({ tx: x, ty: y }); // lower cutoff catches AA edges
         }
       }
       if (targets.length === 0) { reveal(); return; }
 
+      // assemble cohesively: particles rise from a shallow band below with slight x jitter
       const particles = targets.map((t) => ({
-        x: Math.random() * W,
-        y: Math.random() * H,
+        x: t.tx + (Math.random() - 0.5) * 24,
+        y: t.ty + 26 + Math.random() * 40,
         tx: t.tx,
         ty: t.ty,
-        d: Math.random() * 0.25, // staggered start
+        d: Math.random() * 0.22, // staggered start
       }));
 
-      const DURATION = 1050;
+      const DURATION = 1000;
       const t0 = performance.now();
       const ease = (p: number) => 1 - Math.pow(1 - p, 3);
-      const sz = step - 1;
 
       const frame = (now: number) => {
         if (cancelled) return;
@@ -82,11 +94,11 @@ export default function HeroPixels({ text }: { text: string }) {
           if (local < 1) done = false;
           const x = p.x + (p.tx - p.x) * e;
           const y = p.y + (p.ty - p.y) * e;
-          ctx.globalAlpha = 0.25 + 0.75 * e;
+          ctx.globalAlpha = 0.15 + 0.85 * e;
           ctx.fillRect(x, y, sz, sz);
         }
         ctx.globalAlpha = 1;
-        if (done) { reveal(); return; }
+        if (done) { drawCrisp(); reveal(); return; } // crisp freeze-frame before crossfade
         raf = requestAnimationFrame(frame);
       };
       raf = requestAnimationFrame(frame);
