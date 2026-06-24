@@ -365,3 +365,14 @@ footer.dg-footer{border-top:1px solid rgba(26,24,19,.14);margin-top:30px}
 .quiz-best{font-family:var(--font-mono);font-size:12px;color:rgba(26,24,19,.55);margin-top:6px}
 .quiz-breakdown{margin:22px auto;max-width:280px;display:flex;flex-direction:column;gap:8px}
 .quiz-breakdown-row{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:13px;color:rgba(26,24,19,.7);padding-bottom:6px;border-bottom:1px solid rgba(26,24,19,.1)}
+
+/* ---- Playground two-column body ---- */
+.pg-tool-body{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:24px;align-items:center;margin-top:10px}
+.pg-chart{min-width:0}
+.pg-context{border-left:1px solid rgba(26,24,19,.12);padding-left:20px}
+.pg-context-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(26,24,19,.45);margin-bottom:8px}
+.pg-context p{font-size:14px;line-height:1.6;color:rgba(26,24,19,.74);margin:0}
+@media (max-width:860px){
+  .pg-tool-body{grid-template-columns:1fr}
+  .pg-context{border-left:none;border-top:1px solid rgba(26,24,19,.12);padding-left:0;padding-top:16px}
+}
