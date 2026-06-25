@@ -20,7 +20,7 @@ const mono = JetBrains_Mono({
   variable: "--font-jetbrains",
 });
 
-const BASE_URL = "https://defigrail.vercel.app";
+const BASE_URL = "https://defigrail.xyz";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

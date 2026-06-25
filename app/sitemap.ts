@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { loadTopics } from "@/lib/mdx";
 
-const BASE = "https://defigrail.vercel.app";
+const BASE = "https://defigrail.xyz";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = ["", "/learn", "/graph", "/playground", "/quiz", "/glossary", "/news", "/community"].map((p) => ({
