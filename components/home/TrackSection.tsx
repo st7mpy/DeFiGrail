@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import Glyph from "@/components/Glyph";
 import { useProgress } from "@/lib/use-progress";
 import type { TrackView } from "@/lib/topic-cards";
 
@@ -24,13 +23,6 @@ export default function TrackSection({ tracks, totalTopics }: { tracks: TrackVie
             <Link key={t.id} href={`/learn?track=${t.id}`} className="track-card">
               <div className="track-card-top">
                 <span className="track-name">{t.name}</span>
-                <span className="track-glyphs">
-                  {t.topics.slice(0, 5).map((tp) => (
-                    <span key={tp.slug} title={tp.name} style={{ display: "flex" }}>
-                      <Glyph era={tp.era} size={11} />
-                    </span>
-                  ))}
-                </span>
               </div>
               <p className="track-blurb">{t.blurb}</p>
               <div>

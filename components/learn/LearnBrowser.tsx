@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Glyph from "@/components/Glyph";
+import Glyph, { ERA_LABELS } from "@/components/Glyph";
 import { useProgress } from "@/lib/use-progress";
 import type { TrackView } from "@/lib/topic-cards";
 
@@ -27,6 +27,12 @@ export default function LearnBrowser({ tracks, initialTrack }: { tracks: TrackVi
             <span className="track-nav-count">{countRead(t.topics.map((x) => x.slug))}/{t.topics.length} read</span>
           </button>
         ))}
+        <div className="learn-sidebar-label" style={{ marginTop: 22 }}>Era key</div>
+        <div className="era-legend">
+          {(["v0", "v1", "v2", "esoteric", "infra", "ref"] as const).map((e) => (
+            <span key={e} className="era-legend-item"><Glyph era={e} size={11} /> {ERA_LABELS[e]}</span>
+          ))}
+        </div>
       </aside>
       <div>
         <div style={{ marginBottom: 20 }}>

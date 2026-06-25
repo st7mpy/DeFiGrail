@@ -162,7 +162,9 @@ footer.dg-footer{border-top:1px solid rgba(26,24,19,.14);margin-top:30px}
 .track-card:hover{border-color:#1a1813}
 .track-card-top{display:flex;align-items:center;justify-content:space-between}
 .track-name{font-family:var(--font-serif);font-size:21px}
-.track-glyphs{display:flex;gap:5px;align-items:center}
+.era-legend{display:flex;flex-direction:column;gap:8px}
+.era-legend-item{display:flex;align-items:center;gap:9px;font-size:11.5px;color:rgba(26,24,19,.6)}
+.era-legend-item svg{flex:none}
 .track-blurb{font-size:12.5px;line-height:1.5;color:rgba(26,24,19,.66);min-height:38px}
 .track-progress-bar{height:4px;background:rgba(26,24,19,.1);border-radius:3px;overflow:hidden}
 .track-progress-fill{height:100%;background:#1a1813;border-radius:3px;transition:width .4s}
