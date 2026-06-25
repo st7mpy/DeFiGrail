@@ -17,7 +17,7 @@ const SEED = [
     body: "Intents flip the model: you sign what you want, solvers compete to deliver it. This note maps intents back to the classic request-for-quote desk and shows where the analogy breaks — chiefly that solvers are permissionless and the settlement is on-chain and atomic. We walk through a simple intent lifecycle, the role of the solver auction, and the trust assumptions a user actually takes on." },
 ];
 
-export async function GET() {
+export async function POST() {
   const url = process.env.DATABASE_URL;
   if (!url) return NextResponse.json({ ok: false, message: "DATABASE_URL not set" }, { status: 503 });
   const sql = neon(url);
