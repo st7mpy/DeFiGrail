@@ -45,3 +45,4 @@ liquidate when margin_ratio < maintenance_margin
 - **Liquidation cascades** — high leverage means a small adverse move triggers liquidations that move price further, liquidating more. Perps amplify volatility both ways.
 - **LP is the counterparty (GMX-style)** — the liquidity vault is short whatever traders are long; in a strong trend, LPs pay out and oracle-priced entries can be gamed.
 - **Oracle dependence** — pool-based perps liquidate and price off an oracle; a manipulated or laggy feed is an attack surface (several historical perp exploits).
+- **Funding cuts both ways** — it is not only a long's tax. In a downtrend the perp can trade below spot, funding flips negative, and a short — say, one hedging a spot bag — now bleeds, paying longs. Sustained negative funding signals crowded shorts and a hedge that is expensive to carry.

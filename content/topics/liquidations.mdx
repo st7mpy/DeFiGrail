@@ -40,5 +40,5 @@ repaid ≤ debt · closeFactor
 
 - **Black Thursday (Mar 2020)** — ETH crashed, gas spiked, and MakerDAO keepers stalled; some auctions cleared at **$0**, leaving the system with bad debt and forcing an MKR mint to recapitalize.
 - **Liquidation cascades** — forced collateral sales push the price down, which liquidates more positions, which sells more collateral. Thin liquidity turns a dip into a spiral.
-- **Keeper absence** — if a bounty is too small or gas too high, no one liquidates, and the position rots into bad debt the pool must absorb.
+- **Keeper absence is chain-dependent** — a liquidation only fires if it pays. A small position whose bonus cannot cover L1 gas (dollars) may sit unliquidated and rot into bad debt the pool absorbs — while the *same* position clears instantly on an L2 where gas is cents. "Health factor below 1" guarantees a liquidation only where a keeper profits.
 - **Oracle latency** — liquidations fire on the [oracle](/learn/oracles) price; a lagging feed liquidates too late (bad debt) or a manipulated one liquidates healthy users.

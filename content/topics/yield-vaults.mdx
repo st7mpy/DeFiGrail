@@ -42,3 +42,4 @@ net = gross_strategy_yield − performance_fee − gas
 - **The Pickle lesson (2020):** a $19.7M exploit hit a yield vault via an unvalidated strategy address — composability means inherited attack surface. See [Pickle Finance](/learn/pickle-finance).
 - **Strategy/curator trust:** depositors rarely audit the strategy; a malicious or careless operator (or an upgradeable strategy contract) can lose the whole vault.
 - **Yield-source fragility:** much DeFi yield is emissions or basis trades that evaporate or invert; a quoted APY is a snapshot, not a promise.
+- **Redemption runs:** a vault is fractional by design. If many depositors exit at once, the strategy must unwind its least-liquid positions at a loss, and the last to redeem eats the slippage — a bank run in miniature. Stress-test "what if I'm last out the moment incentives stop?", not just the headline APY.

@@ -38,3 +38,4 @@ A honeypot ERC-20 whose `transfer()` silently delivers ~10% of the stated amount
 - **Private relay:** bundles go straight to block builders via `eth_sendBundle` — never touching the public mempool, so they can't be front-run; failed bundles pay nothing.
 - **Supply chain:** `searchers` (find opportunities, sign bundles) → `builders` (assemble optimal blocks) → `validators` (sell their ordering rights via MEV-Boost to the highest-bidding builder).
 - **Consequence:** ordering rights are now a transparent auction market — MEV got formalized, not eliminated. Private order flow and PFOF dynamics are re-emerging on-chain.
+- **Encrypted mempools shift it, don't end it:** hiding transactions from searchers (threshold encryption like Shutter, or MEV-Commit) stops naive front-running — but whoever decrypts or builds the block inherits the look-ahead. Like private relays before them, they reprice ordering rights rather than abolish them.

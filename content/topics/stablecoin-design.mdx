@@ -43,3 +43,4 @@ price > $1 → mint token, sell for >$1 → supply rises → price ↓
 - **Centralized freeze risk** — fiat issuers can and do blacklist addresses; the decentralization of anything built on USDC/USDT is capped by that switch.
 - **Collateral correlation** — crypto-backed coins fail when their collateral crashes faster than [liquidations](/learn/liquidations) can clear (MakerDAO's Black Thursday).
 - **Reserve opacity** — attestations are point-in-time and not full audits; the market periodically reprices issuer trust, and that repricing *is* a depeg.
+- **Depeg contagion** — a wobble does not stay contained. When USDC slipped in March 2023, every lending market and vault holding it as collateral marked it down at once, triggering liquidations of *unrelated* positions downstream. Choosing a stablecoin as collateral means asking "what cascades if this drops a few percent?", not just "is it backed?".
