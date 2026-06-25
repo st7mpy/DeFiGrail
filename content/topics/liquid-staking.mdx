@@ -38,6 +38,7 @@ stETH < ETH → buy stETH, redeem for ETH → price → peg
 
 ## 04 · Edge cases & risks
 
+- **Secondary-market depeg when queues are long** — an LST's redemption peg only holds if you *can* redeem. When the withdrawal queue stretches to weeks or months (heavy validator exits, post-shock spike in requests), the fastest way out is selling the LST on secondary markets. If leveraged LST positions unwind simultaneously, secondary liquidity thins fast and the LST can trade well below its redemption value — not because the protocol is broken, but because the exit path is constrained. The 2022 stETH episode (~0.94 ETH) is the reference case: withdrawals weren't live, leveraged sellers hit a shallow Curve pool, and the "peg" drifted for weeks.
 - **The stETH "depeg" (2022)** — during the Terra/3AC unwind, stETH traded to ~0.94 ETH. Not a protocol failure — withdrawals weren't live yet, so leveraged holders forced to exit could only sell into thin secondary liquidity.
 - **Centralization of consensus** — one liquid-staking protocol controlling a large share of validators is a systemic risk to Ethereum itself; ~33% is the threshold where it starts to matter.
 - **Slashing pass-through** — if operators misbehave, validators are slashed and the loss flows back to LST holders (mitigated by operator diversification and insurance).

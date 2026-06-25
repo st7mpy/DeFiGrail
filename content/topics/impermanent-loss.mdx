@@ -42,5 +42,6 @@ P=4    → −20.0%  P=5 → −25.5%
 
 ## 04 · Edge cases & risks
 
+- **Should you actually LP?** — fees offset IL only if volume is high enough. High-volume, low-volatility pairs (ETH/USDC on a 0.05% tier, stablecoin pairs) regularly out-earn IL. Low-volume, high-drift pairs almost never do. Before entering, estimate daily fees earned vs the historical IL for that volatility level; most retail LPs on volatile pairs would have earned more holding.
 - **LVR refinement** — modern research (loss-versus-rebalancing) separates IL into hedgeable inventory drift + unhedgeable losses to arbitrageurs. LVR is the true cost of LPing.
 - **IL can exceed fees forever** — in trending markets no fee tier compensates; "impermanent" is marketing.

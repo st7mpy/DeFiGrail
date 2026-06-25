@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import SiteNav from "@/components/SiteNav";
 import Ticker from "@/components/Ticker";
 import SiteFooter from "@/components/SiteFooter";
@@ -19,10 +20,27 @@ const mono = JetBrains_Mono({
   variable: "--font-jetbrains",
 });
 
+const BASE_URL = "https://defigrail.vercel.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
   title: { default: "DeFiGrail — An interactive DeFi curriculum", template: "%s · DeFiGrail" },
   description:
     "Learn DeFi the way a trading desk would teach it — every protocol anchored to its TradFi equivalent, every formula made interactive.",
+  openGraph: {
+    type: "website",
+    url: BASE_URL,
+    siteName: "DeFiGrail",
+    title: "DeFiGrail — An interactive DeFi curriculum",
+    description:
+      "Learn DeFi the way a trading desk would teach it — every protocol anchored to its TradFi equivalent, every formula made interactive.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DeFiGrail — An interactive DeFi curriculum",
+    description:
+      "Learn DeFi the way a trading desk would teach it — every protocol anchored to its TradFi equivalent, every formula made interactive.",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -40,6 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SiteFooter />
         </div>
         <SearchPalette topics={topics} />
+        <Analytics />
       </body>
     </html>
   );

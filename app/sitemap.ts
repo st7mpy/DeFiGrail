@@ -4,7 +4,7 @@ import { loadTopics } from "@/lib/mdx";
 const BASE = "https://defigrail.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ["", "/learn", "/graph", "/charts", "/glossary", "/news", "/community"].map((p) => ({
+  const staticRoutes = ["", "/learn", "/graph", "/playground", "/quiz", "/glossary", "/news", "/community"].map((p) => ({
     url: BASE + p,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
