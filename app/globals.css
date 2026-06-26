@@ -378,3 +378,60 @@ footer.dg-footer{border-top:1px solid rgba(26,24,19,.14);margin-top:30px}
   .pg-tool-body{grid-template-columns:1fr}
   .pg-context{border-left:none;border-top:1px solid rgba(26,24,19,.12);padding-left:0;padding-top:16px}
 }
+
+/* ── MOBILE ─────────────────────────────────────────────── */
+@media (max-width:640px){
+  /* Gutter: 28px → 16px everywhere */
+  .nav-inner{padding-left:16px;padding-right:16px}
+  main.dg-main{padding-left:16px;padding-right:16px}
+  .ticker-inner{padding-left:16px;padding-right:16px}
+  .footer-inner{padding:20px 16px 32px}
+
+  /* Nav: hide search button, let links scroll horizontally */
+  .nav-search{display:none}
+  .nav-spacer{display:none}
+  .nav-links{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-shrink:1;min-width:0}
+  .nav-links::-webkit-scrollbar{display:none}
+
+  /* Hero: tighter vertical padding, smaller sub */
+  .home-hero{padding:52px 0 36px}
+  .hero-sub{font-size:16px}
+  .hero-stats{gap:18px}
+  .stat-num{font-size:27px}
+  .section-h2{font-size:22px}
+
+  /* Track + featured: force single column (minmax would overflow at 28px gutter) */
+  .track-grid{grid-template-columns:1fr}
+  .featured-grid{grid-template-columns:1fr}
+
+  /* Topic detail: scale H1 and tagline */
+  .topic-detail{padding:32px 0 40px}
+  .topic-h1{font-size:clamp(26px,8vw,48px)}
+  .topic-tagline-text{font-size:18px}
+  .topic-nav-btns{flex-direction:column;align-items:flex-start;gap:12px}
+
+  /* News: drop source column on narrow screens */
+  .news-full-row{grid-template-columns:1fr 52px}
+  .news-source{display:none}
+
+  /* Playground */
+  .pg-tool{padding:16px}
+
+  /* Quiz */
+  .quiz-card{padding:18px 16px 20px}
+  .quiz-prompt{font-size:18px}
+  .quiz-results{padding:28px 16px}
+  .quiz-score-big{font-size:52px}
+
+  /* Community form */
+  .submit-form{padding:20px 16px}
+
+  /* Search overlay: raise it up (keyboard covers bottom on mobile) */
+  .search-overlay{padding-top:60px}
+  .search-results{max-height:280px}
+
+  /* Graph: collapse hint text (obscured by side panel anyway) */
+  .graph-hint{display:none}
+  .graph-header{top:14px;left:16px}
+  .graph-legend{bottom:14px;left:16px}
+}
