@@ -23,6 +23,7 @@ export type TopicCard = {
   summary: string;
   prereqs: string[];
   related: string[];
+  isNew: boolean;
 };
 
 export function topicCards(): TopicCard[] {
@@ -38,6 +39,7 @@ export function topicCards(): TopicCard[] {
     summary: t.meta.summary,
     prereqs: t.meta.prereqs,
     related: t.meta.related,
+    isNew: t.meta.isNew,
   }));
 }
 
