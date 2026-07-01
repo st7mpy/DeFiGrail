@@ -24,8 +24,8 @@ How do you turn scattered opinions about an uncertain future event — who wins 
 - **Order types:**
   - **Market order** — fill immediately at the best resting price; guarantees a fill, not a probability. Takes liquidity, same as any [order book](/learn/order-books-and-exchanges).
   - **Limit order** — post a resting order at a chosen probability, e.g. "buy YES at 34¢" (34% implied odds); it only fills if the market trades down to meet it. Provides liquidity while you wait.
-  - **Range order** — rather than one price, commit collateral across a probability band (e.g. 30¢–45¢), auto-quoting resting bids and asks throughout that range. This is the prediction-market analogue of Uniswap v3 concentrated liquidity: you earn the spread on trades that occur inside your range, but if the price exits the range your position stops earning and needs manual rebalancing.
-  - **AMM / LMSR alternative:** older designs (Augur, Gnosis) skip the order book entirely and price against a **market-scoring-rule** curve, which always quotes both sides but charges more price impact on size than a deep order book would.
+  - **Range order** — newer designs are experimenting with committing collateral across a probability band (e.g. 30¢–45¢) instead of one price, auto-quoting resting bids and asks throughout that range. This is the prediction-market analogue of Uniswap v3 concentrated liquidity: you earn the spread on trades that occur inside your range, but if the price exits the range your position stops earning and needs manual rebalancing.
+  - **AMM / LMSR alternative:** some designs (early Gnosis Predict) skip the order book entirely and price against a **market-scoring-rule** curve, which always quotes both sides but charges more price impact on size than a deep order book would. Augur, by contrast, is order-book based (relayer-matched limit orders), not LMSR.
 
 ## 03 · Formulas
 
