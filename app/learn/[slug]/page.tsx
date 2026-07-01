@@ -50,9 +50,12 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
         <div className="topic-breadcrumb">
           <Link href={`/learn?track=${topic.meta.track}`}>← {trackLabel}</Link>
         </div>
-        <div className="topic-era-tag">
-          <Glyph era={topic.meta.era} size={10} />
-          {ERA_LABELS[topic.meta.era] ?? topic.meta.era}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div className="topic-era-tag">
+            <Glyph era={topic.meta.era} size={10} />
+            {ERA_LABELS[topic.meta.era] ?? topic.meta.era}
+          </div>
+          {topic.meta.isNew && <span className="new-badge">New!</span>}
         </div>
         <h1 className="topic-h1">{topic.meta.title}</h1>
         <div className="topic-tagline-text">{topic.meta.summary}</div>
