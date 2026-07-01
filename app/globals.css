@@ -211,6 +211,7 @@ footer.dg-footer{border-top:1px solid rgba(26,24,19,.14);margin-top:30px}
 .topic-tradfi{font-size:11px;color:rgba(26,24,19,.45);margin-top:2px}
 .topic-check{width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(26,24,19,.2);display:flex;align-items:center;justify-content:center;flex:none;font-size:11px;transition:background .15s,border-color .15s;background:none;color:inherit}
 .topic-check.done{background:#1a1813;border-color:#1a1813;color:#e8e3d6}
+.new-badge{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;background:#1a1813;color:#efeadd;border-radius:100px;padding:3px 8px;flex:none;white-space:nowrap}
 
 /* ─── TOPIC DETAIL ─── */
 .topic-detail{padding:48px 0 60px;animation:fadeUp .4s ease;max-width:720px}
