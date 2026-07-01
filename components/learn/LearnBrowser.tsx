@@ -51,6 +51,7 @@ export default function LearnBrowser({ tracks, initialTrack }: { tracks: TrackVi
                   <div className="topic-tagline">{t.tagline}</div>
                   {t.tradfi && <div className="topic-tradfi">TradFi: {t.tradfi}</div>}
                 </div>
+                {t.isNew && <span className="new-badge">New!</span>}
                 <button
                   className={`topic-check${done ? " done" : ""}`}
                   title="Mark as read"
