@@ -7,7 +7,7 @@
   "composability":  { "label": "Composability",       "era": "v1",        "topics": ["pickle-finance", "sushiswap"] },
   "frontier":       { "label": "Modern Frontier",     "era": "v2",        "topics": ["uniswap-v3", "ohm-olympusdao", "pendle", "fluid", "euler"] },
   "staking":        { "label": "Staking & Restaking", "era": "v2",        "topics": ["liquid-staking", "restaking"] },
-  "derivatives":    { "label": "Derivatives",         "era": "v2",        "topics": ["perpetual-futures", "defi-options"] },
+  "derivatives":    { "label": "Derivatives",         "era": "v2",        "topics": ["perpetual-futures", "defi-options", "prediction-markets"] },
   "ecosystem":      { "label": "Ecosystem & Frontier","era": "v2",        "topics": ["rwa", "dao-governance", "yield-vaults", "account-abstraction", "defi-risk-taxonomy"] },
   "esoteric":       { "label": "Esoteric",            "era": "esoteric",  "topics": ["mm-primer", "impermanent-loss", "ptyt-zero-coupon", "mev", "multi-utilization"] },
   "infrastructure": { "label": "Infrastructure",      "era": "infra",     "topics": ["bot-architecture", "oracles", "bridges"] }

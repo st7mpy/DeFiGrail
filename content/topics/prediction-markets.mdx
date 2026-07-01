@@ -1,0 +1,54 @@
+---
+title: "Prediction Markets"
+slug: "prediction-markets"
+era: "v2"
+track: "derivatives"
+order: 3
+prereqs: ["order-books-and-exchanges", "understanding-liquidity"]
+related: ["perpetual-futures", "defi-options", "dex-aggregators"]
+tradfiAnchor: "Futures on events, not prices — Iowa Electronic Markets, Intrade"
+summary: "Markets that price the probability of a future event directly — outcome shares, resolution, and the order types used to trade them."
+significance: 15
+isNew: true
+---
+
+## 01 · Concept — what problem does it solve?
+
+How do you turn scattered opinions about an uncertain future event — who wins an election, whether a protocol gets exploited, whether a macro print beats consensus — into a single, tradeable number? A **prediction market** lets anyone buy and sell shares tied to a yes/no outcome; the share's price *is* the market's collective probability estimate. Unlike a poll, participants back their opinion with capital, which tends to make the price more accurate than punditry — the same "wisdom of crowds" logic that makes order books good at pricing stocks now applies to discrete real-world events.
+
+## 02 · Mechanics
+
+- **Outcome shares:** a binary market has two complementary tokens, YES and NO. Depositing $1 of collateral **mints** one YES + one NO (a "complete set"). At resolution, the winning share redeems for $1 and the losing share for $0.
+- **Split / merge:** anyone can split $1 into 1 YES + 1 NO, or merge 1 YES + 1 NO back into $1, at any time before resolution. This is a hard arbitrage constraint: `price(YES) + price(NO)` can never drift far from $1, or arbitrageurs mint/merge to capture the gap.
+- **Resolution:** someone has to report what actually happened. On-chain venues typically use an **optimistic oracle** (e.g. UMA) — a proposer posts the outcome, a dispute window opens, and unresolved disputes escalate to a token-holder vote — or a simpler admin/multisig resolver for lower-stakes markets. This is the step with no on-chain source of truth to fall back on, unlike an [oracle](/learn/oracles) price feed.
+- **Order types:**
+  - **Market order** — fill immediately at the best resting price; guarantees a fill, not a probability. Takes liquidity, same as any [order book](/learn/order-books-and-exchanges).
+  - **Limit order** — post a resting order at a chosen probability, e.g. "buy YES at 34¢" (34% implied odds); it only fills if the market trades down to meet it. Provides liquidity while you wait.
+  - **Range order** — rather than one price, commit collateral across a probability band (e.g. 30¢–45¢), auto-quoting resting bids and asks throughout that range. This is the prediction-market analogue of Uniswap v3 concentrated liquidity: you earn the spread on trades that occur inside your range, but if the price exits the range your position stops earning and needs manual rebalancing.
+  - **AMM / LMSR alternative:** older designs (Augur, Gnosis) skip the order book entirely and price against a **market-scoring-rule** curve, which always quotes both sides but charges more price impact on size than a deep order book would.
+
+## 03 · Formulas
+
+```text
+// no-arbitrage constraint between complementary shares
+price(YES) + price(NO) ≈ $1
+
+// price *is* the implied probability
+price(YES) = P(YES resolves true)
+
+// payout at resolution
+winning share → $1        losing share → $0
+
+// LMSR cost function (Hanson's market scoring rule) for outcome shares q_i
+C(q) = b · ln( Σ e^(q_i / b) )
+price_i = e^(q_i / b) / Σ e^(q_j / b)
+   // b = liquidity parameter — larger b means deeper book, smaller price impact per trade
+```
+
+## 04 · Edge cases & risks
+
+- **Resolution disputes:** ambiguously worded questions or contested real-world outcomes can leave a market frozen for days while an optimistic-oracle dispute plays out — capital is locked with no price discovery in the meantime.
+- **Thin long-tail markets:** niche questions often have wide spreads and shallow books; limit and range orders can sit unfilled indefinitely, and a market order can move price sharply on modest size.
+- **Manipulation near resolution:** because the price is read as "the market's odds," a large trade just before close can distort the *perceived* probability even if it doesn't change the underlying event — a risk for anyone citing the price as a signal rather than just trading it.
+- **Regulatory status varies by jurisdiction:** event-contract venues have faced different regulatory treatment (e.g. CFTC actions, geofencing, or a path through registered exchanges) — availability and legal status differ by country and by venue.
+- **No arbitrage against reality:** a mispriced perp can be arbitraged against spot instantly; a mispriced prediction market can only be corrected once the real-world event resolves, so the price can stay "wrong" for the market's entire duration.
