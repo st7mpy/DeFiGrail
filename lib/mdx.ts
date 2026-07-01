@@ -18,6 +18,7 @@ export const frontmatterSchema = z.object({
   tradfiAnchor: z.string().optional(),
   summary: z.string().min(10).max(300),
   significance: z.number().int().min(8).max(30).default(14),
+  isNew: z.boolean().default(false),
 });
 
 export type TopicMeta = z.infer<typeof frontmatterSchema>;

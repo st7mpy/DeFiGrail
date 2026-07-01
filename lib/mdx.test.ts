@@ -12,6 +12,12 @@ describe("frontmatterSchema", () => {
   it("accepts a valid topic", () => expect(frontmatterSchema.parse(valid).slug).toBe("uniswap-v2"));
   it("rejects bad era", () => expect(() => frontmatterSchema.parse({ ...valid, era: "v9" })).toThrow());
   it("rejects bad slug chars", () => expect(() => frontmatterSchema.parse({ ...valid, slug: "Uni Swap!" })).toThrow());
+  it("defaults isNew to false when omitted", () => {
+    expect(frontmatterSchema.parse(valid).isNew).toBe(false);
+  });
+  it("accepts isNew: true", () => {
+    expect(frontmatterSchema.parse({ ...valid, isNew: true }).isNew).toBe(true);
+  });
 });
 
 describe("loadTopics", () => {
