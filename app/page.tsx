@@ -7,7 +7,7 @@ import { getNewsData } from "@/lib/news";
 import { listApproved } from "@/lib/submissions";
 import glossary from "@/content/glossary.json";
 
-export const revalidate = 1800;
+export const revalidate = 3600;
 
 export default async function Home() {
   const topics = topicCards();

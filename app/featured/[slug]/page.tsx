@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getApprovedBySlug } from "@/lib/submissions";
 import { renderCommunityMarkdown } from "@/lib/sanitize";
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const item = await getApprovedBySlug((await params).slug);
