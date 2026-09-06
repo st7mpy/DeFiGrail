@@ -18,6 +18,27 @@ describe("frontmatterSchema", () => {
   it("accepts isNew: true", () => {
     expect(frontmatterSchema.parse({ ...valid, isNew: true }).isNew).toBe(true);
   });
+  it("defaults sources to an empty array when omitted", () => {
+    expect(frontmatterSchema.parse(valid).sources).toEqual([]);
+  });
+  it("accepts a well-formed sources array", () => {
+    const parsed = frontmatterSchema.parse({
+      ...valid,
+      sources: [{ label: "Uniswap v2 Core whitepaper", url: "https://uniswap.org/whitepaper.pdf" }],
+    });
+    expect(parsed.sources[0].label).toBe("Uniswap v2 Core whitepaper");
+  });
+  it("rejects a source with a non-URL", () => {
+    expect(() =>
+      frontmatterSchema.parse({ ...valid, sources: [{ label: "x", url: "not-a-url" }] })
+    ).toThrow();
+  });
+  it("accepts an ISO lastVerified date", () => {
+    expect(frontmatterSchema.parse({ ...valid, lastVerified: "2026-09-06" }).lastVerified).toBe("2026-09-06");
+  });
+  it("rejects a non-ISO lastVerified date", () => {
+    expect(() => frontmatterSchema.parse({ ...valid, lastVerified: "Sept 2026" })).toThrow();
+  });
 });
 
 describe("loadTopics", () => {

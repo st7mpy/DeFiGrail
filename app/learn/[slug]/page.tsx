@@ -102,6 +102,22 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
           </div>
         )}
 
+        {topic.meta.sources.length > 0 && (
+          <div className="topic-section" style={{ marginTop: 30 }}>
+            <div className="topic-section-label">Primary sources</div>
+            <ul className="topic-sources">
+              {topic.meta.sources.map((s) => (
+                <li key={s.url}>
+                  <a href={s.url} target="_blank" rel="noreferrer">{s.label} ↗</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {topic.meta.lastVerified && (
+          <div className="topic-verified">Last verified {topic.meta.lastVerified}</div>
+        )}
+
         <div className="topic-divider" />
         <div className="topic-nav-btns">
           <MarkAsRead slug={topic.meta.slug} />

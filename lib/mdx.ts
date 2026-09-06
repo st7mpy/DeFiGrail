@@ -18,6 +18,13 @@ export const frontmatterSchema = z.object({
   tradfiAnchor: z.string().optional(),
   summary: z.string().min(10).max(300),
   significance: z.number().int().min(8).max(30).default(14),
+  sources: z
+    .array(z.object({ label: z.string().min(1), url: z.url() }))
+    .default([]),
+  lastVerified: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "lastVerified must be YYYY-MM-DD")
+    .optional(),
   isNew: z.boolean().default(false),
 });
 

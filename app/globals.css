@@ -449,3 +449,10 @@ footer.dg-footer{border-top:1px solid rgba(26,24,19,.14);margin-top:30px}
 .caveat-body p:last-child{margin-bottom:0}
 .caveat-src{display:inline-block;margin-top:10px;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:rgba(26,24,19,.6);text-decoration:none}
 .caveat-src:hover{color:#1a1813;text-decoration:underline}
+
+/* ─── SOURCES / VERIFIED ─── */
+.topic-sources{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.topic-sources li{font-size:13.5px;line-height:1.45}
+.topic-sources a{color:rgba(26,24,19,.78);text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(26,24,19,.25)}
+.topic-sources a:hover{color:#1a1813;text-decoration-color:#1a1813}
+.topic-verified{margin-top:22px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(26,24,19,.4)}
