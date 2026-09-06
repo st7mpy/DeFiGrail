@@ -2,7 +2,6 @@ import Link from "next/link";
 import HeroPixels from "@/components/home/HeroPixels";
 import TrackSection from "@/components/home/TrackSection";
 import { topicCards, trackViews } from "@/lib/topic-cards";
-import { FEATURED } from "@/lib/site-data";
 import { getNewsData } from "@/lib/news";
 import { listApproved } from "@/lib/submissions";
 import glossary from "@/content/glossary.json";
@@ -15,10 +14,7 @@ export default async function Home() {
   const glossaryCount = (glossary as unknown[]).length;
   const market = await getNewsData();
   const approved = await listApproved(3);
-  // fall back to placeholder copy only until the first piece is approved
-  const featured = approved.length > 0
-    ? approved.map((a) => ({ slug: a.slug, title: a.title, author: a.author, date: a.date, category: a.category, blurb: a.blurb, read: a.read, href: `/featured/${a.slug}` }))
-    : FEATURED.map((f) => ({ ...f, href: "/community" }));
+  const featured = approved.map((a) => ({ slug: a.slug, title: a.title, author: a.author, date: a.date, category: a.category, blurb: a.blurb, read: a.read, href: `/featured/${a.slug}` }));
 
   return (
     <>
@@ -49,6 +45,12 @@ export default async function Home() {
           <h2 className="section-h2">Featured from the community</h2>
           <Link className="section-link" href="/community">SUBMIT YOURS →</Link>
         </div>
+        {featured.length === 0 ? (
+          <div className="featured-empty">
+            No community pieces published yet.{" "}
+            <Link href="/community">Write the first one →</Link>
+          </div>
+        ) : (
         <div className="featured-grid">
           {featured.map((f) => (
             <Link key={f.slug} href={f.href} className="featured-card" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
@@ -59,6 +61,7 @@ export default async function Home() {
             </Link>
           ))}
         </div>
+        )}
       </section>
 
       <section style={{ padding: "8px 0 0" }}>
