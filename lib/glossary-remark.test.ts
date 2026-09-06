@@ -58,4 +58,18 @@ describe("remarkGlossary", () => {
     expect(out).toContain('<GlossaryTerm term="AMM">');
     expect(out).toContain('<GlossaryTerm term="flash loan">');
   });
+
+  it("links glossary terms inside a block-level JSX element", async () => {
+    const out = await run("<Caveat kind=\"misuse\">\n\nAn AMM quotes passively.\n\n</Caveat>", [
+      { term: "AMM", def: "x" },
+    ]);
+    expect(out).toContain("GlossaryTerm");
+  });
+
+  it("still refuses to link inside an inline JSX element", async () => {
+    const out = await run("Text with <GlossaryTerm term=\"AMM\">AMM</GlossaryTerm> already linked.", [
+      { term: "AMM", def: "x" },
+    ]);
+    expect(out.match(/GlossaryTerm/g)?.length).toBe(2); // the opening and closing tag only
+  });
 });

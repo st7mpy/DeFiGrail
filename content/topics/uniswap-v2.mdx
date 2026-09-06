@@ -17,6 +17,11 @@ Order books need active market makers posting quotes. On-chain, every quote upda
 
 Unlike a TradFi market maker, the AMM never withdraws quotes, never widens spreads in panic, and never refuses a trade — the price impact curve *is* the spread.
 
+<Caveat kind="misuse">
+x·y=k does not mean the pool *sets* a price. The pool is a passive quoting
+function; arbitrageurs move it. The pool is always the last to know.
+</Caveat>
+
 ## 02 · Mechanics
 
 - **Pool:** reserves *x* (token A) and *y* (token B). Every swap must preserve `x · y = k` (after the 0.30% fee is added to reserves).
