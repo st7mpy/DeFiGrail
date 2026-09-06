@@ -9,6 +9,12 @@ related: ["makerdao", "algorithmic-stablecoins", "curve-stableswap"]
 tradfiAnchor: "Currency board / money-market fund share"
 summary: "How a token holds a dollar: fiat-backed, crypto-backed, or algorithmic — and what each one risks."
 significance: 22
+lastVerified: "2026-09-06"
+sources:
+  - label: "Circle — $3.3B of USDC Reserve Risk Removed, Dollar De-peg Closes"
+    url: "https://www.circle.com/pressroom/3-3-billion-of-usdc-reserve-risk-removed-dollar-de-peg-closes"
+  - label: "Circle USDC reserve transparency"
+    url: "https://www.circle.com/transparency"
 ---
 
 ## 01 · Concept — what problem does it solve?
@@ -22,6 +28,12 @@ Crypto needs a stable unit of account — somewhere to sit between trades, a den
 - **Algorithmic:** hold peg via supply-and-incentive mechanics with little or no hard backing — historically fragile. See [Algorithmic Stablecoins](/learn/algorithmic-stablecoins).
 - **Yield-bearing / synthetic (e.g. USDe):** back the peg with a delta-neutral hedge (spot collateral + short perp) so the float earns the [funding rate](/learn/perpetual-futures). New, powerful, and carrying exchange/funding risk.
 - **The peg arbitrage:** redemption keeps the peg honest — if the token trades below $1, arbitrageurs buy cheap and redeem for $1; the **Peg Stability Module** does this at the margin for DAI.
+
+<Caveat kind="misuse">
+A peg is not held by the design doc; it is held by whoever can redeem at par.
+Ask: who can redeem, for what, in what size, on which day? If the answer is
+"nobody, but there's an arbitrage incentive", it is a confidence peg.
+</Caveat>
 
 ## 03 · Formulas
 
@@ -39,7 +51,12 @@ price > $1 → mint token, sell for >$1 → supply rises → price ↓
 
 ## 04 · Edge cases & risks
 
-- **USDC depeg (Mar 2023)** — $3.3B of reserves were stuck in the failed Silicon Valley Bank; USDC fell to ~$0.88 over a weekend. "Fully backed" still carries *where the backing is held* risk.
+<Caveat kind="real" src="https://www.circle.com/pressroom/3-3-billion-of-usdc-reserve-risk-removed-dollar-de-peg-closes">
+USDC, 11 March 2023: roughly $3.3B of reserves stranded at Silicon Valley Bank,
+and USDC traded to about $0.87 despite being fully backed. Backing is not a peg
+when redemption is closed for a weekend.
+</Caveat>
+
 - **Centralized freeze risk** — fiat issuers can and do blacklist addresses; the decentralization of anything built on USDC/USDT is capped by that switch.
 - **Collateral correlation** — crypto-backed coins fail when their collateral crashes faster than [liquidations](/learn/liquidations) can clear (MakerDAO's Black Thursday).
 - **Reserve opacity** — attestations are point-in-time and not full audits; the market periodically reprices issuer trust, and that repricing *is* a depeg.

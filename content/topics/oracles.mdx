@@ -9,6 +9,12 @@ related: ["makerdao", "liquidations", "mev"]
 tradfiAnchor: "Market-data feed / reference rate"
 summary: "How off-chain prices get on chain — and why a bad feed is the root cause of most DeFi hacks."
 significance: 17
+lastVerified: "2026-09-06"
+sources:
+  - label: "Chainlink Data Feeds documentation"
+    url: "https://docs.chain.link/data-feeds"
+  - label: "Pyth Network price feeds documentation"
+    url: "https://docs.pyth.network/price-feeds"
 ---
 
 ## 01 · Concept — what problem does it solve?
@@ -21,6 +27,12 @@ A smart contract can't see the outside world. But lending, liquidations, perps, 
 - **Pull oracles (Pyth):** prices are signed off-chain and *pulled* on chain by the user at the moment of use — lower latency, fresher, the consumer pays the update gas.
 - **TWAP (on-chain):** derive a price from a DEX's own time-weighted average (Uniswap v3 accumulators). No external trust, but only as deep as the pool.
 - **Aggregation & deviation:** good feeds take a median across many sources and only update on meaningful moves, filtering single-venue spikes.
+
+<Caveat kind="misuse">
+A feed with a heartbeat and a deviation threshold is stale *by design* up to
+that threshold. It is not a live price, and that gap is exactly where the
+exploit sits.
+</Caveat>
 
 ## 03 · Formulas
 
@@ -38,6 +50,12 @@ single-block spike → cheap for spot, but TWAP needs sustained capital
 ## 04 · Edge cases & risks
 
 - **Flash-loan spot manipulation** — borrow a fortune, slam a thin pool to skew its spot price, exploit a protocol reading that spot, repay — all in one transaction. The classic oracle attack; the reason naive `getPrice()` from a single DEX is fatal.
-- **TWAP ≠ safe** — TWAP resists one-block spikes but is still beatable by multi-block manipulation, and it lags fast crashes (liquidations fire late → bad debt).
+- **TWAP lag** — a TWAP smooths one-block spikes, but it also lags fast crashes, so liquidations fire late and the pool eats the bad debt.
 - **Stale / frozen feeds** — if a feed stops updating in a crash (or an L2 sequencer halts), protocols act on a stale price; good integrations check feed freshness.
 - **Centralization of "decentralized" feeds** — if too many protocols read the same oracle, that oracle is a systemic single point of failure for the whole ecosystem.
+
+<Caveat kind="breaks">
+A TWAP is not manipulation-proof; it converts manipulation into a *financing*
+problem. The cost is the capital needed to hold the price off for the window,
+and deep borrow markets make that capital rentable.
+</Caveat>

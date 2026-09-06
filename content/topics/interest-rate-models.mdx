@@ -29,6 +29,12 @@ A lending pool has no trader quoting rates. Instead the rate is a deterministic 
 - **Supply rate is derived:** lenders earn the borrow rate scaled by utilization, minus a reserve factor the protocol keeps.
 - **Reactive / PID models:** Aave and Euler tune the curve dynamically, targeting a utilization band rather than hard-coding one fixed slope.
 
+<Caveat kind="misuse">
+Utilization near 100% is not insolvency. It means withdrawals are blocked until
+the rate pulls new supply in. Illiquidity ≠ insolvency, and conflating the two
+is how an on-chain bank run starts.
+</Caveat>
+
 ## 03 · Formulas
 
 ```text
@@ -44,6 +50,12 @@ r_s = r_b · U · (1 − reserveFactor)
 ```
 
 <KinkedRate />
+
+<Caveat kind="stale" asOf="2026-09-06" src="https://aave.com/docs">
+Base 2%, kink 80%, slope₁ 10% and slope₂ 75% are illustrative. Aave and Compound
+have re-parameterised these repeatedly, per asset, by governance vote. Check the
+live params before quoting them anywhere that matters.
+</Caveat>
 
 ## 04 · Edge cases & risks
 

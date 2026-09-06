@@ -35,6 +35,13 @@ function; arbitrageurs move it. The pool is always the last to know.
 - **LP tokens:** depositors receive pro-rata pool shares; fees accrue into reserves, so LP tokens appreciate against the pool.
 - **TWAP oracle:** cumulative price accumulators allow manipulation-resistant time-weighted average prices.
 
+<Caveat kind="breaks">
+k is only constant in the fee-free idealisation. With the 0.30% fee, reserves
+after every swap satisfy k′ ≥ k — the invariant grows, and that growth *is* the
+LP fee. Fee-on-transfer and rebasing tokens break the pair accounting outright,
+which is why Uniswap's own docs warn against them.
+</Caveat>
+
 ## 03 · Formulas
 
 ```text
