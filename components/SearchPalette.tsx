@@ -5,6 +5,7 @@ import glossary from "@/content/glossary.json";
 import { ERA_LABELS } from "@/components/Glyph";
 
 type SearchTopic = { slug: string; name: string; era: string; tradfi: string; summary: string };
+type SearchDoc = SearchTopic & { text: string };
 type Result =
   | { type: "topic"; slug: string; name: string; meta: string }
   | { type: "glossary"; name: string; meta: string };
@@ -16,6 +17,7 @@ export default function SearchPalette({ topics }: { topics: SearchTopic[] }) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const [active, setActive] = useState(0);
+  const [docs, setDocs] = useState<SearchDoc[] | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -43,20 +45,44 @@ export default function SearchPalette({ topics }: { topics: SearchTopic[] }) {
     }
   }, [open]);
 
+  useEffect(() => {
+    if (!open || docs) return;
+    fetch("/search-index")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: SearchDoc[] | null) => d && setDocs(d))
+      .catch(() => { /* fall back to metadata-only search */ });
+  }, [open, docs]);
+
   const results = useMemo<Result[]>(() => {
     const s = q.toLowerCase().trim();
     if (!s) return [];
     const out: Result[] = [];
-    for (const t of topics) {
-      if (t.name.toLowerCase().includes(s) || t.summary.toLowerCase().includes(s) || t.tradfi.toLowerCase().includes(s))
+    const source: SearchDoc[] = docs ?? topics.map((t) => ({ ...t, text: "" }));
+    const bodyHits: Result[] = [];
+    for (const t of source) {
+      const meta = `${t.name} ${t.summary} ${t.tradfi}`.toLowerCase();
+      if (meta.includes(s)) {
         out.push({ type: "topic", slug: t.slug, name: t.name, meta: ERA_LABELS[t.era] ?? t.era });
+        continue;
+      }
+      const i = t.text.toLowerCase().indexOf(s);
+      if (i !== -1) {
+        const from = Math.max(0, i - 40);
+        bodyHits.push({
+          type: "topic",
+          slug: t.slug,
+          name: t.name,
+          meta: `…${t.text.slice(from, i + s.length + 60).trim()}…`,
+        });
+      }
     }
+    out.push(...bodyHits);
     for (const g of GLOSSARY) {
       if (g.term.toLowerCase().includes(s) || g.def.toLowerCase().includes(s))
         out.push({ type: "glossary", name: g.term, meta: g.def.slice(0, 80) + "…" });
     }
     return out.slice(0, 8);
-  }, [q, topics]);
+  }, [q, topics, docs]);
 
   function go(r: Result) {
     setOpen(false);
