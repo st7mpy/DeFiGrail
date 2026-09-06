@@ -476,3 +476,13 @@ footer.dg-footer{border-top:1px solid rgba(26,24,19,.14);margin-top:30px}
 .layman-body{margin-top:12px;font-family:var(--font-serif);font-size:16px;line-height:1.65;color:rgba(26,24,19,.82)}
 .layman-body p{margin:0 0 10px}
 .layman-body p:last-child{margin-bottom:0}
+
+/* ─── TRADFI INDEX ─── */
+.tradfi-index{display:flex;flex-direction:column;gap:2px}
+.tradfi-entry{padding:20px 0;border-top:1px solid rgba(26,24,19,.12)}
+.tradfi-anchor{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(26,24,19,.5);font-weight:500;margin:0 0 12px}
+.tradfi-topics{display:flex;flex-direction:column;gap:10px}
+.tradfi-topic{display:block;text-decoration:none;color:#1a1813;border-left:2px solid rgba(26,24,19,.14);padding-left:14px;transition:border-color .15s}
+.tradfi-topic:hover{border-left-color:#1a1813}
+.tradfi-topic-name{display:block;font-family:var(--font-serif);font-size:17px;font-weight:500}
+.tradfi-topic-sum{display:block;font-size:13.5px;line-height:1.5;color:rgba(26,24,19,.6);margin-top:3px;max-width:640px}
