@@ -36,9 +36,9 @@ export default function LearnBrowser({ tracks, initialTrack }: { tracks: TrackVi
       </aside>
       <div>
         <div style={{ marginBottom: 20 }}>
-          <div style={{ fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(26,24,19,.5)", marginBottom: 6 }}>Current track</div>
+          <div style={{ fontSize: 10, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(0, 0, 128,.5)", marginBottom: 6 }}>Current track</div>
           <div style={{ fontFamily: "var(--font-serif)", fontSize: 24, fontWeight: 500 }}>{track?.name}</div>
-          <div style={{ fontSize: 13, color: "rgba(26,24,19,.6)", marginTop: 4 }}>{track?.blurb}</div>
+          <div style={{ fontSize: 13, color: "rgba(0, 0, 128,.6)", marginTop: 4 }}>{track?.blurb}</div>
         </div>
         <div className="topic-list">
           {track?.topics.map((t) => {

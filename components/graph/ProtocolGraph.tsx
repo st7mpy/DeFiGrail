@@ -130,7 +130,7 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
         s.x += s.vx; s.y += s.vy;
         if (s.x < 0) s.x += 1; if (s.x > 1) s.x -= 1;
         if (s.y < 0) s.y += 1; if (s.y > 1) s.y -= 1;
-        ctx!.fillStyle = "rgba(26,24,19,0.055)";
+        ctx!.fillStyle = "rgba(0, 0, 128,0.055)";
         ctx!.fillRect(s.x * W, s.y * H, s.s, s.s);
       }
       const active = selectedRef.current || hoverId;
@@ -142,7 +142,7 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
       for (const e of edges) {
         const a = map[e[0]], b = map[e[1]];
         const hot = active && (e[0] === active || e[1] === active);
-        ctx!.strokeStyle = hot ? "rgba(26,24,19,.6)" : active ? "rgba(26,24,19,.055)" : "rgba(26,24,19,.15)";
+        ctx!.strokeStyle = hot ? "rgba(0, 0, 128,.6)" : active ? "rgba(0, 0, 128,.055)" : "rgba(0, 0, 128,.15)";
         ctx!.lineWidth = hot ? 1.5 : 1;
         ctx!.beginPath(); ctx!.moveTo(a.x, a.y); ctx!.lineTo(b.x, b.y); ctx!.stroke();
       }
@@ -153,7 +153,7 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
         const isNb = active && nb.has(n.id);
         const ly = n.y + n.r + 7;
         const tw = ctx!.measureText(n.short).width;
-        ctx!.fillStyle = "rgba(232,227,214," + (active ? (isNb ? 0.88 : 0.4) : 0.8) + ")";
+        ctx!.fillStyle = "rgba(255, 250, 250," + (active ? (isNb ? 0.88 : 0.4) : 0.8) + ")";
         ctx!.fillRect(n.x - tw / 2 - 4, ly - 2, tw + 8, 15);
       }
       // nodes
@@ -163,7 +163,7 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
         const r = n.r;
         ctx!.save();
         ctx!.globalAlpha = dim ? 0.22 : 1;
-        ctx!.strokeStyle = "#1a1813"; ctx!.fillStyle = "#1a1813"; ctx!.lineWidth = 1.6;
+        ctx!.strokeStyle = "#000080"; ctx!.fillStyle = "#000080"; ctx!.lineWidth = 1.6;
         if (n.era === "esoteric") {
           ctx!.beginPath();
           ctx!.moveTo(n.x, n.y - r); ctx!.lineTo(n.x + r, n.y); ctx!.lineTo(n.x, n.y + r); ctx!.lineTo(n.x - r, n.y); ctx!.closePath();
@@ -180,7 +180,7 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
           if (n.era !== "v0") ctx!.stroke();
           if (n.era === "v2") {
             ctx!.beginPath(); ctx!.arc(n.x, n.y, r * 0.34, 0, TAU);
-            ctx!.fillStyle = isActive ? "#efeadd" : "#1a1813"; ctx!.fill();
+            ctx!.fillStyle = isActive ? "#F1F7FA" : "#000080"; ctx!.fill();
           }
         }
         if (isActive) {
@@ -195,7 +195,7 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
       for (const n of sims) {
         const isActive = active && n.id === active, isNb = active && nb.has(n.id);
         const al = active ? (isActive ? 0.95 : isNb ? 0.78 : 0.14) : 0.64;
-        ctx!.fillStyle = "rgba(26,24,19," + al + ")";
+        ctx!.fillStyle = "rgba(0, 0, 128," + al + ")";
         ctx!.fillText(n.short, n.x, n.y + n.r + 7);
       }
     }
@@ -250,8 +250,8 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
 
   return (
     <div className="graph-screen">
-      <div style={{ position: "absolute", inset: 0, borderRadius: "50%", width: "92vh", height: "92vh", margin: "auto", border: "1px dashed rgba(26,24,19,.055)", pointerEvents: "none", animation: "ringSpin 160s linear infinite", zIndex: 0 }} />
-      <div style={{ position: "absolute", inset: 0, borderRadius: "50%", width: "60vh", height: "60vh", margin: "auto", border: "1px dotted rgba(26,24,19,.045)", pointerEvents: "none", animation: "ringSpinR 110s linear infinite", zIndex: 0 }} />
+      <div style={{ position: "absolute", inset: 0, borderRadius: "50%", width: "92vh", height: "92vh", margin: "auto", border: "1px dashed rgba(0, 0, 128,.055)", pointerEvents: "none", animation: "ringSpin 160s linear infinite", zIndex: 0 }} />
+      <div style={{ position: "absolute", inset: 0, borderRadius: "50%", width: "60vh", height: "60vh", margin: "auto", border: "1px dotted rgba(0, 0, 128,.045)", pointerEvents: "none", animation: "ringSpinR 110s linear infinite", zIndex: 0 }} />
       <canvas ref={canvasRef} className="graph-canvas" style={{ position: "absolute", inset: 0, zIndex: 1 }} />
       <header className="graph-header">
         <div className="graph-title">DeFiGrail</div>

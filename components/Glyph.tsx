@@ -10,7 +10,7 @@ export const ERA_LABELS: Record<string, string> = {
 };
 
 export default function Glyph({ era, size = 12 }: { era: string; size?: number }) {
-  const s = size, h = s / 2, ink = "#1a1813";
+  const s = size, h = s / 2, ink = "#000080";
   const sw = 1.5;
   if (era === "v0")
     return <svg width={s} height={s} viewBox={`0 0 ${s} ${s}`}><circle cx={h} cy={h} r={h} fill={ink} /></svg>;

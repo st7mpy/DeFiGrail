@@ -15,12 +15,12 @@ export default async function CommunityPage() {
         <div className="page-head-sub">Member-submitted guides and essays</div>
       </div>
 
-      <div style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(26,24,19,.5)", marginBottom: 14 }}>
+      <div style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(0, 0, 128,.5)", marginBottom: 14 }}>
         Featured pieces
       </div>
 
       {approved.length === 0 ? (
-        <p style={{ fontFamily: "var(--font-serif)", fontSize: 17, color: "rgba(26,24,19,.6)", marginBottom: 8 }}>
+        <p style={{ fontFamily: "var(--font-serif)", fontSize: 17, color: "rgba(0, 0, 128,.6)", marginBottom: 8 }}>
           No published pieces yet — be the first to submit one below.
         </p>
       ) : (

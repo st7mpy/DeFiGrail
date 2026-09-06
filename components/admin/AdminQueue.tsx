@@ -28,7 +28,7 @@ export default function AdminQueue({ initial }: { initial: PendingItem[] }) {
   }
 
   if (items.length === 0) {
-    return <p style={{ fontFamily: "var(--font-serif)", fontSize: 17, color: "rgba(26,24,19,.6)" }}>No pending submissions. 🎉</p>;
+    return <p style={{ fontFamily: "var(--font-serif)", fontSize: 17, color: "rgba(0, 0, 128,.6)" }}>No pending submissions. 🎉</p>;
   }
 
   return (
@@ -39,9 +39,9 @@ export default function AdminQueue({ initial }: { initial: PendingItem[] }) {
           <div className="submission-header">
             <div>
               <span className="status-badge pending">pending</span>
-              <span style={{ fontSize: 11, color: "rgba(26,24,19,.45)", marginLeft: 10 }}>{s.category} · {s.date}</span>
+              <span style={{ fontSize: 11, color: "rgba(0, 0, 128,.45)", marginLeft: 10 }}>{s.category} · {s.date}</span>
             </div>
-            <span style={{ fontSize: 11, color: "rgba(26,24,19,.5)" }}>by {s.author}</span>
+            <span style={{ fontSize: 11, color: "rgba(0, 0, 128,.5)" }}>by {s.author}</span>
           </div>
           <div className="submission-title">{s.title}</div>
           <div className="submission-body" style={{ whiteSpace: "pre-wrap" }}>{s.body.slice(0, 600)}{s.body.length > 600 ? "…" : ""}</div>

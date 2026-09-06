@@ -59,7 +59,7 @@ export default function CommunityForm() {
     return (
       <div className="submit-form">
         <div className="submit-h3">Thanks — submission received</div>
-        <p style={{ fontFamily: "var(--font-serif)", fontSize: 16, lineHeight: 1.6, color: "rgba(26,24,19,.75)" }}>
+        <p style={{ fontFamily: "var(--font-serif)", fontSize: 16, lineHeight: 1.6, color: "rgba(0, 0, 128,.75)" }}>
           Your piece is queued for editorial review. Approved guides appear in the Featured section,
           usually within a few days.
         </p>

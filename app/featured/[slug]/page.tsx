@@ -24,12 +24,12 @@ export default async function FeaturedArticle({ params }: { params: Promise<{ sl
       <div className="topic-era-tag">{item.category} · community</div>
       <h1 className="topic-h1">{item.title}</h1>
       <div className="featured-byline" style={{ marginTop: 14 }}>
-        by {item.authorLink ? <a href={item.authorLink} target="_blank" rel="nofollow noopener noreferrer" style={{ color: "#1a1813", textDecoration: "underline" }}>{item.author}</a> : item.author} · {item.date} · {item.read}
+        by {item.authorLink ? <a href={item.authorLink} target="_blank" rel="nofollow noopener noreferrer" style={{ color: "#000080", textDecoration: "underline" }}>{item.author}</a> : item.author} · {item.date} · {item.read}
       </div>
       <div className="topic-divider" />
       <div className="prose-paper" dangerouslySetInnerHTML={{ __html: html }} />
       <div className="topic-divider" />
-      <p style={{ fontSize: 11, color: "rgba(26,24,19,.5)", fontFamily: "var(--font-mono)" }}>
+      <p style={{ fontSize: 11, color: "rgba(0, 0, 128,.5)", fontFamily: "var(--font-mono)" }}>
         Community contribution — not reviewed for financial accuracy. Nothing here is financial advice.
       </p>
     </article>

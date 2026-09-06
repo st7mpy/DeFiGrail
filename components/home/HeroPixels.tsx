@@ -41,7 +41,7 @@ export default function HeroPixels({ text }: { text: string }) {
       ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillStyle = "#1a1813";
+      ctx.fillStyle = "#000080";
       // match the heading's tracking so the mask aligns with the real <h1>
       try {
         if (!Number.isNaN(parseFloat(cs.letterSpacing))) {
@@ -52,7 +52,7 @@ export default function HeroPixels({ text }: { text: string }) {
       const drawCrisp = () => {
         ctx.clearRect(0, 0, W, H);
         ctx.globalAlpha = 1;
-        ctx.fillStyle = "#1a1813";
+        ctx.fillStyle = "#000080";
         ctx.fillText(text, W / 2, H / 2 + 2);
       };
       drawCrisp(); // render once to sample the glyph mask
@@ -86,7 +86,7 @@ export default function HeroPixels({ text }: { text: string }) {
         if (cancelled) return;
         const elapsed = (now - t0) / DURATION;
         ctx.clearRect(0, 0, W, H);
-        ctx.fillStyle = "#1a1813";
+        ctx.fillStyle = "#000080";
         let done = true;
         for (const p of particles) {
           const local = Math.min(1, Math.max(0, (elapsed - p.d) / (1 - p.d)));

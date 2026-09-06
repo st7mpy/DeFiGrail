@@ -33,7 +33,7 @@ export default function GlossaryList() {
             </div>
           ))
         ) : (
-          <div className="glossary-term" style={{ color: "rgba(26,24,19,.45)" }}>No terms match.</div>
+          <div className="glossary-term" style={{ color: "rgba(0, 0, 128,.45)" }}>No terms match.</div>
         )}
       </div>
     </div>
