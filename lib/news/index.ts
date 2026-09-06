@@ -4,7 +4,6 @@ import {
   parseCoingecko, parseDefillamaTotal, parseDefillamaChains, buildAssets,
   parseRssItems, asOfUTC, type Asset, type ChainRow, type Headline,
 } from "./parse";
-import { MARKET, NEWS_ITEMS } from "@/lib/site-data";
 
 const REVALIDATE = 1800; // 30 min — sources update slowly
 
@@ -42,7 +41,8 @@ async function getMarket(): Promise<{ assets: Asset[]; chains: ChainRow[]; ok: b
     const { total, chgPct } = parseDefillamaTotal(histRaw as never);
     return { assets: buildAssets(cg, total, chgPct), chains: parseDefillamaChains(chainsRaw as never, total, 5), ok: true };
   } catch {
-    return { assets: MARKET.assets, chains: MARKET.chains, ok: false };
+    // Empty, not invented: a stale fake price is worse than no price.
+    return { assets: [], chains: [], ok: false };
   }
 }
 
@@ -59,7 +59,7 @@ async function getHeadlines(): Promise<{ headlines: Headline[]; ok: boolean }> {
     if (headlines.length === 0) throw new Error("no headlines");
     return { headlines, ok: true };
   } catch {
-    return { headlines: NEWS_ITEMS.map((n) => ({ ...n, url: "#" })), ok: false };
+    return { headlines: [], ok: false };
   }
 }
 

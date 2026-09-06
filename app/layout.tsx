@@ -4,7 +4,6 @@ import { Analytics } from "@vercel/analytics/next";
 import SiteNav from "@/components/SiteNav";
 import Ticker from "@/components/Ticker";
 import SiteFooter from "@/components/SiteFooter";
-import Splash from "@/components/Splash";
 import SearchPalette from "@/components/SearchPalette";
 import { topicCards } from "@/lib/topic-cards";
 import "./globals.css";
@@ -50,7 +49,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${mono.variable}`}>
       <body>
-        <Splash />
         <div id="app">
           <SiteNav />
           <Ticker />

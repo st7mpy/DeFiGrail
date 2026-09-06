@@ -1,37 +1,7 @@
-// Graceful-fallback data, used only when the live sources are unreachable:
-//   MARKET + NEWS_ITEMS → fallback for lib/news (CoinGecko/DefiLlama/RSS)
-//   FEATURED            → fallback for the home featured grid before the first
-//                         community piece is approved (real data: Neon submissions)
+// Placeholder copy for the home featured grid, shown only until the first
+// community submission is approved. Real data: Neon submissions.
 
-export type MarketAsset = { sym: string; price: string; chg: string; up: boolean };
-export type Chain = { name: string; tvl: string; share: number };
-export type NewsItem = { source: string; title: string; time: string };
 export type Featured = { slug: string; title: string; author: string; date: string; category: string; blurb: string; read: string };
-
-export const MARKET = {
-  asOf: "14:00 UTC",
-  assets: [
-    { sym: "BTC", price: "$71,240", chg: "+2.1%", up: true },
-    { sym: "ETH", price: "$3,905", chg: "+3.4%", up: true },
-    { sym: "DeFi TVL", price: "$112.4B", chg: "-0.8%", up: false },
-  ] as MarketAsset[],
-  chains: [
-    { name: "Ethereum", tvl: "$61.2B", share: 54 },
-    { name: "Solana", tvl: "$13.8B", share: 12 },
-    { name: "Base", tvl: "$9.1B", share: 8 },
-    { name: "Arbitrum", tvl: "$8.4B", share: 7 },
-    { name: "BSC", tvl: "$6.7B", share: 6 },
-  ] as Chain[],
-};
-
-export const NEWS_ITEMS: NewsItem[] = [
-  { source: "The Defiant", title: "Pendle launches fixed-yield markets for restaked ETH", time: "2h ago" },
-  { source: "Blockworks", title: "Uniswap governance debates v4 hook whitelist for the third time", time: "4h ago" },
-  { source: "CoinDesk", title: "DeFi TVL slips below $115B as funding rates cool", time: "5h ago" },
-  { source: "The Defiant", title: "A new salmonella-style contract is quietly draining sandwich bots", time: "7h ago" },
-  { source: "Blockworks", title: "Aave deploys isolated markets for long-tail collateral", time: "9h ago" },
-  { source: "CoinDesk", title: "Olympus treasury crosses $300M, mostly in its own liquidity", time: "11h ago" },
-];
 
 export const FEATURED: Featured[] = [
   { slug: "lvr-vs-il", title: "LVR is the number IL was hiding from you", author: "0xMercator", date: "2026-06-08", category: "Esoteric", blurb: "Impermanent loss measures the wrong baseline. Loss-versus-rebalancing prices what arbitrageurs actually take from LPs each block — and it's bigger.", read: "6 min" },

@@ -15,7 +15,6 @@
     "@neondatabase/serverless": "^1.1.0",
     "@vercel/analytics": "^2.0.1",
     "drizzle-orm": "^0.45.2",
-    "flexsearch": "^0.8.212",
     "gray-matter": "^4.0.3",
     "next": "16.2.9",
     "next-mdx-remote": "^6.0.0",

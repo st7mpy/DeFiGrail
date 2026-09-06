@@ -1,13 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import { MARKET } from "@/lib/site-data";
 
 type Asset = { sym: string; price: string; chg: string; up: boolean };
 
-// Renders mock data on first paint, then swaps in live data from /api/news.
+// Renders nothing until live data arrives from /api/news — no placeholder prices.
 export default function Ticker() {
-  const [assets, setAssets] = useState<Asset[]>(MARKET.assets);
-  const [asOf, setAsOf] = useState(MARKET.asOf);
+  const [assets, setAssets] = useState<Asset[]>([]);
+  const [asOf, setAsOf] = useState("");
 
   useEffect(() => {
     let alive = true;
@@ -24,6 +23,8 @@ export default function Ticker() {
       alive = false;
     };
   }, []);
+
+  if (assets.length === 0) return null;
 
   return (
     <div className="ticker">
