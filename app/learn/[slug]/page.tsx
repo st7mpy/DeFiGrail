@@ -12,6 +12,7 @@ import GlossaryTerm from "@/components/glossary/GlossaryTerm";
 import MarkAsRead from "@/components/topic/MarkAsRead";
 import Caveat from "@/components/topic/Caveat";
 import TopicCheck from "@/components/topic/TopicCheck";
+import Layman from "@/components/topic/Layman";
 import Glyph, { ERA_LABELS } from "@/components/Glyph";
 import ILCurve from "@/components/charts/ILCurve";
 import KinkedRate from "@/components/charts/KinkedRate";
@@ -88,7 +89,7 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
         <div className="prose-paper">
           <MDXRemote
             source={topic.body}
-            components={{ GlossaryTerm, Caveat, ILCurve, KinkedRate, RangeLiquidity, PTDecay, PriceImpact }}
+            components={{ GlossaryTerm, Caveat, Layman, ILCurve, KinkedRate, RangeLiquidity, PTDecay, PriceImpact }}
             options={{ mdxOptions: { remarkPlugins: [remarkGfm, [remarkGlossary, { terms: glossaryTerms }]] } }}
           />
         </div>
