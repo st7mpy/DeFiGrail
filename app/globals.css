@@ -486,3 +486,32 @@ footer.dg-footer{border-top:1px solid rgba(26,24,19,.14);margin-top:30px}
 .tradfi-topic:hover{border-left-color:#1a1813}
 .tradfi-topic-name{display:block;font-family:var(--font-serif);font-size:17px;font-weight:500}
 .tradfi-topic-sum{display:block;font-size:13.5px;line-height:1.5;color:rgba(26,24,19,.6);margin-top:3px;max-width:640px}
+
+/* ─── MOTION ───
+   Scroll-driven reveal via the native CSS timeline — no JS, no observer.
+   Unsupported browsers simply render the element in its final state. */
+@supports (animation-timeline: view()) {
+  .caveat,
+  .tradfi-entry,
+  .topic-check-q {
+    animation: fadeUp .5s ease both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 45%;
+  }
+}
+.topic-check-explain{animation:fadeUp .28s ease}
+.layman[open] .layman-body{animation:fadeUp .25s ease}
+.caveat{transition:border-left-color .2s ease,background .2s ease}
+.caveat:hover{border-left-color:#1a1813}
+.tradfi-topic-name{transition:letter-spacing .2s ease}
+.tradfi-topic:hover .tradfi-topic-name{letter-spacing:.005em}
+
+/* Motion is decoration here; honour the OS setting globally. */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+}
