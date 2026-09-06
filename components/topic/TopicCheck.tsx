@@ -20,14 +20,14 @@ export default function TopicCheck({ slug, questions }: { slug: string; question
   };
 
   return (
-    <section className="topic-check">
+    <section className="topic-selfcheck">
       <div className="topic-section-label">Check yourself</div>
       {questions.map((q) => {
         const chose = picked[q.id];
         return (
-          <div className="topic-check-q" key={q.id}>
-            <p className="topic-check-prompt">{q.prompt}</p>
-            <div className="topic-check-options">
+          <div className="topic-selfcheck-q" key={q.id}>
+            <p className="topic-selfcheck-prompt">{q.prompt}</p>
+            <div className="topic-selfcheck-options">
               {q.options.map((opt, i) => {
                 const state =
                   chose === undefined ? "" : i === q.answer ? " correct" : i === chose ? " wrong" : " dimmed";
@@ -46,7 +46,7 @@ export default function TopicCheck({ slug, questions }: { slug: string; question
               })}
             </div>
             {chose !== undefined && (
-              <div className="topic-check-explain">
+              <div className="topic-selfcheck-explain">
                 <span className={`quiz-verdict ${chose === q.answer ? "ok" : "no"}`}>
                   {chose === q.answer ? "Correct" : "Not quite"}
                 </span>
