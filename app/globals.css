@@ -456,3 +456,12 @@ footer.dg-footer{border-top:1px solid rgba(26,24,19,.14);margin-top:30px}
 .topic-sources a{color:rgba(26,24,19,.78);text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(26,24,19,.25)}
 .topic-sources a:hover{color:#1a1813;text-decoration-color:#1a1813}
 .topic-verified{margin-top:22px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(26,24,19,.4)}
+
+/* ─── TOPIC CHECK ─── */
+.topic-check{margin-top:34px;padding-top:26px;border-top:1px solid rgba(26,24,19,.12)}
+.topic-check-q{margin-bottom:26px}
+.topic-check-q:last-child{margin-bottom:0}
+.topic-check-prompt{font-family:var(--font-serif);font-size:16.5px;line-height:1.5;margin:0 0 12px}
+.topic-check-options{display:flex;flex-direction:column;gap:8px}
+.topic-check-explain{margin-top:12px;padding-left:14px;border-left:2px solid rgba(26,24,19,.16)}
+.topic-check-explain p{font-size:14px;line-height:1.6;color:rgba(26,24,19,.75);margin:6px 0 0}

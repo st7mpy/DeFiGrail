@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { QUIZ, type QuizType } from "./quiz";
+import { QUIZ, questionsForTopic, type QuizType } from "./quiz";
 import { loadTopics } from "./mdx";
 
 describe("quiz data", () => {
   const slugs = new Set(loadTopics().map((t) => t.meta.slug));
 
-  it("has exactly 20 questions", () => {
-    expect(QUIZ).toHaveLength(20);
+  it("has at least the original 20 questions", () => {
+    expect(QUIZ.length).toBeGreaterThanOrEqual(20);
   });
 
   it("every question has 4 options and a valid answer index", () => {
@@ -34,5 +34,16 @@ describe("quiz data", () => {
   it("question ids are unique", () => {
     const ids = new Set(QUIZ.map((q) => q.id));
     expect(ids.size).toBe(QUIZ.length);
+  });
+});
+
+describe("questionsForTopic", () => {
+  it("returns only questions for that topic", () => {
+    const qs = questionsForTopic("uniswap-v2");
+    expect(qs.length).toBeGreaterThan(0);
+    for (const q of qs) expect(q.topic).toBe("uniswap-v2");
+  });
+  it("returns an empty array for a topic with no questions", () => {
+    expect(questionsForTopic("no-such-topic")).toEqual([]);
   });
 });

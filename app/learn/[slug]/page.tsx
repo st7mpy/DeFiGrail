@@ -5,11 +5,13 @@ import remarkGfm from "remark-gfm";
 import { loadTopics, getTopic } from "@/lib/mdx";
 import { remarkGlossary, type GlossaryEntry } from "@/lib/glossary-remark";
 import { nextInTrack } from "@/lib/tracks";
+import { questionsForTopic } from "@/lib/quiz";
 import { trackViews } from "@/lib/topic-cards";
 import GlossaryProvider from "@/components/glossary/GlossaryProvider";
 import GlossaryTerm from "@/components/glossary/GlossaryTerm";
 import MarkAsRead from "@/components/topic/MarkAsRead";
 import Caveat from "@/components/topic/Caveat";
+import TopicCheck from "@/components/topic/TopicCheck";
 import Glyph, { ERA_LABELS } from "@/components/Glyph";
 import ILCurve from "@/components/charts/ILCurve";
 import KinkedRate from "@/components/charts/KinkedRate";
@@ -90,6 +92,8 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
             options={{ mdxOptions: { remarkPlugins: [remarkGfm, [remarkGlossary, { terms: glossaryTerms }]] } }}
           />
         </div>
+
+        <TopicCheck slug={topic.meta.slug} questions={questionsForTopic(topic.meta.slug)} />
 
         {related.length > 0 && (
           <div className="topic-section" style={{ marginTop: 30 }}>
