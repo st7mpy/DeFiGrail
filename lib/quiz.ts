@@ -13,3 +13,6 @@ export interface QuizQuestion {
 }
 
 export const QUIZ: QuizQuestion[] = quizData as QuizQuestion[];
+
+export const questionsForTopic = (slug: string): QuizQuestion[] =>
+  QUIZ.filter((q) => q.topic === slug);

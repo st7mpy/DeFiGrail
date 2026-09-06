@@ -3,7 +3,9 @@ import type { Root, Text } from "mdast";
 
 export type GlossaryEntry = { term: string; aliases?: string[]; def: string };
 
-const FORBIDDEN_ANCESTORS = ["heading", "link", "mdxJsxTextElement", "mdxJsxFlowElement"] as const;
+// mdxJsxTextElement stays (prevents GlossaryTerm nesting inside itself); flow
+// elements are block containers like <Caveat> whose prose SHOULD auto-link.
+const FORBIDDEN_ANCESTORS = ["heading", "link", "mdxJsxTextElement"] as const;
 
 export function remarkGlossary({ terms }: { terms: GlossaryEntry[] }) {
   // longest alias first so "liquidity provider" wins over "LP" when both could match

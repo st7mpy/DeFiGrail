@@ -9,6 +9,12 @@ related: ["impermanent-loss"]
 tradfiAnchor: "Continuous-quote market maker"
 summary: "Constant-product AMM (x·y=k) — the passive market maker every DEX descends from."
 significance: 24
+lastVerified: "2026-09-06"
+sources:
+  - label: "Uniswap v2 Core whitepaper"
+    url: "https://uniswap.org/whitepaper.pdf"
+  - label: "Uniswap v2 protocol overview (docs)"
+    url: "https://docs.uniswap.org/contracts/v2/overview"
 ---
 
 ## 01 · Concept — what problem does it solve?
@@ -17,12 +23,24 @@ Order books need active market makers posting quotes. On-chain, every quote upda
 
 Unlike a TradFi market maker, the AMM never withdraws quotes, never widens spreads in panic, and never refuses a trade — the price impact curve *is* the spread.
 
+<Caveat kind="misuse">
+x·y=k does not mean the pool *sets* a price. The pool is a passive quoting
+function; arbitrageurs move it. The pool is always the last to know.
+</Caveat>
+
 ## 02 · Mechanics
 
 - **Pool:** reserves *x* (token A) and *y* (token B). Every swap must preserve `x · y = k` (after the 0.30% fee is added to reserves).
 - **Price:** the marginal price is just the reserve ratio *y/x*. Big trades move along the hyperbola → price impact grows with trade size.
 - **LP tokens:** depositors receive pro-rata pool shares; fees accrue into reserves, so LP tokens appreciate against the pool.
 - **TWAP oracle:** cumulative price accumulators allow manipulation-resistant time-weighted average prices.
+
+<Caveat kind="breaks">
+k is only constant in the fee-free idealisation. With the 0.30% fee, reserves
+after every swap satisfy k′ ≥ k — the invariant grows, and that growth *is* the
+LP fee. Fee-on-transfer and rebasing tokens break the pair accounting outright,
+which is why Uniswap's own docs warn against them.
+</Caveat>
 
 ## 03 · Formulas
 

@@ -9,6 +9,12 @@ related: ["makerdao", "aave-v1", "mev"]
 tradfiAnchor: "Margin call + forced position close-out"
 summary: "The backstop that keeps lending pools solvent: when health factor drops below 1, keepers seize collateral at a discount."
 significance: 16
+lastVerified: "2026-09-06"
+sources:
+  - label: "Aave developer documentation"
+    url: "https://aave.com/docs"
+  - label: "Compound v2 documentation"
+    url: "https://docs.compound.finance/v2/"
 ---
 
 ## 01 · Concept — what problem does it solve?
@@ -22,6 +28,12 @@ Over-collateralization only works if someone actually closes positions before th
 - **Liquidation bonus:** the liquidator repays debt and receives collateral worth slightly more (e.g. +5–10%). That spread is their profit and the borrower's penalty.
 - **Dutch-auction / soft liquidations:** newer designs (Euler, crvUSD) ramp the discount from near zero upward, or de-risk continuously, minimizing the penalty instead of charging a fixed bonus.
 - **Keepers are MEV actors:** liquidations are some of the most contested [MEV](/learn/mev) on chain; bots monitor every position and bid gas to win the bounty.
+
+<Caveat kind="breaks">
+Liquidation does not happen at the liquidation threshold. It happens when a bot
+finds it profitable after gas and slippage on the seized collateral. Bad debt
+lives in that gap.
+</Caveat>
 
 ## 03 · Formulas
 
@@ -38,7 +50,20 @@ repaid ≤ debt · closeFactor
 
 ## 04 · Edge cases & risks
 
-- **Black Thursday (Mar 2020)** — ETH crashed, gas spiked, and MakerDAO keepers stalled; some auctions cleared at **$0**, leaving the system with bad debt and forcing an MKR mint to recapitalize.
+<Caveat kind="real">
+Black Thursday, 12 March 2020: gas spiked, one keeper bid, and Maker's
+collateral auctions cleared near zero — leaving the system with unbacked DAI,
+later recapitalised by an MKR auction. The liquidation engine was correct. The
+liveness assumption underneath it was not.
+</Caveat>
+
 - **Liquidation cascades** — forced collateral sales push the price down, which liquidates more positions, which sells more collateral. Thin liquidity turns a dip into a spiral.
-- **Keeper absence is chain-dependent** — a liquidation only fires if it pays. A small position whose bonus cannot cover L1 gas (dollars) may sit unliquidated and rot into bad debt the pool absorbs — while the *same* position clears instantly on an L2 where gas is cents. "Health factor below 1" guarantees a liquidation only where a keeper profits.
+- **Keeper absence is chain-dependent** — a liquidation only fires if it pays. A small position whose bonus cannot cover L1 gas (dollars) may sit unliquidated and rot into bad debt the pool absorbs — while the *same* position clears instantly on an L2 where gas is cents.
 - **Oracle latency** — liquidations fire on the [oracle](/learn/oracles) price; a lagging feed liquidates too late (bad debt) or a manipulated one liquidates healthy users.
+
+<Caveat kind="check" src="https://aave.com/docs">
+Verify it yourself: take the liquidation threshold an aggregator or dashboard
+shows for any Aave market, then read the same parameter straight off the
+`getReserveConfigurationData` call on Aave's ProtocolDataProvider contract in
+Etherscan. If they disagree, the aggregator is stale — trust the contract.
+</Caveat>

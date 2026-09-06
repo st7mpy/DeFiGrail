@@ -9,6 +9,10 @@ related: ["defi-options", "mev", "understanding-liquidity", "prediction-markets"
 tradfiAnchor: "Futures with no expiry, pegged by funding"
 summary: "Leveraged exposure that never expires, tied to spot by a funding rate — the highest-volume product in crypto."
 significance: 21
+lastVerified: "2026-09-06"
+sources:
+  - label: "Hyperliquid documentation — funding"
+    url: "https://hyperliquid.gitbook.io/hyperliquid-docs/trading/funding"
 ---
 
 ## 01 · Concept — what problem does it solve?
@@ -22,6 +26,11 @@ Traders want leveraged, perpetual exposure to a price without ever taking delive
 - **Margin & leverage:** post margin, take exposure many times larger; an underwater position is liquidated like any [leveraged loan](/learn/liquidations).
 - **Two on-chain designs:** *orderbook* perps (Hyperliquid — its own L1 matching engine) vs. *pool/oracle* perps (GMX — traders take the other side of a shared LP vault, priced off an [oracle](/learn/oracles)).
 - **vAMM:** earlier designs (Perpetual Protocol) priced perps off a *virtual* AMM curve with no real reserves — pure price discovery, settled in a vault.
+
+<Caveat kind="misuse">
+Funding is not a protocol fee; it is a transfer between longs and shorts. And it
+does not force convergence — it makes divergence expensive to hold.
+</Caveat>
 
 ## 03 · Formulas
 

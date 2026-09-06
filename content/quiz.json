@@ -243,5 +243,79 @@
     "answer": 3,
     "explanation": "Return to maturity = 1/0.92 − 1 ≈ 8.7% over half a year. Annualized simply: 8.7% / 0.5 ≈ 17.4%. Buying the PT locks in that fixed yield as its price pulls to par.",
     "topic": "pendle"
+  },
+  {
+    "id": "q21",
+    "type": "theory",
+    "prompt": "In a constant-product pool, what actually moves the quoted price toward the wider market price?",
+    "options": [
+      "An oracle the pool reads at the start of each block",
+      "Arbitrageurs trading against the pool until it is no longer profitable",
+      "Liquidity providers rebalancing their own deposits",
+      "A keeper contract called by protocol governance"
+    ],
+    "answer": 1,
+    "explanation": "The pool is a passive quoting function \u2014 it has no idea what the market price is. Arbitrageurs trade against a stale quote until the marginal price matches elsewhere, and their profit is the LP's divergence loss.",
+    "topic": "uniswap-v2"
+  },
+  {
+    "id": "q22",
+    "type": "quant",
+    "prompt": "A Uniswap v2 pool charges a 0.30% fee. After a swap settles, how does the invariant k = x\u00b7y behave?",
+    "options": [
+      "It stays exactly constant \u2014 that is what 'constant product' means",
+      "It decreases by the fee amount",
+      "It increases slightly, because the fee is left in the reserves",
+      "It resets to the geometric mean of the new reserves"
+    ],
+    "answer": 2,
+    "explanation": "k is only constant in the fee-free idealisation. The 0.30% fee stays in the pool, so post-swap reserves satisfy k' \u2265 k. That growth in k is precisely the LP's fee income.",
+    "topic": "uniswap-v2"
+  },
+  {
+    "id": "q23",
+    "type": "theory",
+    "prompt": "An LP withdraws from a 50/50 pool while the price ratio sits at 4\u00d7 its entry. What is true of their impermanent loss?",
+    "options": [
+      "It reverses automatically once the price returns to entry",
+      "It is realised and permanent the moment they withdraw",
+      "It is zero, because trading fees always offset it",
+      "It applies only to concentrated-liquidity positions"
+    ],
+    "answer": 1,
+    "explanation": "\"Impermanent\" is marketing. The loss unwinds only if the price returns AND you are still in the pool. Withdraw at a diverged price and it is realised, exactly like any other closed position.",
+    "topic": "impermanent-loss"
+  },
+  {
+    "id": "q24",
+    "type": "quant",
+    "prompt": "A 50/50 LP position's price ratio moves to 4\u00d7 entry. Ignoring fees, what is the divergence loss versus simply holding?",
+    "options": ["-5.7%", "-20.0%", "-25.0%", "-50.0%"],
+    "answer": 1,
+    "explanation": "IL = 2\u00b7\u221ar/(1+r) \u2212 1. With r = 4: 2\u00b72/5 \u2212 1 = 0.8 \u2212 1 = \u221220%. Note it is symmetric in the ratio \u2014 a move to 0.25\u00d7 costs the same 20%.",
+    "topic": "impermanent-loss"
+  },
+  {
+    "id": "q25",
+    "type": "theory",
+    "prompt": "A lending pool is sitting at 99% utilization. What does that tell you?",
+    "options": [
+      "The pool is insolvent and depositors have lost money",
+      "The borrowers have defaulted on their positions",
+      "Withdrawals are constrained until high rates pull in new supply",
+      "The reserve factor has been set to zero by governance"
+    ],
+    "answer": 2,
+    "explanation": "High utilization is illiquidity, not insolvency. The loans are still over-collateralised; there is simply little idle cash. The rate curve spikes past the kink precisely to attract new deposits and repay borrowers. Conflating the two is how an on-chain bank run starts.",
+    "topic": "interest-rate-models"
+  },
+  {
+    "id": "q26",
+    "type": "quant",
+    "prompt": "With base rate 2%, a kink at 80% utilization, slope\u2081 10% and slope\u2082 75%, what is the borrow rate at 90% utilization?",
+    "options": ["11.0%", "17.5%", "26.0%", "69.5%"],
+    "answer": 1,
+    "explanation": "Below the kink the rate accrues at slope\u2081: 0.02 + 0.80\u00b70.10 = 10%. Past it, the excess 10 points of utilization accrue at slope\u2082: 0.10\u00b70.75 = 7.5%. Total 17.5%.",
+    "topic": "interest-rate-models"
   }
 ]

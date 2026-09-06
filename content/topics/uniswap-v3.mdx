@@ -9,11 +9,21 @@ related: []
 tradfiAnchor: "Limit-order market making / short straddle"
 summary: "Concentrated liquidity: LPs pick price ranges. Up to ~4000× capital efficiency, active risk."
 significance: 23
+lastVerified: "2026-09-06"
+sources:
+  - label: "Uniswap v3 Core whitepaper"
+    url: "https://app.uniswap.org/whitepaper-v3.pdf"
 ---
 
 ## 01 · Concept — what problem does it solve?
 
 In v2, liquidity is spread along the entire price curve from 0 to ∞ — most of it never touched. v3 lets each LP choose a **price range** and concentrate capital there, earning fees only while price is inside it. The same depth can be provided with up to ~4000× less capital. The cost: LPing stops being passive. Range selection is an active view on volatility — v3 LPs are functionally **short gamma**.
+
+<Caveat kind="misuse">
+"~4000× capital efficiency" is the number for a ±0.05% band that essentially
+never holds outside a stable pair. Efficiency and time-in-range trade off
+directly; there is no free multiplier.
+</Caveat>
 
 ## 02 · Mechanics
 
@@ -45,3 +55,9 @@ eff = 1 / (1 − (Pa/Pb)^¼)   → ~4000× at ±0.05%
 - **LVR / informed flow** — fast arbitrageurs rebalance the pool against stale prices; passive v3 LPs systematically lose to them (loss-versus-rebalancing).
 - **JIT liquidity** — bots add a razor-thin range one block before a whale swap, capture the fee, withdraw — diluting honest LPs.
 - **Oracle subtlety** — v3 TWAPs use geometric mean of ticks; thin-liquidity tails make manipulation cheaper than v2's full-range depth.
+
+<Caveat kind="breaks">
+A quoted v3 fee APR assumes the price stays in range. Out of range is 0% and
+100% of one asset. Always ask what fraction of the window the position was
+actually in range.
+</Caveat>
