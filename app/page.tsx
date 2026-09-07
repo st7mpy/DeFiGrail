@@ -16,7 +16,8 @@ export default async function Home() {
   const glossaryCount = (glossary as unknown[]).length;
   const market = await getNewsData();
   const approved = await listApproved(3);
-  const featured = approved.map((a) => ({ slug: a.slug, title: a.title, author: a.author, date: a.date, category: a.category, blurb: a.blurb, read: a.read, href: `/featured/${a.slug}` }));
+  // Link posts now — the card goes straight to where it was published.
+  const featured = approved.map((a) => ({ slug: a.slug, title: a.title, author: a.author, date: a.date, category: a.category, blurb: a.blurb, read: a.domain, href: a.url }));
 
   return (
     <>
@@ -25,8 +26,8 @@ export default async function Home() {
         <div className="hero-eyebrow">An interactive DeFi curriculum</div>
         <HeroPixels text="DeFi, For Everyone" />
         <p className="hero-sub">
-          Every protocol anchored to its TradFi equivalent, every formula made interactive, every
-          advanced idea preceded by exactly what you must read first.
+          DeFi mechanics have a lot to dump on your brain, we made every formula interactive,
+          every idea preceded by exactly what you need to know first.
         </p>
         <div className="hero-ctas">
           <Link className="btn-primary" href="/learn/uniswap-v2">Start the Foundations track →</Link>
@@ -45,7 +46,7 @@ export default async function Home() {
 
       <section style={{ padding: "8px 0 0" }}>
         <div className="section-header">
-          <h2 className="section-h2">Featured from the community</h2>
+          <h2 className="section-h2">DeFi&rsquo;s best writeups</h2>
           <Link className="section-link" href="/community">SUBMIT YOURS →</Link>
         </div>
         {featured.length === 0 ? (
@@ -56,12 +57,12 @@ export default async function Home() {
         ) : (
         <div className="featured-grid">
           {featured.map((f) => (
-            <Link key={f.slug} href={f.href} className="featured-card" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
+            <a key={f.slug} href={f.href} target="_blank" rel="noopener noreferrer nofollow" className="featured-card" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
               <div className="featured-card-top"><span>{f.category}</span><span>{f.read}</span></div>
               <h3 className="featured-title">{f.title}</h3>
               <p className="featured-blurb">{f.blurb}</p>
               <div className="featured-byline">by {f.author} · {f.date}</div>
-            </Link>
+            </a>
           ))}
         </div>
         )}

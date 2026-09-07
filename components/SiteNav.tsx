@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const TABS = [
   { href: "/learn", label: "Learn", key: "learn" },
@@ -15,6 +16,16 @@ const TABS = [
 
 export default function SiteNav() {
   const pathname = usePathname() || "/";
+  // Starts at the Mac glyph so the server and first client render agree — then
+  // corrects on mount for anyone who isn't. The key handler already accepts
+  // both metaKey and ctrlKey, so only the label ever needed to change.
+  const [modKey, setModKey] = useState("⌘");
+  useEffect(() => {
+    const ua = navigator.userAgent;
+    const platform =
+      (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform ?? ua;
+    if (!/Mac|iPhone|iPad|iPod/i.test(platform)) setModKey("Ctrl ");
+  }, []);
   const seg = pathname.split("/")[1] || "home";
 
   return (
@@ -37,7 +48,7 @@ export default function SiteNav() {
           onClick={() => window.dispatchEvent(new CustomEvent("dg:open-search"))}
         >
           <span>Search</span>
-          <kbd>⌘K</kbd>
+          <kbd>{modKey}K</kbd>
         </button>
       </div>
     </nav>

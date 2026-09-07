@@ -9,6 +9,7 @@ export const submissions = pgTable("submissions", {
   authorLink: text("author_link"),
   category: text("category").notNull(),
   bodyMd: text("body_md").notNull(),
+  externalUrl: text("external_url"), // link posts; null on legacy body-only rows
   status: text("status", { enum: ["pending", "approved", "rejected"] }).notNull().default("pending"),
   slug: text("slug").unique(),
   ipHash: text("ip_hash").notNull(),

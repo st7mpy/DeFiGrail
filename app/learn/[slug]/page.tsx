@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import { loadTopics, getTopic } from "@/lib/mdx";
+import { extractHeadings } from "@/lib/headings";
+import { slugify } from "@/lib/slug";
 import { remarkGlossary, type GlossaryEntry } from "@/lib/glossary-remark";
 import { nextInTrack } from "@/lib/tracks";
 import { questionsForTopic } from "@/lib/quiz";
@@ -11,6 +13,7 @@ import GlossaryProvider from "@/components/glossary/GlossaryProvider";
 import GlossaryTerm from "@/components/glossary/GlossaryTerm";
 import MarkAsRead from "@/components/topic/MarkAsRead";
 import Caveat from "@/components/topic/Caveat";
+import ProximitySidebar from "@/components/topic/ProximitySidebar";
 import TopicCheck from "@/components/topic/TopicCheck";
 import Layman from "@/components/topic/Layman";
 import Glyph, { ERA_LABELS } from "@/components/Glyph";
@@ -23,6 +26,17 @@ import glossary from "@/content/glossary.json";
 
 const glossaryTerms = glossary as GlossaryEntry[];
 const glossaryDefs = Object.fromEntries(glossaryTerms.map((g) => [g.term, g.def]));
+
+// Heading text can arrive as nested nodes (glossary links, <em>); flatten to the
+// same plain string extractHeadings() slugified, so anchors match.
+function childText(node: React.ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(childText).join("");
+  if (node && typeof node === "object" && "props" in node) {
+    return childText((node as { props?: { children?: React.ReactNode } }).props?.children);
+  }
+  return "";
+}
 
 export const dynamicParams = false;
 export function generateStaticParams() {
@@ -46,10 +60,12 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
     .filter(Boolean)
     .map((t) => ({ slug: t!.meta.slug, title: t!.meta.title }));
   const next = nextInTrack(topic.meta.slug);
+  const headings = extractHeadings(topic.body);
   const trackLabel = trackViews().find((t) => t.id === topic.meta.track)?.name ?? "Learn";
 
   return (
     <GlossaryProvider defs={glossaryDefs}>
+      <ProximitySidebar sections={headings} side="left" />
       <article className="topic-detail">
         <div className="topic-breadcrumb">
           <Link href={`/learn?track=${topic.meta.track}`}>← {trackLabel}</Link>
@@ -89,7 +105,9 @@ export default async function TopicPage({ params }: { params: Promise<{ slug: st
         <div className="prose-paper">
           <MDXRemote
             source={topic.body}
-            components={{ GlossaryTerm, Caveat, Layman, ILCurve, KinkedRate, RangeLiquidity, PTDecay, PriceImpact }}
+            components={{ GlossaryTerm, Caveat, Layman, ILCurve, KinkedRate, RangeLiquidity, PTDecay, PriceImpact,
+              h2: (p: React.ComponentProps<"h2">) => <h2 id={slugify(childText(p.children))} {...p} />,
+              h3: (p: React.ComponentProps<"h3">) => <h3 id={slugify(childText(p.children))} {...p} />, }}
             options={{ mdxOptions: { remarkPlugins: [remarkGfm, [remarkGlossary, { terms: glossaryTerms }]] } }}
           />
         </div>

@@ -27,6 +27,7 @@ export default function CommunityForm() {
     const payload = {
       title: String(f.get("title") || ""),
       category: String(f.get("category") || "general"),
+      externalUrl: String(f.get("externalUrl") || ""),
       bodyMd: String(f.get("bodyMd") || ""),
       authorName: String(f.get("authorName") || ""),
       authorContact: String(f.get("authorContact") || ""),
@@ -87,11 +88,24 @@ export default function CommunityForm() {
         </select>
       </div>
       <div className="form-field">
-        <label className="form-label">Content (Markdown)</label>
-        <textarea className="form-textarea" name="bodyMd" required placeholder="Write your guide here… (min ~200 characters)" />
-        {err("bodyMd")}
+        <label className="form-label">Link to the writeup</label>
+        <input
+          className="form-input"
+          name="externalUrl"
+          type="url"
+          required
+          placeholder="https://x.com/… · https://…substack.com/p/… · https://medium.com/…"
+        />
+        <p className="form-hint">X, Substack, Medium, Mirror, a personal blog — anywhere it is published.</p>
+        {err("externalUrl")}
       </div>
       <div className="form-field">
+        <label className="form-label">Why it&rsquo;s worth reading</label>
+        <textarea className="form-textarea forum-blurb-input" name="bodyMd" required placeholder="One or two sentences on what it explains well. 40–600 characters." />
+        {err("bodyMd")}
+      </div>
+
+      <div className="form-row">
         <label className="form-label">Your handle</label>
         <input className="form-input" name="authorName" required placeholder="0xYou" />
         {err("authorName")}

@@ -1,11 +1,13 @@
 import "server-only";
 import { unstable_cache } from "next/cache";
-import { and, count, desc, eq, gt } from "drizzle-orm";
+import { and, count, desc, eq, gt, isNotNull } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { submissions, type Submission } from "@/lib/db/schema";
 import { slugify } from "@/lib/slug";
 
 export type FeaturedItem = {
+  url: string;
+  domain: string;
   slug: string;
   title: string;
   author: string;
@@ -36,8 +38,15 @@ function blurbOf(body: string): string {
   return text.length > 160 ? text.slice(0, 157).trimEnd() + "…" : text;
 }
 
+/** Bare host for the source chip — "x.com", "substack.com". */
+function hostOf(url: string): string {
+  try { return new URL(url).hostname.replace(/^www\./, ""); } catch { return "link"; }
+}
+
 export function toFeatured(s: Submission): FeaturedItem {
   return {
+    url: s.externalUrl ?? "",
+    domain: hostOf(s.externalUrl ?? ""),
     slug: s.slug ?? s.id,
     title: s.title,
     author: s.authorName,
@@ -53,7 +62,7 @@ export function toFeatured(s: Submission): FeaturedItem {
 async function listApprovedUncached(limit?: number): Promise<FeaturedItem[]> {
   if (!db) return [];
   try {
-    const q = db.select().from(submissions).where(eq(submissions.status, "approved")).orderBy(desc(submissions.reviewedAt));
+    const q = db.select().from(submissions).where(and(eq(submissions.status, "approved"), isNotNull(submissions.externalUrl))).orderBy(desc(submissions.reviewedAt));
     const rows = limit ? await q.limit(limit) : await q;
     return rows.map(toFeatured);
   } catch {
@@ -104,7 +113,7 @@ export async function recentCountForIp(ipHash: string, sinceMs = 3600_000): Prom
 
 export async function insertSubmission(input: {
   title: string; authorName: string; authorContact: string; authorLink?: string | null;
-  category: string; bodyMd: string; ipHash: string;
+  category: string; bodyMd: string; externalUrl: string; ipHash: string;
 }): Promise<void> {
   if (!db) throw new Error("db unavailable");
   await db.insert(submissions).values({ ...input, authorLink: input.authorLink || null });
