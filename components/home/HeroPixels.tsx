@@ -80,7 +80,9 @@ export default function HeroPixels({ text }: { text: string }) {
 
       const DURATION = 1000;
       const t0 = performance.now();
-      const ease = (p: number) => 1 - Math.pow(1 - p, 3);
+      // quintic ease-out: flatter arrival than cubic, so particles settle rather
+      // than land — the last 15% of travel is nearly imperceptible.
+      const ease = (p: number) => 1 - Math.pow(1 - p, 5);
 
       const frame = (now: number) => {
         if (cancelled) return;
@@ -98,7 +100,11 @@ export default function HeroPixels({ text }: { text: string }) {
           ctx.fillRect(x, y, sz, sz);
         }
         ctx.globalAlpha = 1;
-        if (done) { drawCrisp(); reveal(); return; } // crisp freeze-frame before crossfade
+        // No drawCrisp() here. Swapping the grid-quantised particles for a real
+        // fillText render shifts every glyph by up to half a cell in one frame,
+        // which reads as a bounce. Hold the final particle frame and let the CSS
+        // crossfade to the DOM <h1> do the sharpening.
+        if (done) { reveal(); return; }
         raf = requestAnimationFrame(frame);
       };
       raf = requestAnimationFrame(frame);
