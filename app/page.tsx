@@ -6,7 +6,9 @@ import { getNewsData } from "@/lib/news";
 import { listApproved } from "@/lib/submissions";
 import glossary from "@/content/glossary.json";
 
-export const revalidate = 3600;
+// Cached until /api/admin/review invalidates it — the featured grid is the
+// only DB-backed content here, and approval is its only source of change.
+export const revalidate = false;
 
 export default async function Home() {
   const topics = topicCards();

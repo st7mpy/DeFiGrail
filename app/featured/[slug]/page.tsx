@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { getApprovedBySlug } from "@/lib/submissions";
 import { renderCommunityMarkdown } from "@/lib/sanitize";
 
-export const revalidate = 3600;
+// Cached until /api/admin/review invalidates this exact path on approval.
+export const revalidate = false;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const item = await getApprovedBySlug((await params).slug);

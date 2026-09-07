@@ -4,7 +4,9 @@ import CommunityForm from "@/components/community/CommunityForm";
 import { listApproved } from "@/lib/submissions";
 
 export const metadata: Metadata = { title: "Community" };
-export const revalidate = 300;
+// Cached until /api/admin/review invalidates it. Was 300s, which re-ran an
+// unbounded SELECT against Neon every 5 minutes for data that changes weekly.
+export const revalidate = false;
 
 export default async function CommunityPage() {
   const approved = await listApproved();

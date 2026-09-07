@@ -1,4 +1,5 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
 import { and, count, desc, eq, gt } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { submissions, type Submission } from "@/lib/db/schema";
@@ -49,7 +50,7 @@ export function toFeatured(s: Submission): FeaturedItem {
   };
 }
 
-export async function listApproved(limit?: number): Promise<FeaturedItem[]> {
+async function listApprovedUncached(limit?: number): Promise<FeaturedItem[]> {
   if (!db) return [];
   try {
     const q = db.select().from(submissions).where(eq(submissions.status, "approved")).orderBy(desc(submissions.reviewedAt));
@@ -60,7 +61,7 @@ export async function listApproved(limit?: number): Promise<FeaturedItem[]> {
   }
 }
 
-export async function getApprovedBySlug(slug: string): Promise<FeaturedItem | null> {
+async function getApprovedBySlugUncached(slug: string): Promise<FeaturedItem | null> {
   if (!db) return null;
   try {
     const rows = await db.select().from(submissions).where(and(eq(submissions.slug, slug), eq(submissions.status, "approved"))).limit(1);
@@ -69,6 +70,18 @@ export async function getApprovedBySlug(slug: string): Promise<FeaturedItem | nu
     return null;
   }
 }
+
+// Both public reads are cached across requests and invalidated by the
+// "submissions" tag, which /api/admin/review fires on approve. Without this the
+// home page would still wake Neon ~48x/day: its own `revalidate = false` is
+// overridden by the 30-minute news fetch inside it, and every regeneration
+// re-ran the query. Approvals happen weekly; the rows cannot change otherwise.
+// ponytail: unstable_cache because Cache Components is off — migrate to
+// `use cache` + cacheTag if next.config.ts ever enables it.
+const CACHE_OPTS = { tags: ["submissions"], revalidate: false as const };
+
+export const listApproved = unstable_cache(listApprovedUncached, ["submissions:approved"], CACHE_OPTS);
+export const getApprovedBySlug = unstable_cache(getApprovedBySlugUncached, ["submissions:by-slug"], CACHE_OPTS);
 
 export async function listPending(): Promise<Submission[]> {
   if (!db) return [];
