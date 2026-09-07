@@ -3,12 +3,15 @@ import { ImageResponse } from "next/og";
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
+// The brand mark is the navy disc from the nav logo (.nav-logo-dot), not a
+// letterform: "DeFi" set at 11px in a 32px box is an unreadable smudge at tab
+// size, and a solid disc stays legible down to 16px.
 export default function Icon() {
   return new ImageResponse(
     (
       <div
         style={{
-          background: "#ffffff",
+          background: "#FFFAFA",
           width: "100%",
           height: "100%",
           display: "flex",
@@ -16,17 +19,7 @@ export default function Icon() {
           justifyContent: "center",
         }}
       >
-        <span
-          style={{
-            fontSize: 11,
-            fontWeight: 800,
-            color: "#000000",
-            letterSpacing: "-0.02em",
-            fontFamily: "system-ui, -apple-system, sans-serif",
-          }}
-        >
-          DeFi
-        </span>
+        <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#000080" }} />
       </div>
     ),
     { ...size }
