@@ -1,4 +1,4 @@
-# DeFiGrail launch video — plan v2
+# DeFiGrail launch video — plan v3
 
 *45 seconds, cut for X. v2 applies the 12-second decision and replaces v1's shot list with
 measured capture offsets from the live site.*
@@ -52,33 +52,37 @@ claim, and it is defensible because the anchor metadata is on all 51 topics.
 
 ### Shot 3 is the whole pitch — measured offsets
 
-`/learn/uniswap-v3`, document height 3619. One continuous scroll, ~12s, ease-in-out:
+`/learn/uniswap-v3` at **1440×900**. Measured: at `scrollY 300` the TradFi anchor, both
+prereq chips *and* the first caveat are all on screen at once.
 
 ```
-scrollY  248 → 1287   over ~12s
-
- 248  h1 "Uniswap v3"
- 384  TradFi chip — "Limit-order market making / short straddle"   ← hold ~1.5s
- 507  prereq chips — "Uniswap v2" + "Impermanent Loss"             ← hold ~1.5s
- 797  first caveat (kind=misuse) — the ~4000x capital efficiency one
-1287  the interactive RangeLiquidity chart
+HOLD  scrollY 300           ~4s   the whole thesis in one static frame
+                                    y  84  TradFi chip — "Limit-order market making / short straddle"
+                                    y 207  prereqs — "Uniswap v2" + "Impermanent Loss"
+                                    y 497  caveat (misuse) — the ~4000x capital-efficiency one
+SCROLL 300 → 1100           ~8s   ease-in-out, landing on the RangeLiquidity chart at y 187
 ```
 
-That single move shows the anchor, the dependency chain, a typed caveat and an interactive
-chart without a cut. **v1 had this on `/learn/uniswap-v2` — that was wrong: uniswap-v2 is the
-first Foundations topic and has no prereqs, so the chips would not have rendered.**
+Open held, then move. The held frame is the pitch; the scroll proves it keeps going.
+
+**Two corrections this measurement caught.** v1 put this on `/learn/uniswap-v2`, which is
+first in Foundations and has *no prereqs* — the chips would never have rendered. And v2's
+`248 → 1287` overshot both ends: 248 wastes 4s on whitespace above the anchor, and 1287 pushes
+the chart past the bottom edge.
 
 ### Shot 7 — measured offsets
 
 `/learn/liquidations`, three caveats on the page:
 
 ```
-1206  breaks — "Liquidation does not happen at the liquidation threshold…"
-1677  real   — "Black Thursday, 12 March 2020…"      ← this is the shot
-2083  check  — "Verify it yourself…"
+document offsets      capture scrollY
+1206  breaks                 —
+1677  real  ← the shot     1417   frames it at y 260, fully in shot at 1440x900
+2083  check                  —
 ```
 
-Land on **1677** and hold. That caveat is the single most persuasive frame in the product: a
+Scroll to **1417** and hold. (1677 is where the caveat *sits*; scrolling there would push it
+off the top edge — the framing offset is 1417.) That caveat is the single most persuasive frame in the product: a
 dated, sourced, real-money failure, not a definition.
 
 ---
@@ -126,10 +130,10 @@ Record at 1440×900, no cursor except shots 4 and 6 where the drag *is* the poin
 | Shot | URL | Action |
 |---|---|---|
 | 2, 10 | `/` | Hard reload, wait for aurora + headline to settle, hold still |
-| 3 | `/learn/uniswap-v3` | Scroll 248 → 1287, ~12s, ease-in-out |
+| 3 | `/learn/uniswap-v3` | Hold at 300 (~4s), then scroll 300 → 1100 (~8s), ease-in-out |
 | 4 | `/playground` | Drag IL entry 2000 → current 3000, slowly |
 | 6 | `/graph` | Drag one node, release, let physics settle |
-| 7 | `/learn/liquidations` | Jump to 1600, ease to 1677, hold 2s |
+| 7 | `/learn/liquidations` | Jump to 1417, hold 4s |
 | 8 | `/quiz` | Click Expert, scroll one question into frame |
 
 **Do not record:** `/news` (live prices date the video) · `/community` (empty until real
@@ -162,8 +166,20 @@ free · no signup
 
 ---
 
+## Status
+
+**Runway — blocked on one manual step.** The server was registered under project scope
+`/Users/siddharthsingh` (home), so it never loaded in this repo. Re-added at **user** scope,
+now reachable at `https://mcp.runwayml.com/mcp`, and reporting `Needs authentication`.
+Authorise it with `/mcp` in an interactive terminal; the tools load after that. A backup of
+`~/.claude.json` was written before the change.
+
+**Capture — ready to shoot.** Every offset above is measured against the live site at
+1440×900, not estimated. Shots 3 and 7 were both wrong in earlier drafts and are now correct.
+
 ## Next
 
-1. Restart the session so the Runway MCP tools load, then generate shots 1, 5, 9 (3–4 variants each).
-2. Capture the six product clips against the offsets above.
-3. Assemble, and cut the 30s version by dropping shots 5 and 6.
+1. Authorise Runway (`/mcp`), then generate shots 1, 5, 9 — 3–4 variants each, image-to-video
+   seeded with a real hero frame for 1 and 9.
+2. Shoot the six product clips against the recipe above.
+3. Assemble. The 30s cut drops shots 5 and 6.
