@@ -362,5 +362,33 @@
     "answer": 1,
     "explanation": "Below the kink the rate accrues at slope₁: 0.02 + 0.80·0.10 = 10%. Past it, the excess 10 points of utilization accrue at slope₂: 0.10·0.75 = 7.5%. Total 17.5%.",
     "topic": "interest-rate-models"
+  },
+  {
+    "id": "q27",
+    "type": "theory",
+    "topic": "custody-and-issuers",
+    "prompt": "You buy Apple shares through a typical US broker. Who is the registered holder on Apple's books?",
+    "options": [
+      "You, by name",
+      "Cede & Co., the DTC nominee — you are a beneficial owner with a claim on your broker",
+      "Apple's transfer agent holds them in your name",
+      "The SEC, which maintains the central register"
+    ],
+    "answer": 1,
+    "explanation": "Retail shares are held in \"street name\": registered to Cede & Co. as DTC's nominee, with your broker's ledger recording your beneficial interest. This is the normal case, not an exception — and it is why settlement is a ledger update rather than a certificate moving. Tokenization usually adds a link to this chain rather than removing one."
+  },
+  {
+    "id": "q28",
+    "type": "analytical",
+    "topic": "custody-and-issuers",
+    "prompt": "A token is described as \"fully backed 1:1 by shares held at a licensed custodian\". What does that phrase actually establish?",
+    "options": [
+      "That the token is legally the same instrument as the share",
+      "That you can always redeem it at par on demand",
+      "That the custodian's account holds the assets — nothing about issuer default or who may redeem",
+      "That the issuer is bankruptcy-remote by definition"
+    ],
+    "answer": 2,
+    "explanation": "\"Backed\" is a statement about the custodian's account. Your risk is the chain of promises between you and it: who the issuer is, whether it is genuinely bankruptcy-remote, who keeps the register, and who is permitted to redeem at par. In most structures only authorised participants can redeem with the issuer; everyone else exits by selling."
   }
 ]

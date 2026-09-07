@@ -223,5 +223,35 @@
     "answer": 3,
     "explanation": "Annualise funding first: 0.0080% × 3 intervals × 365 days = 8.76%. Gross on the backing is 3.20% (staking) + 8.76% (funding) − 0.50% (costs) = 11.46% on the full $100,000,000, or $11,460,000. That whole amount is paid to the 70% that is staked, so the wrapper's APY is 11.46% / 0.70 = 16.37%. Stopping at 11.46% ignores the uplift the unstaked 30% donates; treating the funding quote as a daily rather than an 8-hourly rate gives 8.0%; and counting funding but forgetting the staking leg gives 11.8%. The whole yield is contingent — funding turns negative in a bear market and the same arithmetic runs in reverse.",
     "topic": "stablecoin-design"
+  },
+  {
+    "id": "x16",
+    "type": "analytical",
+    "tier": 2,
+    "topic": "custody-and-issuers",
+    "prompt": "A neobank's app shows your $2,000 balance. Its sponsor bank is FDIC-insured. The neobank's middleware provider fails and its ledger cannot be reconciled against the bank's records. What is your actual exposure?",
+    "options": [
+      "None — the sponsor bank is FDIC-insured, so deposits are covered",
+      "The funds may be intact at the bank but unrecoverable, because no one can prove which pooled dollars are yours",
+      "Total loss — FDIC insurance never applies to fintech deposits",
+      "The neobank must cover it from its own capital under Reg E"
+    ],
+    "answer": 1,
+    "explanation": "Deposits sit in a pooled FBO account at the sponsor bank; the middleware's ledger is the only record of who owns which slice. FDIC insurance is triggered by the failure of the insured bank, which has not happened here — the bank still holds the money. Synapse (April 2024) is the worked example: the banks held the funds, roughly $265M of end-user money was frozen, and the trustee reported about $85M unaccounted for. Question 3 of the claim chain — who says it's mine — is the link that broke."
+  },
+  {
+    "id": "x17",
+    "type": "theory",
+    "tier": 1,
+    "topic": "custody-and-issuers",
+    "prompt": "You hold a tokenized Apple share issued by an SPV, with the underlying stock at a licensed custodian. A shareholder vote is called. What do you get?",
+    "options": [
+      "A vote proportional to your tokens, relayed on-chain by the issuer",
+      "Dividends but no vote — the custodian votes the underlying shares or abstains",
+      "Both dividend and vote, since the token is legally equivalent to the share",
+      "Neither, because tokenized equities forfeit all shareholder economics"
+    ],
+    "answer": 1,
+    "explanation": "Across live tokenized-equity programs the economics pass through but governance stops at the custodian: you receive dividend equivalents, and the custodian either votes the shares itself or abstains. The token is a claim on the issuer collateralized by the share — not the share — so the registered holder, not you, is who the company recognises."
   }
 ]

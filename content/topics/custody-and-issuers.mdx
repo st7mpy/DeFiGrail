@@ -1,0 +1,106 @@
+---
+title: "Issuers, Custodians & the Claim Chain"
+slug: "custody-and-issuers"
+era: "ref"
+track: "ecosystem"
+order: 6
+prereqs: ["what-is-a-stock", "rwa"]
+related: ["stablecoin-design", "defi-risk-taxonomy", "tradfi-mapping"]
+tradfiAnchor: "Street-name ownership / DTC custody chain"
+summary: "Who actually holds the asset, and who owes you what. The issuer–custodian–broker chain behind tokenized equities, neobanks, and every 'backed' token."
+significance: 20
+lastVerified: "2026-09-07"
+sources:
+  - label: "xStocks — Product Legal Overview (issuer, custodian, security agent)"
+    url: "https://docs.xstocks.fi/docs/product-legal-overview"
+  - label: "CNBC — Synapse trustee: $85M of customer savings missing"
+    url: "https://www.cnbc.com/2024/06/07/synapse-bankruptcy-trustee-85-million-of-customer-savings-is-missing.html"
+  - label: "CFPB enforcement action — Synapse Financial Technologies"
+    url: "https://www.consumerfinance.gov/enforcement/actions/synapse-financial-technologies-inc/"
+  - label: "DTCC — how securities are held and settled"
+    url: "https://www.dtcc.com/about/businesses-and-subsidiaries/dtc"
+---
+
+## 01 · Concept — what problem does it solve?
+
+You almost never hold the asset. You hold a **claim** on whoever does.
+
+Buy Apple shares through a US broker and you are not on Apple's register. The shares sit in **street name** — legally registered to Cede & Co., the nominee of the Depository Trust Company — and your broker's ledger records that some of that pool is yours. You are a *beneficial* owner with a contractual claim, not a *registered* holder. This is not a loophole; it is how essentially all retail equity ownership works, and it is why settlement can happen by updating ledgers rather than moving certificates.
+
+Once you see the chain, most "backed by real assets" claims stop being a yes/no question and become a *how many links* question — and every link is a party that can fail independently of the asset itself.
+
+<Layman>
+Think of a coat check. The coat is yours, but what you're actually holding is a
+ticket, and the ticket is only as good as the cloakroom. Most of finance is
+coat checks handing tickets to other coat checks. Tokenizing something doesn't
+give you the coat — it usually just prints a nicer ticket, one cloakroom further
+down the line.
+</Layman>
+
+## 02 · Mechanics
+
+Four roles do almost all the work. Conflating them is the single most common mistake in reading a tokenization structure.
+
+- **Issuer** — creates the instrument and owes you the obligation. For xStocks that is Backed Assets (JE) Limited, a Jersey SPV whose only business is issuing and redeeming those tokens. The issuer is your counterparty.
+- **Custodian** — holds the actual asset. A licensed institution with the shares, the bullion, or the T-bills in an account. Bankruptcy-remote from the issuer if the structure is done properly.
+- **Transfer agent / registrar** — keeps the authoritative record of who owns what. In tokenized funds this role is increasingly the chain itself, with a licensed agent recognising on-chain balances as the register.
+- **Broker / interface** — the app you actually touch. Holds nothing; routes orders and shows you a number.
+
+<Caveat kind="misuse">
+"Fully backed" describes the *custodian's* account. It says nothing about
+whether the **issuer** can fail, whether your claim is senior to anyone else's,
+or how long redemption takes. Backing is a statement about assets; your risk is
+a statement about the chain of promises between you and them.
+</Caveat>
+
+**Tokenized equities** wire these together explicitly. The issuer sells you a token; a licensed custodian or broker holds the matching shares; a three-party *account control agreement* between issuer, custodian and an independent **security agent** governs the collateral. If the issuer defaults, the security agent can seize the collateral account, liquidate, and distribute to token holders under the prospectus.
+
+**Neobanks** are the same picture without the word "token". A neobank typically holds no banking charter. Your deposit sits in a pooled **FBO** ("for benefit of") account at a sponsor bank, and the fintech's own ledger is what says which slice is yours. The bank knows it holds $400M; the fintech's ledger is what knows you own $2,000 of it.
+
+## 03 · Formulas
+
+There is no equation here — the discipline is structural. Work the chain in order and answer four questions.
+
+```text
+you → interface → issuer → custodian → asset
+
+1. WHO OWES ME?        the issuer's legal entity, and its jurisdiction
+2. WHO HOLDS IT?       the custodian, and is it bankruptcy-remote from (1)?
+3. WHO SAYS IT'S MINE? the register — transfer agent, chain, or a private ledger
+4. HOW DO I EXIT?      who must act, in what size, on what day, at what price
+```
+
+Rank the failure modes by which link breaks, not by how the product is marketed. A token can be perfectly collateralized and still leave you with nothing if the *register* — question 3 — is a spreadsheet nobody reconciled.
+
+<Caveat kind="real">
+Synapse, April 2024. A banking-as-a-service middleware firm filed Chapter 11;
+its bankruptcy trustee reported roughly $85M of customer savings unaccounted
+for, against $65–95M estimated missing overall, and around $265M of end-user
+funds frozen. The sponsor banks held the money the whole time. What failed was
+the *ledger* — the CFPB's action cites failures to keep records that matched
+the partner banks'. Question 3, not question 2.
+</Caveat>
+
+<Caveat kind="breaks">
+FDIC insurance covers the failure of an **insured bank**. It does not cover the
+failure of a fintech sitting in front of one. When a middleware firm's records
+break, the deposits may be perfectly safe and perfectly unreachable, because no
+one can prove which dollars are yours. "FDIC-insured" on a neobank's homepage
+describes the sponsor bank, not the app.
+</Caveat>
+
+## 04 · Edge cases & risks
+
+- **Voting rights usually stop at the custodian.** Across live tokenized-equity programs, dividends are passed through but votes are not — the custodian votes the underlying shares or abstains. You get the economics, not the governance.
+- **Bankruptcy-remoteness is a design claim, not a fact.** It holds only if the SPV is genuinely separate: own board, no commingling, assets pledged to a security agent. A "custodian" that is a subsidiary of the issuer collapses two links into one.
+- **Redemption is a right held by someone specific.** In most structures only authorised participants can redeem at par with the issuer; everyone else exits by selling to another buyer. That is the whole difference between a peg and a price. See [Stablecoin Design](/learn/stablecoin-design) — the same asymmetry drives depegs.
+- **Chains lengthen quietly.** A token wrapping a token wrapping a fund share is three issuers and three default points. Each wrapper markets itself against the *underlying*, never against the wrapper beneath it.
+- **The regulated link is not always the risky one.** In both Synapse and the 2022 crypto-lender failures, the licensed, audited institution held the assets correctly; the unregulated bookkeeper in front of it is what lost track of the claims.
+
+<Caveat kind="check">
+Verify it yourself: open any tokenized-asset product's legal or docs page and
+find the four answers. If the issuing entity, its jurisdiction, the named
+custodian, and the redemption mechanism are not all stated plainly, that is
+itself the finding — reputable structures publish all four, because they have
+to.
+</Caveat>

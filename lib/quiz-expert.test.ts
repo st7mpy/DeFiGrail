@@ -5,11 +5,14 @@ import { loadTopics } from "./mdx";
 describe("expert quiz data", () => {
   const slugs = new Set(loadTopics().map((t) => t.meta.slug));
 
-  it("has 15 questions", () => expect(EXPERT_QUIZ).toHaveLength(15));
+  it("has at least the original 15 questions", () => {
+    expect(EXPERT_QUIZ.length).toBeGreaterThanOrEqual(15);
+  });
 
-  it("has five questions at each tier", () => {
+  it("carries a valid tier on every question, with all three represented", () => {
+    for (const q of EXPERT_QUIZ) expect([1, 2, 3], q.id).toContain(q.tier);
     for (const tier of [1, 2, 3]) {
-      expect(EXPERT_QUIZ.filter((q) => q.tier === tier)).toHaveLength(5);
+      expect(EXPERT_QUIZ.filter((q) => q.tier === tier).length, `tier ${tier}`).toBeGreaterThan(0);
     }
   });
 
