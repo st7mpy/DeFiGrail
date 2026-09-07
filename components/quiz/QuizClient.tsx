@@ -1,14 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import type { QuizQuestion } from "@/lib/quiz";
+import { tweetIntent, type QuizQuestion } from "@/lib/quiz";
 
 const BEST_KEY = "dg:quiz-best";
 const TYPE_LABEL: Record<string, string> = {
   quant: "Quant", theory: "Theory", analytical: "Analytical",
 };
 
-export default function QuizClient({ questions, bestKey = BEST_KEY }: { questions: QuizQuestion[]; bestKey?: string }) {
+export default function QuizClient({ questions, bestKey = BEST_KEY, shareLabel = "DeFiGrail" }: { questions: QuizQuestion[]; bestKey?: string; shareLabel?: string }) {
   const total = questions.length;
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
@@ -68,7 +68,17 @@ export default function QuizClient({ questions, bestKey = BEST_KEY }: { question
             </div>
           ))}
         </div>
-        <button className="btn-primary" onClick={restart}>Retake the quiz →</button>
+        <div className="quiz-result-actions">
+          <button type="button" className="btn-primary" onClick={restart}>Retake the quiz →</button>
+          <a
+            className="btn-secondary quiz-share"
+            href={tweetIntent(score, total, shareLabel)}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Share on X →
+          </a>
+        </div>
       </div>
     );
   }

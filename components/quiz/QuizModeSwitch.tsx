@@ -31,7 +31,7 @@ export default function QuizModeSwitch({ core, expert }: { core: QuizQuestion[];
         ))}
       </div>
       <p className="quiz-mode-blurb">{active.blurb}</p>
-      <QuizClient key={mode} questions={questions} bestKey={active.bestKey} />
+      <QuizClient key={mode} questions={questions} bestKey={active.bestKey} shareLabel={active.label} />
     </>
   );
 }

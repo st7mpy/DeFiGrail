@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { QUIZ, questionsForTopic, type QuizType } from "./quiz";
+import { QUIZ, questionsForTopic, tweetIntent, type QuizType } from "./quiz";
 import { loadTopics } from "./mdx";
 
 describe("quiz data", () => {
@@ -45,5 +45,21 @@ describe("questionsForTopic", () => {
   });
   it("returns an empty array for a topic with no questions", () => {
     expect(questionsForTopic("no-such-topic")).toEqual([]);
+  });
+});
+
+describe("tweetIntent", () => {
+  it("carries the score, label and quiz URL", () => {
+    const u = new URL(tweetIntent(12, 15, "Expert"));
+    expect(u.searchParams.get("text")).toContain("12/15");
+    expect(u.searchParams.get("text")).toContain("Expert");
+    expect(u.searchParams.get("url")).toBe("https://defigrail.xyz/quiz");
+  });
+
+  it("escapes characters that would otherwise truncate the query string", () => {
+    const u = new URL(tweetIntent(1, 2, "A&B?C=D"));
+    // survives the round-trip intact rather than being cut at the & or ?
+    expect(u.searchParams.get("text")).toContain("A&B?C=D");
+    expect(u.searchParams.get("url")).toBe("https://defigrail.xyz/quiz");
   });
 });
