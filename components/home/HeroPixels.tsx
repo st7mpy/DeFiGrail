@@ -110,12 +110,17 @@ export default function HeroPixels({ text }: { text: string }) {
       raf = requestAnimationFrame(frame);
     };
 
+    // Safety net: requestAnimationFrame does not fire in a background tab, so a
+    // page opened in one would sit with the <h1> at opacity 0 until focused.
+    // Reveal unconditionally after the animation's own worst case.
+    const failsafe = setTimeout(reveal, 2600);
+
     // wait for the web font so the pixel mask matches the final heading
     const start = () => requestAnimationFrame(run);
     if (document.fonts?.ready) document.fonts.ready.then(start);
     else start();
 
-    return () => { cancelled = true; cancelAnimationFrame(raf); };
+    return () => { cancelled = true; clearTimeout(failsafe); cancelAnimationFrame(raf); };
   }, [text]);
 
   return (

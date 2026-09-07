@@ -1,4 +1,3 @@
-import FooterEmailLink from "./FooterEmailLink";
 
 export default function SiteFooter() {
   return (
@@ -18,7 +17,12 @@ export default function SiteFooter() {
           <div className="footer-tag">CONCEPT → MECHANICS → FORMULAS → EDGE CASES</div>
           <div className="footer-contact">
             <span className="footer-contact-label">Get in touch</span>
-            <FooterEmailLink />
+            {/* Percent-encoded @ (RFC 6068): browsers decode it, so this is a
+                working mailto with no JS, while the literal address never
+                appears in the served HTML for naive [\w.]+@[\w.]+ scrapers. */}
+            <a className="footer-made" href="mailto:siddharth77work%40gmail.com">
+              Email Siddharth →
+            </a>
             <a className="footer-made" href="https://s7ddharth-portfolio.vercel.app" target="_blank" rel="noopener noreferrer">
               Portfolio →
             </a>
