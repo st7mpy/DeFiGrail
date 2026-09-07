@@ -11,7 +11,7 @@ const TABS = [
   { href: "/quiz", label: "Quiz", key: "quiz" },
   { href: "/glossary", label: "Glossary", key: "glossary" },
   { href: "/news", label: "News", key: "news" },
-  { href: "/community", label: "Community", key: "community" },
+  { href: "/community", label: "Writeups", key: "community" },
 ];
 
 export default function SiteNav() {
