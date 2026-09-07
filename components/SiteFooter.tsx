@@ -9,13 +9,6 @@ export default function SiteFooter() {
           </div>
         </div>
         <div className="footer-side">
-          <ol className="footer-flow" aria-label="How every topic is structured">
-            {["Concept", "Mechanics", "Formulas", "Edge cases"].map((step, i) => (
-              <li key={step} className="footer-flow-step" style={{ animationDelay: `${i * 0.55}s` }}>
-                {step}
-              </li>
-            ))}
-          </ol>
           <div className="footer-contact">
             <span className="footer-contact-label">Get in touch</span>
             {/* Percent-encoded @ (RFC 6068): browsers decode it, so this is a

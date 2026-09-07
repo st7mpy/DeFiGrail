@@ -4,7 +4,6 @@ import TrackSection from "@/components/home/TrackSection";
 import { topicCards, trackViews } from "@/lib/topic-cards";
 import { getNewsData } from "@/lib/news";
 import { listApproved } from "@/lib/submissions";
-import glossary from "@/content/glossary.json";
 
 // Cached until /api/admin/review invalidates it — the featured grid is the
 // only DB-backed content here, and approval is its only source of change.
@@ -13,7 +12,6 @@ export const revalidate = false;
 export default async function Home() {
   const topics = topicCards();
   const tracks = trackViews();
-  const glossaryCount = (glossary as unknown[]).length;
   const market = await getNewsData();
   const approved = await listApproved(3);
   // Link posts now — the card goes straight to where it was published.
@@ -29,16 +27,18 @@ export default async function Home() {
           DeFi mechanics have a lot to dump on your brain, we made every formula interactive,
           every idea preceded by exactly what you need to know first.
         </p>
+        <ol className="hero-flow" aria-label="How every topic is structured">
+          {["Concept", "Mechanics", "Formulas", "Edge cases"].map((step, i) => (
+            <li className="hero-flow-step" key={step}>
+              <span className="hero-flow-pill" style={{ animationDelay: `${(i * 1.15).toFixed(2)}s` }}>{step}</span>
+            </li>
+          ))}
+        </ol>
+
         <div className="hero-ctas">
           <Link className="btn-primary" href="/learn/uniswap-v2">Start the Foundations track →</Link>
           <Link className="btn-secondary" href="/graph">Open the knowledge graph</Link>
           <Link className="btn-secondary" href="/community">Submit your content →</Link>
-        </div>
-        <div className="hero-stats">
-          <div><div className="stat-num">{topics.length}</div><div className="stat-label">Topics</div></div>
-          <div><div className="stat-num">{tracks.length}</div><div className="stat-label">Tracks</div></div>
-          <div><div className="stat-num">5</div><div className="stat-label">Interactive tools</div></div>
-          <div><div className="stat-num">{glossaryCount}</div><div className="stat-label">Glossary terms</div></div>
         </div>
       </section>
 
