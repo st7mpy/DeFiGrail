@@ -130,7 +130,6 @@ footer.dg-footer{border-top:1px solid rgba(0, 0, 128,.14);margin-top:30px}
 
 /* ─── HOME ─── */
 .home-hero{position:relative;padding:96px 0 72px;text-align:center;display:flex;flex-direction:column;align-items:center}
-.hero-eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:rgba(0, 0, 128,.5)}
 .hero-h1{font-family:var(--font-sans);font-weight:700;font-size:clamp(44px,7vw,84px);line-height:1.04;letter-spacing:-.035em;margin:18px auto 0;max-width:880px}
 .hero-sub{font-family:var(--font-sans);font-size:19px;line-height:1.55;color:rgba(0, 0, 128,.66);margin:20px auto 0;max-width:560px}
 .hero-ctas{display:flex;gap:13px;margin-top:34px;flex-wrap:wrap;justify-content:center}
@@ -617,3 +616,6 @@ footer.dg-footer{border-top:1px solid rgba(0, 0, 128,.14);margin-top:30px}
   .hero-flow-pill,.hero-flow-step + .hero-flow-step::before{animation:none}
   .hero-flow-pill{color:rgba(0, 0, 128,.6)}
 }
+
+.learn-sidebar-link{display:block;margin-top:16px;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:rgba(0, 0, 128,.6);text-decoration:none;border-top:1px solid rgba(0, 0, 128,.1);padding-top:14px}
+.learn-sidebar-link:hover{color:#000080;text-decoration:underline}

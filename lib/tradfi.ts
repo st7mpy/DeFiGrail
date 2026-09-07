@@ -16,11 +16,14 @@ export type TradfiEntry = {
 export function tradfiIndex(): TradfiEntry[] {
   const byAnchor = new Map<string, TradfiEntry["topics"]>();
   for (const t of loadTopics()) {
-    const anchor = (t.meta.tradfiAnchor ?? "").trim();
-    if (!anchor) continue;
-    const bucket = byAnchor.get(anchor) ?? [];
-    bucket.push({ slug: t.meta.slug, name: t.meta.title, summary: t.meta.summary });
-    byAnchor.set(anchor, bucket);
+    const anchors = [t.meta.tradfiAnchor ?? "", ...t.meta.tradfiAlso]
+      .map((a) => a.trim())
+      .filter(Boolean);
+    for (const anchor of anchors) {
+      const bucket = byAnchor.get(anchor) ?? [];
+      bucket.push({ slug: t.meta.slug, name: t.meta.title, summary: t.meta.summary });
+      byAnchor.set(anchor, bucket);
+    }
   }
   return [...byAnchor.entries()]
     .map(([anchor, topics]) => ({ anchor, topics }))

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Glyph, { ERA_LABELS } from "@/components/Glyph";
 import { useProgress } from "@/lib/use-progress";
 import type { TrackView } from "@/lib/topic-cards";
@@ -27,6 +28,13 @@ export default function LearnBrowser({ tracks, initialTrack }: { tracks: TrackVi
             <span className="track-nav-count">{countRead(t.topics.map((x) => x.slug))}/{t.topics.length} read</span>
           </button>
         ))}
+        {/* /tradfi is no longer in the top nav; this keeps it reachable, and
+            beside the track list is where "I already know the TradFi version"
+            actually occurs to a reader. */}
+        <Link className="learn-sidebar-link" href="/tradfi">
+          Coming from TradFi? →
+        </Link>
+
         <div className="learn-sidebar-label" style={{ marginTop: 22 }}>Era key</div>
         <div className="era-legend">
           {(["v0", "v1", "v2", "esoteric", "infra", "ref"] as const).map((e) => (

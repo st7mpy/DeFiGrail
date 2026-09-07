@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 
 const TABS = [
   { href: "/learn", label: "Learn", key: "learn" },
-  { href: "/tradfi", label: "TradFi", key: "tradfi" },
   { href: "/graph", label: "Graph", key: "graph" },
   { href: "/playground", label: "Playground", key: "playground" },
   { href: "/quiz", label: "Quiz", key: "quiz" },

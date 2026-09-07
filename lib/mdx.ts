@@ -16,6 +16,9 @@ export const frontmatterSchema = z.object({
   prereqs: z.array(z.string()).default([]),
   related: z.array(z.string()).default([]),
   tradfiAnchor: z.string().optional(),
+  // Extra TradFi anchors for the /tradfi index only. A topic often maps to more
+  // than one instrument; tradfiAnchor stays the single headline chip.
+  tradfiAlso: z.array(z.string().min(1)).default([]),
   summary: z.string().min(10).max(300),
   significance: z.number().int().min(8).max(30).default(14),
   sources: z
