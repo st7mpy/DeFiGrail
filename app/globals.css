@@ -516,3 +516,11 @@ footer.dg-footer{border-top:1px solid rgba(0, 0, 128,.14);margin-top:30px}
 }
 .featured-empty{border:1px dashed rgba(0, 0, 128,.24);border-radius:10px;padding:26px;text-align:center;font-size:14px;color:rgba(0, 0, 128,.6)}
 .featured-empty a{color:#000080;text-decoration:underline;text-underline-offset:2px}
+
+/* ─── QUIZ MODES ─── */
+.quiz-modes{display:flex;gap:8px;margin-bottom:12px}
+.quiz-mode{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border:1px solid rgba(0, 0, 128,.2);border-radius:100px;background:transparent;color:rgba(0, 0, 128,.7);font-size:13px;transition:background .15s,color .15s,border-color .15s}
+.quiz-mode:hover{border-color:#000080;color:#000080}
+.quiz-mode.active{background:#000080;border-color:#000080;color:#FFFAFA}
+.quiz-mode-count{font-family:var(--font-mono);font-size:10.5px;opacity:.85}
+.quiz-mode-blurb{font-size:13px;color:rgba(0, 0, 128,.6);margin:0 0 20px;max-width:620px}
