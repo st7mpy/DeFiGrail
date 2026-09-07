@@ -1,0 +1,227 @@
+[
+  {
+    "id": "x01",
+    "tier": 1,
+    "type": "quant",
+    "prompt": "An Aave-style market holds 12 ETH of collateral at $2,400. The asset's max LTV is 80% and its liquidation threshold is 82.5%. The account owes 14,000 USDC. What is its health factor?",
+    "options": [
+      "1.65",
+      "1.70",
+      "2.06",
+      "0.59"
+    ],
+    "answer": 1,
+    "explanation": "Health factor uses the liquidation threshold, not the max LTV: HF = (collateral × threshold) / debt. Collateral = 12 × $2,400 = $28,800; × 0.825 = $23,760; ÷ 14,000 = 1.697 ≈ 1.70. Using the 80% max LTV instead gives 23,040 / 14,000 = 1.65 — the number that governs how much more you may borrow, not when you get liquidated. Dropping the threshold entirely gives 28,800 / 14,000 = 2.06, and inverting the ratio gives 0.59.",
+    "topic": "liquidations"
+  },
+  {
+    "id": "x02",
+    "tier": 1,
+    "type": "quant",
+    "prompt": "Same position — 12 ETH collateral, 82.5% liquidation threshold, 14,000 USDC of debt, nothing repaid and nothing added. At what ETH price does the account become liquidatable?",
+    "options": [
+      "$1,167",
+      "$1,458",
+      "$1,414",
+      "$963"
+    ],
+    "answer": 2,
+    "explanation": "Set HF = 1 and solve for price: P × 12 × 0.825 = 14,000, so P = 14,000 / 9.9 = $1,414.14. That is a 41% drawdown from $2,400. Substituting the 80% max LTV gives 14,000 / 9.6 = $1,458 — too high, so you would think you were liquidated while still safe. Ignoring the threshold gives 14,000 / 12 = $1,167, and applying the haircut to the debt rather than the collateral (14,000 × 0.825 / 12) gives $963.",
+    "topic": "liquidations"
+  },
+  {
+    "id": "x03",
+    "tier": 1,
+    "type": "quant",
+    "prompt": "An ETH perp pays funding every 8 hours and the rate has sat at +0.0100% for a week, meaning longs pay shorts. You are short $250,000 of notional backed by $50,000 of margin. Ignoring price moves, what does the funding leg alone earn over 7 days, and what is that as a return on your margin?",
+    "options": [
+      "$105, and 0.21% on margin",
+      "$525, and 0.21% on margin",
+      "$175, and 0.35% on margin",
+      "$525, and 1.05% on margin"
+    ],
+    "answer": 3,
+    "explanation": "Funding accrues three times a day: 0.0100% × 3 × 7 = 0.21% of notional over the week. On $250,000 of notional that is $525. The return is measured against the capital actually posted, so $525 / $50,000 = 1.05% in a week — the 5× leverage magnifies the carry exactly as it magnifies price risk. Treating the quoted rate as daily gives $175 (0.35%); applying the rate to margin instead of notional gives $105; and dividing the correct $525 by notional rather than margin gives 0.21%, which understates the return on capital fivefold.",
+    "topic": "perpetual-futures"
+  },
+  {
+    "id": "x04",
+    "tier": 1,
+    "type": "quant",
+    "prompt": "You put $40,000 into a Uniswap v3 ETH/USDC position in the 0.05% fee tier. While price stays inside your range your liquidity is 0.5% of all active liquidity in the pool, and the pool trades $18,000,000 a day. Assuming those conditions hold, what fee APR does the position earn?",
+    "options": [
+      "≈41%",
+      "≈246%",
+      "≈411%",
+      "≈3.4%"
+    ],
+    "answer": 0,
+    "explanation": "Fees to the whole pool are $18,000,000 × 0.0005 = $9,000 a day. Your 0.5% share of active liquidity earns 0.005 × $9,000 = $45 a day, or $45 × 365 = $16,425 a year, which on $40,000 of capital is 41.1%. Assuming the 0.30% tier out of habit gives $270/day and 246%; reading 0.05% as 0.005 rather than 0.0005 gives 411%; and quoting 30 days of fees as if annual gives 3.4%. Note this is fee yield only — it says nothing about what divergence does to the position.",
+    "topic": "uniswap-v3"
+  },
+  {
+    "id": "x05",
+    "tier": 1,
+    "type": "quant",
+    "prompt": "You LP a full-range 50/50 ETH/USDC pool at ETH = $2,000. Over the quarter ETH ends at $3,200 and the position accrues fees worth 3.10% of its starting value. Using IL = 2·√r/(1+r) − 1, how does the LP finish versus simply holding the two assets?",
+    "options": [
+      "−2.70%",
+      "+3.10%",
+      "+0.40%",
+      "−2.62%"
+    ],
+    "answer": 2,
+    "explanation": "The price ratio is r = 3,200 / 2,000 = 1.6. IL = 2·√1.6 / 2.6 − 1 = 2.5298 / 2.6 − 1 = −2.70%. Fees of +3.10% land on top of that, so the LP finishes 3.10 − 2.70 = +0.40% ahead of holding — a thin margin from a move that was not even a double. Quoting fees alone gives +3.10%, quoting IL alone gives −2.70%, and reaching for the memorised 'a 2× move costs 5.72%' figure instead of computing r = 1.6 gives −2.62%.",
+    "topic": "impermanent-loss"
+  },
+  {
+    "id": "x06",
+    "tier": 2,
+    "type": "quant",
+    "prompt": "A constant-product ETH/USDC pool holds 1,000 ETH and 2,000,000 USDC, and charges no fee. A victim broadcasts a 100,000 USDC → ETH swap with a 10% slippage tolerance. A searcher front-runs with an identical 100,000 USDC buy, lets the victim through, then sells all the ETH back in the same block. Gas plus the priority bid for the bundle costs $1,200. What does the searcher net?",
+    "options": [
+      "≈ $8,700",
+      "≈ $9,500",
+      "≈ $14,000",
+      "≈ $8,300"
+    ],
+    "answer": 3,
+    "explanation": "k = 2,000,000,000. The front-run takes the pool to 2,100,000 USDC / 952.381 ETH, handing the searcher 47.619 ETH. The victim's buy moves it to 2,200,000 / 909.091, so they receive 43.290 ETH instead of the 47.619 they would have got alone — 9.1% worse, which squeaks under their 10% tolerance. The back-run puts 47.619 ETH back in (956.710 ETH), so USDC falls to 2,090,497.74 and the searcher receives 109,502.26. Gross is $9,502; net of the $1,200 bundle cost, $8,302. Marking the ETH at the post-victim marginal price of $2,420 rather than the price it actually executes at overstates it as ≈$14,000, and assuming the searcher captures exactly the victim's 4.329 ETH shortfall valued at $2,000 gives ≈$8,700.",
+    "topic": "mev"
+  },
+  {
+    "id": "x07",
+    "tier": 2,
+    "type": "analytical",
+    "prompt": "A freshly deployed ERC-4626 vault with no virtual-share offset mints shares = assets × totalSupply / totalAssets, rounded down. An attacker deposits 1 wei of USDC (getting 1 share), then transfers 10,000 USDC straight to the vault address without minting. A victim then deposits 20,000 USDC. What happens when the victim redeems?",
+    "options": [
+      "They get back ~$15,000 — their deposit mints 1 share, half the vault",
+      "They get back $0 — their deposit mints 0 shares",
+      "They get back ~$10,000 — only the amount the attacker donated",
+      "They get back $20,000 — the donation lifts the share price for both parties equally"
+    ],
+    "answer": 0,
+    "explanation": "After the donation totalSupply = 1 and totalAssets = 10,000.000001 USDC, so one share is worth about 10,000 USDC. The victim's 20,000 mints floor(20,000e6 × 1 / 10,000,000,001) = floor(1.9999999998) = 1 share — the 0.9999 is rounded away and silently given to the attacker. The vault now holds 30,000.000001 across 2 shares, so the victim redeems 15,000 and loses $5,000, exactly the attacker's profit on a 10,000 outlay. The deposit does not round to zero here (that needs a donation larger than the deposit), and the donation does not benefit both sides — the rounding decides who keeps it. Virtual shares, or a dead first deposit, are the standard fix.",
+    "topic": "yield-vaults"
+  },
+  {
+    "id": "x08",
+    "tier": 2,
+    "type": "analytical",
+    "prompt": "A lending market prices collateral token TKN from a push oracle, validating only `require(answer > 0)` — there is no check on `updatedAt`. The feed's last pushed answer is $4.00; the node set has been down for hours and TKN now trades at $2.00 everywhere. Max LTV on TKN is 60%. An attacker supplies 100,000 TKN, borrows the maximum in USDC, and abandons the position. What bad debt does the protocol take?",
+    "options": [
+      "$200,000",
+      "$40,000",
+      "$120,000",
+      "$0"
+    ],
+    "answer": 1,
+    "explanation": "At the stale $4.00 the collateral is valued at 100,000 × $4.00 = $400,000, so the maximum borrow is 60% × $400,000 = $240,000. The collateral is actually worth 100,000 × $2.00 = $200,000, so once the feed catches up the protocol is left holding $200,000 against a $240,000 loan: $40,000 of bad debt, and the attacker's profit. Subtracting the raw valuations gives the $200,000 mispricing, not the loss. Applying the 60% LTV to both prices gives $120,000, which double-counts the haircut on the collateral the protocol keeps. A single `require(block.timestamp - updatedAt <= heartbeat)` would have reverted the borrow.",
+    "topic": "oracles"
+  },
+  {
+    "id": "x09",
+    "tier": 2,
+    "type": "quant",
+    "prompt": "PT-sUSDe maturing in 146 days trades at 0.9450 USDe, and one PT redeems for exactly 1 USDe at maturity. Using the zero-coupon convention PT = 1 / (1 + r)^t with t in years, what fixed APY is the market pricing?",
+    "options": [
+      "≈5.8%",
+      "≈14.6%",
+      "≈13.8%",
+      "≈15.2%"
+    ],
+    "answer": 3,
+    "explanation": "t = 146 / 365 = 0.4 years. Invert the discount: r = (1 / 0.9450)^(1/0.4) − 1 = 1.058201^2.5 − 1 = 15.19%. Check it back: 1 / 1.1519^0.4 = 0.9450. Annualising the 5.82% period return linearly (× 365/146) gives 14.55% and misses the compounding; quoting the discount on face value, (1 − 0.9450) × 2.5, gives 13.75%; and 5.82% is the holding-period return, not an annual rate. Buying PT locks that 15.2% in; buying YT is the opposite bet, that realised floating yield beats it.",
+    "topic": "ptyt-zero-coupon"
+  },
+  {
+    "id": "x10",
+    "tier": 2,
+    "type": "quant",
+    "prompt": "ETH spot is $3,000 and the quarterly future, 73 days out, is $3,090. You buy 10 ETH spot and short 10 ETH of the future, holding to expiry so the basis converges. The venue requires 20% initial margin on the short and you post no more than that. What is the annualised return on the capital you actually tie up?",
+    "options": [
+      "≈12.4%",
+      "≈15.0%",
+      "≈2.5%",
+      "≈73%"
+    ],
+    "answer": 0,
+    "explanation": "The basis is $90 per ETH, or $900 on 10 ETH, and it converges to zero at expiry regardless of where ETH goes — that is the point of the delta-neutral leg. Capital is the $30,000 of spot plus 20% margin on the $30,900 short = $6,180, so $36,180 in total. The period return is 900 / 36,180 = 2.49%, and 73 days is exactly a fifth of a year, so 2.49% × 5 = 12.4%. Quoting the raw basis (900 / 30,000 × 5) gives 15.0% and ignores the margin you had to find; 2.5% is the period return left un-annualised; and dividing by the $6,180 margin alone gives 73%, which pretends the spot leg was free.",
+    "topic": "perpetual-futures"
+  },
+  {
+    "id": "x11",
+    "tier": 3,
+    "type": "quant",
+    "prompt": "A cascade leaves 1,200 dust positions on an L1 lending market, each with exactly $900 of debt, each fully repayable in one call because health factor is below 0.95. The liquidation bonus is 5%, a liquidation call costs 450,000 gas, and ETH is $1,700. Above what gas price does liquidating one of these positions stop being worth doing?",
+    "options": [
+      "≈29 gwei",
+      "≈59 gwei",
+      "≈118 gwei",
+      "≈1,176 gwei"
+    ],
+    "answer": 1,
+    "explanation": "Step one: the liquidator's gross take is the bonus on the debt repaid, 5% × $900 = $45 — not the $900 itself, which is capital advanced and immediately returned as seized collateral. Step two: $45 buys 45 / 1,700 = 0.026471 ETH of gas, and spread over 450,000 gas that is 5.882 × 10⁻⁸ ETH per gas, or 58.8 gwei. Above roughly 59 gwei every one of the 1,200 positions is unprofitable to touch, so they sit unliquidated and turn into bad debt — which is exactly why cascades and gas spikes arrive together. Assuming a 50% close factor halves the bonus and gives 29 gwei; a 10% bonus gives 118 gwei; and budgeting the whole $900 rather than the bonus gives 1,176 gwei.",
+    "topic": "liquidations"
+  },
+  {
+    "id": "x12",
+    "tier": 3,
+    "type": "quant",
+    "prompt": "A Uniswap v3 ETH/USDC position is set to the range $1,600–$2,500 and is worth $60,000 with ETH at $2,000. It has earned no fees yet. ETH then falls to exactly $1,600. What is the position worth, and how does that compare with having held the basket the position started with?",
+    "options": [
+      "≈$53,670, about $330 behind holding",
+      "≈$54,000, level with holding",
+      "≈$50,830, about $3,170 behind holding",
+      "≈$48,000, about $6,000 behind holding"
+    ],
+    "answer": 2,
+    "explanation": "First find the starting basket. √(1,600 × 2,500) = 2,000, so the current price sits exactly at the range's geometric mean and the position is 50/50: 15 ETH and 30,000 USDC. From y = L(√P − √Pa), L = 30,000 / (44.721 − 40) = 6,354.1. At the lower bound the position is entirely ETH: x = L(√Pb − √Pa)/(√Pa·√Pb) = 6,354.1 × 10 / 2,000 = 31.771 ETH, worth 31.771 × 1,600 = $50,833. Holding instead would leave 15 × 1,600 + 30,000 = $54,000, so the LP is $3,167 behind — it bought the whole way down at an average of $1,788.85, the geometric mean of the traversed range. Assuming no rebalancing gives $54,000; applying the full-range IL formula at r = 0.8 gives only 0.62%, or $330, because that formula does not describe a concentrated position pushed to its bound; and converting the whole $60,000 to ETH at the entry price gives $48,000.",
+    "topic": "uniswap-v3"
+  },
+  {
+    "id": "x13",
+    "tier": 3,
+    "type": "quant",
+    "prompt": "A full-range 50/50 ETH/USDC pool holds $20,000,000 and charges 0.30%. ETH's annualised volatility is 70%. Loss-versus-rebalancing for a constant-product pool runs at (σ²/8) of pool value per year. What daily volume must the pool do just to break even against LVR?",
+    "options": [
+      "≈$1.60M/day",
+      "≈$1.12M/day",
+      "≈$6.71M/day",
+      "≈$408M/day"
+    ],
+    "answer": 1,
+    "explanation": "LVR = σ²/8 = 0.49/8 = 6.125% a year, which on $20,000,000 is $1,225,000 handed to arbitrageurs annually. Fees must match it: $1,225,000 / 0.003 = $408,333,333 of annual volume, or $1.12M a day. Using σ/8 instead of σ²/8 gives $1.60M; using the 0.05% tier gives $6.71M; and forgetting to divide the annual volume by 365 gives $408M. LVR is the sharper measure: impermanent loss is an endpoint comparison that vanishes if price returns to entry, while LVR is a rate that accrues to arbitrageurs on every round trip and never comes back.",
+    "topic": "impermanent-loss"
+  },
+  {
+    "id": "x14",
+    "tier": 3,
+    "type": "analytical",
+    "prompt": "A protocol reads a push feed and validates it with `require(answer > 0)` and `require(block.timestamp - updatedAt <= 3600)`. The feed's configured heartbeat is 86,400 seconds with a 0.5% deviation threshold. Forensics on the block in question show `updatedAt` was 2,900 seconds old, the token was trading 6% below the last pushed answer, and the deviation-triggered round landed 400 seconds later. Was the mispricing exploitable, and for how long?",
+    "options": [
+      "Yes — for about 700 seconds, until the freshness check would have reverted",
+      "No — the 1-hour check reverts, because the feed's heartbeat is 86,400 seconds",
+      "Yes — for about 400 seconds, until the new round landed",
+      "Yes — for the full 86,400-second heartbeat, since a 6% move does not force an update"
+    ],
+    "answer": 2,
+    "explanation": "The freshness check tests the answer's actual age, not the feed's configured heartbeat: 2,900 ≤ 3,600, so it passes and the stale $-per-token is accepted. The window then closes at whichever comes first — the check failing at 3,600 − 2,900 = 700 seconds, or a fresh round arriving. The round landed at 400 seconds, so the usable window is min(700, 400) = 400 seconds. Confusing heartbeat with age is the common misread and would wrongly clear the protocol. The 700-second answer forgets that a 6% move is twelve times the 0.5% deviation threshold and therefore forces an update long before the heartbeat, which is also why the last option is wrong.",
+    "topic": "oracles"
+  },
+  {
+    "id": "x15",
+    "tier": 3,
+    "type": "quant",
+    "prompt": "A synthetic dollar is backed by $100,000,000 of stETH held long against an equal short in ETH perps. stETH pays 3.20% APY, perp funding has averaged +0.0080% per 8-hour interval with longs paying, and exchange plus custody costs run 0.50% a year. Only 70% of the supply is staked into the yield-bearing wrapper — unstaked holders earn nothing and their share of the yield is redistributed. What APY does the wrapper pay?",
+    "options": [
+      "≈8.0%",
+      "≈11.5%",
+      "≈11.8%",
+      "≈16.4%"
+    ],
+    "answer": 3,
+    "explanation": "Annualise funding first: 0.0080% × 3 intervals × 365 days = 8.76%. Gross on the backing is 3.20% (staking) + 8.76% (funding) − 0.50% (costs) = 11.46% on the full $100,000,000, or $11,460,000. That whole amount is paid to the 70% that is staked, so the wrapper's APY is 11.46% / 0.70 = 16.37%. Stopping at 11.46% ignores the uplift the unstaked 30% donates; treating the funding quote as a daily rather than an 8-hourly rate gives 8.0%; and counting funding but forgetting the staking leg gives 11.8%. The whole yield is contingent — funding turns negative in a bear market and the same arithmetic runs in reverse.",
+    "topic": "stablecoin-design"
+  }
+]

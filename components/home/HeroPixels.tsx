@@ -80,7 +80,9 @@ export default function HeroPixels({ text }: { text: string }) {
 
       const DURATION = 1000;
       const t0 = performance.now();
-      const ease = (p: number) => 1 - Math.pow(1 - p, 3);
+      // quintic ease-out: flatter arrival than cubic, so particles settle rather
+      // than land — the last 15% of travel is nearly imperceptible.
+      const ease = (p: number) => 1 - Math.pow(1 - p, 5);
 
       const frame = (now: number) => {
         if (cancelled) return;
@@ -98,18 +100,32 @@ export default function HeroPixels({ text }: { text: string }) {
           ctx.fillRect(x, y, sz, sz);
         }
         ctx.globalAlpha = 1;
-        if (done) { drawCrisp(); reveal(); return; } // crisp freeze-frame before crossfade
+        // No drawCrisp() here. Swapping the grid-quantised particles for a real
+        // fillText render shifts every glyph by up to half a cell in one frame,
+        // which reads as a bounce. Hold the final particle frame and let the CSS
+        // crossfade to the DOM <h1> do the sharpening.
+        if (done) { reveal(); return; }
         raf = requestAnimationFrame(frame);
       };
       raf = requestAnimationFrame(frame);
     };
 
+    // Safety net: requestAnimationFrame does not fire in a background tab, so a
+    // page opened in one would sit with the <h1> at opacity 0 until focused.
+    // Armed inside start() — document.fonts.ready DOES resolve in a background
+    // tab, so this still covers that case, while a slow font load can no longer
+    // burn the budget and fire mid-assembly.
+    let failsafe: ReturnType<typeof setTimeout> | undefined;
+
     // wait for the web font so the pixel mask matches the final heading
-    const start = () => requestAnimationFrame(run);
+    const start = () => {
+      failsafe = setTimeout(reveal, 2600);
+      requestAnimationFrame(run);
+    };
     if (document.fonts?.ready) document.fonts.ready.then(start);
     else start();
 
-    return () => { cancelled = true; cancelAnimationFrame(raf); };
+    return () => { cancelled = true; clearTimeout(failsafe); cancelAnimationFrame(raf); };
   }, [text]);
 
   return (

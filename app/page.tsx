@@ -21,6 +21,7 @@ export default async function Home() {
   return (
     <>
       <section className="home-hero">
+        <div className="hero-aurora" aria-hidden="true" />
         <div className="hero-eyebrow">An interactive DeFi curriculum</div>
         <HeroPixels text="DeFi, For Everyone" />
         <p className="hero-sub">

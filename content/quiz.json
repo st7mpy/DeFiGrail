@@ -31,8 +31,13 @@
     "id": "q03",
     "type": "quant",
     "prompt": "A constant-product pool holds 100 ETH and 200,000 USDC. What is the marginal price of ETH?",
-    "options": ["200 USDC", "2,000 USDC", "20,000 USDC", "0.0005 USDC"],
-    "answer": 1,
+    "options": [
+      "200 USDC",
+      "20,000 USDC",
+      "2,000 USDC",
+      "0.0005 USDC"
+    ],
+    "answer": 2,
     "explanation": "In an x*y=k pool the price of ETH is the ratio of reserves: 200,000 USDC / 100 ETH = 2,000 USDC per ETH.",
     "topic": "uniswap-v2"
   },
@@ -40,8 +45,13 @@
     "id": "q04",
     "type": "quant",
     "prompt": "Same pool (100 ETH, 200,000 USDC, k=20,000,000). Ignoring fees, roughly how much USDC does it cost to buy 10 ETH?",
-    "options": ["~20,000 USDC", "~18,000 USDC", "~22,222 USDC", "~2,000 USDC"],
-    "answer": 2,
+    "options": [
+      "~20,000 USDC",
+      "~18,000 USDC",
+      "~2,000 USDC",
+      "~22,222 USDC"
+    ],
+    "answer": 3,
     "explanation": "After buying 10 ETH the pool holds 90 ETH, so USDC must rise to k/90 = 222,222. You pay the difference: 222,222 − 200,000 ≈ 22,222 USDC — well above 10 × 2,000 because of price impact.",
     "topic": "liquidity-and-pricing"
   },
@@ -49,8 +59,13 @@
     "id": "q05",
     "type": "quant",
     "prompt": "An LP holds a 50/50 pool position. One asset's price doubles relative to the other. Approximately how much impermanent loss versus simply holding?",
-    "options": ["~0%", "~5.7%", "~25%", "~50%"],
-    "answer": 1,
+    "options": [
+      "~5.7%",
+      "~0%",
+      "~25%",
+      "~50%"
+    ],
+    "answer": 0,
     "explanation": "IL = 2·√r/(1+r) − 1 with r=2 gives 2·1.414/3 − 1 ≈ −5.7%. A 2x divergence costs an LP about 5.7% relative to holding.",
     "topic": "impermanent-loss"
   },
@@ -74,11 +89,11 @@
     "prompt": "Concentrated liquidity (Uniswap v3) lets a liquidity provider do what?",
     "options": [
       "Lend their tokens to borrowers",
-      "Allocate capital to a chosen price range for higher capital efficiency",
       "Avoid impermanent loss entirely",
+      "Allocate capital to a chosen price range for higher capital efficiency",
       "Earn a guaranteed fixed yield"
     ],
-    "answer": 1,
+    "answer": 2,
     "explanation": "v3 lets LPs concentrate liquidity within a price band instead of across the whole curve, earning far more fees per dollar — at the cost of more active management and amplified IL if price leaves the range.",
     "topic": "uniswap-v3"
   },
@@ -88,11 +103,11 @@
     "prompt": "A v3 LP sets a range, and the market price rises above its upper bound. What is the position now?",
     "options": [
       "Split 50/50 and still earning fees",
-      "Entirely in one asset and earning no fees until price re-enters the range",
+      "Earning double fees",
       "Automatically closed and withdrawn",
-      "Earning double fees"
+      "Entirely in one asset and earning no fees until price re-enters the range"
     ],
-    "answer": 1,
+    "answer": 3,
     "explanation": "Once price exits above the range, the position has been fully converted into the 'sold' asset and sits idle — it earns no fees until price moves back inside the chosen band.",
     "topic": "uniswap-v3"
   },
@@ -101,12 +116,12 @@
     "type": "theory",
     "prompt": "In an overcollateralized lending protocol, a borrower must:",
     "options": [
-      "Pass a credit check",
       "Deposit collateral worth more than the amount they borrow",
+      "Pass a credit check",
       "Borrow only stablecoins",
       "Repay within 24 hours"
     ],
-    "answer": 1,
+    "answer": 0,
     "explanation": "Permissionless on-chain lending has no credit scores, so loans are overcollateralized: the collateral value must exceed the debt, giving the protocol a buffer to liquidate if the loan goes underwater.",
     "topic": "lending-borrowing"
   },
@@ -114,7 +129,12 @@
     "id": "q10",
     "type": "quant",
     "prompt": "Collateral is worth $15,000 with an 80% liquidation threshold; debt is $9,000. What is the health factor?",
-    "options": ["0.83", "1.33", "1.67", "0.60"],
+    "options": [
+      "0.83",
+      "1.33",
+      "1.67",
+      "0.60"
+    ],
     "answer": 1,
     "explanation": "Health factor = (collateral × threshold) / debt = (15,000 × 0.80) / 9,000 = 12,000 / 9,000 ≈ 1.33. Above 1 is safe; below 1 is liquidatable.",
     "topic": "liquidations"
@@ -125,11 +145,11 @@
     "prompt": "A borrower's health factor falls below 1. What happens?",
     "options": [
       "The protocol forgives the loan",
-      "The position becomes liquidatable: liquidators repay debt and seize collateral at a discount",
       "Interest stops accruing",
+      "The position becomes liquidatable: liquidators repay debt and seize collateral at a discount",
       "The collateral is returned to the borrower"
     ],
-    "answer": 1,
+    "answer": 2,
     "explanation": "A health factor under 1 means the collateral no longer safely covers the debt. Liquidators can repay part of the debt in exchange for the borrower's collateral plus a bonus, restoring the protocol's solvency.",
     "topic": "liquidations"
   },
@@ -137,8 +157,13 @@
     "id": "q12",
     "type": "quant",
     "prompt": "A kinked rate model: base 0%, slope1 4% up to an 80% utilization kink, slope2 75% above it. What is the borrow rate at 90% utilization?",
-    "options": ["8%", "37.5%", "41.5%", "75%"],
-    "answer": 2,
+    "options": [
+      "8%",
+      "37.5%",
+      "75%",
+      "41.5%"
+    ],
+    "answer": 3,
     "explanation": "At the kink the rate is 4%. Above it: 4% + ((0.90 − 0.80)/(1 − 0.80)) × 75% = 4% + 0.5 × 75% = 4% + 37.5% = 41.5%. The steep second slope punishes high utilization to pull deposits back.",
     "topic": "interest-rate-models"
   },
@@ -147,12 +172,12 @@
     "type": "theory",
     "prompt": "A fiat-collateralized stablecoin (e.g. USDC) holds its peg primarily by:",
     "options": [
-      "An algorithm that mints and burns a volatile token",
       "Holding off-chain reserves redeemable roughly 1:1",
+      "An algorithm that mints and burns a volatile token",
       "Overcollateralized crypto vaults",
       "Staking rewards"
     ],
-    "answer": 1,
+    "answer": 0,
     "explanation": "Fiat-backed stablecoins keep cash and cash-equivalents in reserve so each token can be redeemed for ~$1. The peg rests on trust in those reserves and the redemption guarantee.",
     "topic": "stablecoin-design"
   },
@@ -176,11 +201,11 @@
     "prompt": "What problem do DeFi oracles solve?",
     "options": [
       "They make transactions cheaper",
-      "They bring off-chain data such as asset prices on-chain reliably",
       "They store user passwords",
+      "They bring off-chain data such as asset prices on-chain reliably",
       "They replace validators"
     ],
-    "answer": 1,
+    "answer": 2,
     "explanation": "Smart contracts can't natively see the outside world. Oracles feed external data (prices, rates, events) on-chain so protocols like lenders and derivatives can act on real-world values.",
     "topic": "oracles"
   },
@@ -190,11 +215,11 @@
     "prompt": "What is a 'sandwich' MEV attack?",
     "options": [
       "Splitting a trade across two exchanges",
-      "Buying just before a victim's swap and selling just after, profiting from the price move it causes",
+      "Bundling many small trades into one",
       "Two validators sharing a block reward",
-      "Bundling many small trades into one"
+      "Buying just before a victim's swap and selling just after, profiting from the price move it causes"
     ],
-    "answer": 1,
+    "answer": 3,
     "explanation": "A searcher front-runs a pending swap with a buy (pushing the price up), lets the victim trade at the worse price, then back-runs with a sell — extracting value from the victim's slippage.",
     "topic": "mev"
   },
@@ -203,12 +228,12 @@
     "type": "theory",
     "prompt": "A liquid staking token (e.g. stETH) represents:",
     "options": [
-      "A loan to a validator",
       "A tradeable claim on staked assets plus their accruing rewards",
+      "A loan to a validator",
       "A governance-only token with no value",
       "A stablecoin pegged to ETH"
     ],
-    "answer": 1,
+    "answer": 0,
     "explanation": "Liquid staking issues a token for your staked position so you keep liquidity — it accrues staking rewards yet can still be traded or used as collateral across DeFi.",
     "topic": "liquid-staking"
   },
@@ -216,7 +241,12 @@
     "id": "q18",
     "type": "quant",
     "prompt": "Ignoring fees and maintenance margin, roughly what adverse price move liquidates a 5x leveraged position?",
-    "options": ["5%", "20%", "50%", "100%"],
+    "options": [
+      "5%",
+      "20%",
+      "50%",
+      "100%"
+    ],
     "answer": 1,
     "explanation": "At 5x, your margin is 1/5 of the position, so a move of about 1/5 = 20% against you wipes out the margin and triggers liquidation. Higher leverage means a thinner buffer.",
     "topic": "perpetual-futures"
@@ -227,11 +257,11 @@
     "prompt": "A perpetual future trades persistently above the spot index. The funding rate is positive — what does that mean?",
     "options": [
       "Shorts pay longs",
-      "Longs pay shorts, nudging the perp price back toward spot",
       "The exchange pays both sides",
+      "Longs pay shorts, nudging the perp price back toward spot",
       "Funding has no effect on price"
     ],
-    "answer": 1,
+    "answer": 2,
     "explanation": "Funding keeps the perp tethered to spot. When the perp trades at a premium, longs periodically pay shorts, discouraging longs and encouraging shorts until the gap closes.",
     "topic": "perpetual-futures"
   },
@@ -239,7 +269,12 @@
     "id": "q20",
     "type": "quant",
     "prompt": "A principal token (PT) redeems for 1 unit at maturity. It trades at 0.92 with 6 months left. What is the approximate simple annualized yield?",
-    "options": ["~0.9%", "~4.3%", "~8.7%", "~17.4%"],
+    "options": [
+      "~0.9%",
+      "~4.3%",
+      "~8.7%",
+      "~17.4%"
+    ],
     "answer": 3,
     "explanation": "Return to maturity = 1/0.92 − 1 ≈ 8.7% over half a year. Annualized simply: 8.7% / 0.5 ≈ 17.4%. Buying the PT locks in that fixed yield as its price pulls to par.",
     "topic": "pendle"
@@ -249,50 +284,55 @@
     "type": "theory",
     "prompt": "In a constant-product pool, what actually moves the quoted price toward the wider market price?",
     "options": [
-      "An oracle the pool reads at the start of each block",
       "Arbitrageurs trading against the pool until it is no longer profitable",
+      "An oracle the pool reads at the start of each block",
       "Liquidity providers rebalancing their own deposits",
       "A keeper contract called by protocol governance"
     ],
-    "answer": 1,
-    "explanation": "The pool is a passive quoting function \u2014 it has no idea what the market price is. Arbitrageurs trade against a stale quote until the marginal price matches elsewhere, and their profit is the LP's divergence loss.",
+    "answer": 0,
+    "explanation": "The pool is a passive quoting function — it has no idea what the market price is. Arbitrageurs trade against a stale quote until the marginal price matches elsewhere, and their profit is the LP's divergence loss.",
     "topic": "uniswap-v2"
   },
   {
     "id": "q22",
     "type": "quant",
-    "prompt": "A Uniswap v2 pool charges a 0.30% fee. After a swap settles, how does the invariant k = x\u00b7y behave?",
+    "prompt": "A Uniswap v2 pool charges a 0.30% fee. After a swap settles, how does the invariant k = x·y behave?",
     "options": [
-      "It stays exactly constant \u2014 that is what 'constant product' means",
-      "It decreases by the fee amount",
+      "It stays exactly constant — that is what 'constant product' means",
       "It increases slightly, because the fee is left in the reserves",
+      "It decreases by the fee amount",
       "It resets to the geometric mean of the new reserves"
     ],
-    "answer": 2,
-    "explanation": "k is only constant in the fee-free idealisation. The 0.30% fee stays in the pool, so post-swap reserves satisfy k' \u2265 k. That growth in k is precisely the LP's fee income.",
+    "answer": 1,
+    "explanation": "k is only constant in the fee-free idealisation. The 0.30% fee stays in the pool, so post-swap reserves satisfy k' ≥ k. That growth in k is precisely the LP's fee income.",
     "topic": "uniswap-v2"
   },
   {
     "id": "q23",
     "type": "theory",
-    "prompt": "An LP withdraws from a 50/50 pool while the price ratio sits at 4\u00d7 its entry. What is true of their impermanent loss?",
+    "prompt": "An LP withdraws from a 50/50 pool while the price ratio sits at 4× its entry. What is true of their impermanent loss?",
     "options": [
       "It reverses automatically once the price returns to entry",
-      "It is realised and permanent the moment they withdraw",
       "It is zero, because trading fees always offset it",
+      "It is realised and permanent the moment they withdraw",
       "It applies only to concentrated-liquidity positions"
     ],
-    "answer": 1,
+    "answer": 2,
     "explanation": "\"Impermanent\" is marketing. The loss unwinds only if the price returns AND you are still in the pool. Withdraw at a diverged price and it is realised, exactly like any other closed position.",
     "topic": "impermanent-loss"
   },
   {
     "id": "q24",
     "type": "quant",
-    "prompt": "A 50/50 LP position's price ratio moves to 4\u00d7 entry. Ignoring fees, what is the divergence loss versus simply holding?",
-    "options": ["-5.7%", "-20.0%", "-25.0%", "-50.0%"],
-    "answer": 1,
-    "explanation": "IL = 2\u00b7\u221ar/(1+r) \u2212 1. With r = 4: 2\u00b72/5 \u2212 1 = 0.8 \u2212 1 = \u221220%. Note it is symmetric in the ratio \u2014 a move to 0.25\u00d7 costs the same 20%.",
+    "prompt": "A 50/50 LP position's price ratio moves to 4× entry. Ignoring fees, what is the divergence loss versus simply holding?",
+    "options": [
+      "-5.7%",
+      "-50.0%",
+      "-25.0%",
+      "-20.0%"
+    ],
+    "answer": 3,
+    "explanation": "IL = 2·√r/(1+r) − 1. With r = 4: 2·2/5 − 1 = 0.8 − 1 = −20%. Note it is symmetric in the ratio — a move to 0.25× costs the same 20%.",
     "topic": "impermanent-loss"
   },
   {
@@ -300,22 +340,27 @@
     "type": "theory",
     "prompt": "A lending pool is sitting at 99% utilization. What does that tell you?",
     "options": [
-      "The pool is insolvent and depositors have lost money",
-      "The borrowers have defaulted on their positions",
       "Withdrawals are constrained until high rates pull in new supply",
+      "The borrowers have defaulted on their positions",
+      "The pool is insolvent and depositors have lost money",
       "The reserve factor has been set to zero by governance"
     ],
-    "answer": 2,
+    "answer": 0,
     "explanation": "High utilization is illiquidity, not insolvency. The loans are still over-collateralised; there is simply little idle cash. The rate curve spikes past the kink precisely to attract new deposits and repay borrowers. Conflating the two is how an on-chain bank run starts.",
     "topic": "interest-rate-models"
   },
   {
     "id": "q26",
     "type": "quant",
-    "prompt": "With base rate 2%, a kink at 80% utilization, slope\u2081 10% and slope\u2082 75%, what is the borrow rate at 90% utilization?",
-    "options": ["11.0%", "17.5%", "26.0%", "69.5%"],
+    "prompt": "With base rate 2%, a kink at 80% utilization, slope₁ 10% and slope₂ 75%, what is the borrow rate at 90% utilization?",
+    "options": [
+      "11.0%",
+      "17.5%",
+      "26.0%",
+      "69.5%"
+    ],
     "answer": 1,
-    "explanation": "Below the kink the rate accrues at slope\u2081: 0.02 + 0.80\u00b70.10 = 10%. Past it, the excess 10 points of utilization accrue at slope\u2082: 0.10\u00b70.75 = 7.5%. Total 17.5%.",
+    "explanation": "Below the kink the rate accrues at slope₁: 0.02 + 0.80·0.10 = 10%. Past it, the excess 10 points of utilization accrue at slope₂: 0.10·0.75 = 7.5%. Total 17.5%.",
     "topic": "interest-rate-models"
   }
 ]
