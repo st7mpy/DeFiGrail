@@ -528,3 +528,21 @@ footer.dg-footer{border-top:1px solid rgba(0, 0, 128,.14);margin-top:30px}
 /* ─── FOOTER CONTACT ─── */
 .footer-contact{display:flex;flex-direction:column;align-items:flex-end;gap:5px;margin-top:2px}
 .footer-contact-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(0, 0, 128,.58)}
+
+/* ─── HERO AURORA ─── */
+.home-hero{position:relative}
+.hero-aurora{
+  position:absolute;
+  top:-62px;left:50%;transform:translateX(-50%);
+  width:100vw;max-width:100vw;height:340px;
+  pointer-events:none;z-index:0;
+  background:
+    radial-gradient(60% 120% at 18% 0%, rgba(173,216,230,.85) 0%, rgba(173,216,230,0) 62%),
+    radial-gradient(52% 110% at 52% 6%, rgba(109,129,150,.42) 0%, rgba(109,129,150,0) 60%),
+    radial-gradient(58% 120% at 84% 0%, rgba(173,216,230,.62) 0%, rgba(173,216,230,0) 64%);
+  filter:blur(26px);
+  mask-image:linear-gradient(to bottom, #000 0%, #000 34%, transparent 92%);
+  -webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 34%, transparent 92%);
+}
+.home-hero > *:not(.hero-aurora){position:relative;z-index:1}
+@media (max-width:640px){.hero-aurora{height:220px;top:-40px;filter:blur(20px)}}
