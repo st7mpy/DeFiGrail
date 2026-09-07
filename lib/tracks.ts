@@ -1,6 +1,5 @@
 import tracksJson from "@/content/tracks.json";
 import { loadTopics, getTopic } from "@/lib/mdx";
-import type { Topic } from "@/lib/mdx";
 
 /** Raw shape from tracks.json */
 export type TrackDef = { label: string; era: string; topics: string[] };
@@ -13,7 +12,7 @@ export const TRACKS: Record<string, TrackDef> = tracksJson;
  * topic in that track's ordered list, or null if it's the last (or not found).
  */
 export function nextInTrack(slug: string): { slug: string; title: string } | null {
-  for (const [key, def] of Object.entries(TRACKS)) {
+  for (const def of Object.values(TRACKS)) {
     const idx = def.topics.indexOf(slug);
     if (idx === -1) continue;
     const nextSlug = def.topics[idx + 1];

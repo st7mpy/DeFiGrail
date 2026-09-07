@@ -42,7 +42,6 @@ const X_TICKS = [0, 0.2, 0.4, 0.6, 0.8, 1.0].map((v) => ({
   px: toPixelX(v),
 }));
 
-const maxRateLabel = (RATE_MAX * 100).toFixed(0);
 const Y_TICKS = [0, RATE_MAX * 0.25, RATE_MAX * 0.5, RATE_MAX * 0.75, RATE_MAX].map((v) => ({
   value: v,
   label: `${(v * 100).toFixed(1)}%`,

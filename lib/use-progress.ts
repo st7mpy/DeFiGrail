@@ -1,35 +1,46 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
 const KEY = "defigrail_progress";
 const EVENT = "dg:progress";
 
+// getSnapshot must return a STABLE reference or useSyncExternalStore loops
+// forever, since it compares with Object.is. Parse only when the raw string
+// actually changed, and hand back the same object otherwise.
+let cachedRaw = "";
+let cachedMap: Record<string, boolean> = {};
+const EMPTY: Record<string, boolean> = {};
+
 function readStore(): Record<string, boolean> {
-  if (typeof window === "undefined") return {};
   try {
-    return JSON.parse(localStorage.getItem(KEY) || "{}");
+    const raw = localStorage.getItem(KEY) || "{}";
+    if (raw !== cachedRaw) {
+      cachedRaw = raw;
+      cachedMap = JSON.parse(raw);
+    }
+    return cachedMap;
   } catch {
-    return {};
+    return EMPTY;
   }
 }
 
-// localStorage-backed reading progress, synced across components via a custom event.
-export function useProgress() {
-  const [map, setMap] = useState<Record<string, boolean>>({});
+function subscribe(onChange: () => void) {
+  window.addEventListener(EVENT, onChange);
+  window.addEventListener("storage", onChange);
+  return () => {
+    window.removeEventListener(EVENT, onChange);
+    window.removeEventListener("storage", onChange);
+  };
+}
 
-  useEffect(() => {
-    setMap(readStore());
-    const sync = () => setMap(readStore());
-    window.addEventListener(EVENT, sync);
-    window.addEventListener("storage", sync);
-    return () => {
-      window.removeEventListener(EVENT, sync);
-      window.removeEventListener("storage", sync);
-    };
-  }, []);
+// localStorage-backed reading progress, synced across components via a custom
+// event. useSyncExternalStore rather than setState-in-effect: this is external
+// state with a real subscription, and EMPTY is the server snapshot.
+export function useProgress() {
+  const map = useSyncExternalStore(subscribe, readStore, () => EMPTY);
 
   const toggle = useCallback((slug: string) => {
-    const next = readStore();
+    const next = { ...readStore() };
     if (next[slug]) delete next[slug];
     else next[slug] = true;
     try {
@@ -37,7 +48,6 @@ export function useProgress() {
     } catch {
       /* ignore */
     }
-    setMap(next);
     window.dispatchEvent(new CustomEvent(EVENT));
   }, []);
 

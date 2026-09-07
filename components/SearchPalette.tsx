@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import glossary from "@/content/glossary.json";
 import { ERA_LABELS } from "@/components/Glyph";
@@ -20,29 +20,42 @@ export default function SearchPalette({ topics }: { topics: SearchTopic[] }) {
   const [docs, setDocs] = useState<SearchDoc[] | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Reset in the handlers that open the palette, not in an effect reacting to
+  // `open` — resetting there is a second render pass for state we already know
+  // at the moment of the event.
+  const openFresh = useCallback(() => {
+    setQ("");
+    setActive(0);
+    setOpen(true);
+  }, []);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && (e.key === "k" || e.key === "K")) {
         e.preventDefault();
-        setOpen((o) => !o);
+        setOpen((o) => {
+          if (o) return false;
+          setQ("");
+          setActive(0);
+          return true;
+        });
       }
       if (e.key === "Escape") setOpen(false);
     };
-    const onOpen = () => setOpen(true);
+    const onOpen = () => openFresh();
     document.addEventListener("keydown", onKey);
     window.addEventListener("dg:open-search", onOpen as EventListener);
     return () => {
       document.removeEventListener("keydown", onKey);
       window.removeEventListener("dg:open-search", onOpen as EventListener);
     };
-  }, []);
+  }, [openFresh]);
 
+  // Focus is a DOM side-effect, not state — this one belongs in an effect.
   useEffect(() => {
-    if (open) {
-      setQ("");
-      setActive(0);
-      setTimeout(() => inputRef.current?.focus(), 30);
-    }
+    if (!open) return;
+    const t = setTimeout(() => inputRef.current?.focus(), 30);
+    return () => clearTimeout(t);
   }, [open]);
 
   useEffect(() => {

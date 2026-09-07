@@ -29,7 +29,8 @@ describe("submissionInput", () => {
     expect(submissionInput.safeParse({ ...valid, bodyMd: "x".repeat(601) }).success).toBe(false);
   });
   it("requires the destination link", () => {
-    const { externalUrl: _omitted, ...withoutUrl } = valid;
+    const withoutUrl: Record<string, unknown> = { ...valid };
+    delete withoutUrl.externalUrl;
     expect(submissionInput.safeParse(withoutUrl).success).toBe(false);
   });
   it("rejects unknown category", () => {

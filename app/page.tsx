@@ -94,7 +94,8 @@ export default async function Home() {
           <div className="tvl-card">
             <div className="tvl-label">TVL by chain</div>
             <div className="tvl-rows">
-              {market.chains.map((c) => (
+              {/* /news carries the full ten; the landing page stays compact. */}
+              {market.chains.slice(0, 5).map((c) => (
                 <div key={c.name}>
                   <div className="tvl-row-top"><span>{c.name}</span><span className="tvl-row-val">{c.tvl}</span></div>
                   <div className="tvl-bar"><div className="tvl-bar-fill" style={{ width: `${Math.min(100, c.share)}%` }} /></div>

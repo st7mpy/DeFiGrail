@@ -58,7 +58,7 @@ export default function ILCurve() {
   const entry = parseFloat(entryStr);
   const current = parseFloat(currentStr);
 
-  const { il, ilPct, hodl, lp, delta, markerX, markerY, valid } = useMemo(() => {
+  const { ilPct, hodl, lp, delta, markerX, markerY, valid } = useMemo(() => {
     if (!isFinite(entry) || entry <= 0 || !isFinite(current) || current < 0) {
       return { il: 0, ilPct: "—", hodl: 0, lp: 0, delta: 0, markerX: 0, markerY: 0, valid: false };
     }

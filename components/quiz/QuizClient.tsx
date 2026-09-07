@@ -1,9 +1,22 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { tweetIntent, type QuizQuestion } from "@/lib/quiz";
 
 const BEST_KEY = "dg:quiz-best";
+const BEST_EVENT = "dg:quiz-best-changed";
+
+// The stored best is external state. Reading it with useSyncExternalStore
+// returns a string, which compares by value — so unlike an object snapshot it
+// cannot loop. Writing dispatches the event, which re-reads it.
+function subscribeBest(onChange: () => void) {
+  window.addEventListener(BEST_EVENT, onChange);
+  window.addEventListener("storage", onChange);
+  return () => {
+    window.removeEventListener(BEST_EVENT, onChange);
+    window.removeEventListener("storage", onChange);
+  };
+}
 const TYPE_LABEL: Record<string, string> = {
   quant: "Quant", theory: "Theory", analytical: "Analytical",
 };
@@ -15,12 +28,15 @@ export default function QuizClient({ questions, bestKey = BEST_KEY, shareLabel =
   const [score, setScore] = useState(0);
   const [byType, setByType] = useState<Record<string, { right: number; total: number }>>({});
   const [done, setDone] = useState(false);
-  const [best, setBest] = useState<number | null>(null);
 
-  useEffect(() => {
-    const raw = localStorage.getItem(bestKey);
-    if (raw) setBest(parseInt(raw, 10));
-  }, [bestKey]);
+  const storedBest = useSyncExternalStore(
+    subscribeBest,
+    useCallback(() => {
+      try { return localStorage.getItem(bestKey); } catch { return null; }
+    }, [bestKey]),
+    () => null
+  );
+  const best = storedBest === null ? null : parseInt(storedBest, 10);
 
   const q = questions[idx];
 
@@ -37,12 +53,9 @@ export default function QuizClient({ questions, bestKey = BEST_KEY, shareLabel =
 
   const next = () => {
     if (idx + 1 >= total) {
-      const finalScore = score;
-      setBest((b) => {
-        const nb = b === null ? finalScore : Math.max(b, finalScore);
-        try { localStorage.setItem(bestKey, String(nb)); } catch { /* ignore */ }
-        return nb;
-      });
+      const nb = best === null ? score : Math.max(best, score);
+      try { localStorage.setItem(bestKey, String(nb)); } catch { /* ignore */ }
+      window.dispatchEvent(new CustomEvent(BEST_EVENT));
       setDone(true);
     } else {
       setIdx((n) => n + 1);

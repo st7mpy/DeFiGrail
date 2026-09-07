@@ -39,7 +39,7 @@ async function getMarket(): Promise<{ assets: Asset[]; chains: ChainRow[]; ok: b
     ]);
     const cg = parseCoingecko(cgRaw as never);
     const { total, chgPct } = parseDefillamaTotal(histRaw as never);
-    return { assets: buildAssets(cg, total, chgPct), chains: parseDefillamaChains(chainsRaw as never, total, 5), ok: true };
+    return { assets: buildAssets(cg, total, chgPct), chains: parseDefillamaChains(chainsRaw as never, total, 10), ok: true };
   } catch {
     // Empty, not invented: a stale fake price is worse than no price.
     return { assets: [], chains: [], ok: false };

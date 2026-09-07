@@ -4,7 +4,7 @@ import { useProgress } from "@/lib/use-progress";
 import type { TrackView } from "@/lib/topic-cards";
 
 export default function TrackSection({ tracks, totalTopics }: { tracks: TrackView[]; totalTopics: number }) {
-  const { isRead, countRead } = useProgress();
+  const { countRead } = useProgress();
   const allSlugs = tracks.flatMap((t) => t.topics.map((tp) => tp.slug));
   const totalRead = countRead(allSlugs);
 

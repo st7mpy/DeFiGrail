@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect } from "react";
 
 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
@@ -18,7 +19,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
       </p>
       <div style={{ display: "flex", gap: 12, marginTop: 28, flexWrap: "wrap" }}>
         <button className="btn-primary" onClick={reset}>Try again →</button>
-        <a className="btn-secondary" href="/">Back to home</a>
+        <Link className="btn-secondary" href="/">Back to home</Link>
       </div>
     </div>
   );

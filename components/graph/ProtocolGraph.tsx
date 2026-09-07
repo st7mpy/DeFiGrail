@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Glyph, { ERA_LABELS } from "@/components/Glyph";
 
@@ -16,7 +16,14 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selectedRef = useRef<string | null>(null);
+  // byId holds live simulation state — x/y/vx/vy mutate every animation frame,
+  // so reading it during render is a genuine tearing hazard, not just a lint
+  // nit. The panel only needs the static node fields, so derive those instead.
   const byId = useRef<Record<string, Sim>>({});
+  const nodeById = useMemo(
+    () => Object.fromEntries(nodes.map((n) => [n.id, n])) as Record<string, GraphNode>,
+    [nodes]
+  );
 
   useEffect(() => {
     const cv = canvasRef.current;
@@ -98,7 +105,7 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
         for (let j = 0; j < sims.length; j++) {
           if (i === j) continue;
           const b = sims[j];
-          let dx = a.x - b.x, dy = a.y - b.y;
+          const dx = a.x - b.x, dy = a.y - b.y;
           let d2 = dx * dx + dy * dy; if (d2 < 1) d2 = 1;
           const f = 14000 / d2, d = Math.sqrt(d2);
           fx += (dx / d) * f; fy += (dy / d) * f;
@@ -108,7 +115,7 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
       }
       for (const e of edges) {
         const a = map[e[0]], b = map[e[1]];
-        let dx = b.x - a.x, dy = b.y - a.y;
+        const dx = b.x - a.x, dy = b.y - a.y;
         const d = Math.sqrt(dx * dx + dy * dy) || 1;
         const f = (d - 120) * 0.007, ux = dx / d, uy = dy / d;
         a.fx += ux * f; a.fy += uy * f; b.fx -= ux * f; b.fy -= uy * f;
@@ -167,10 +174,10 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
         if (n.era === "esoteric") {
           ctx!.beginPath();
           ctx!.moveTo(n.x, n.y - r); ctx!.lineTo(n.x + r, n.y); ctx!.lineTo(n.x, n.y + r); ctx!.lineTo(n.x - r, n.y); ctx!.closePath();
-          isActive ? ctx!.fill() : ctx!.stroke();
+          if (isActive) ctx!.fill(); else ctx!.stroke();
         } else if (n.era === "ref") {
           ctx!.beginPath(); ctx!.rect(n.x - r, n.y - r, r * 2, r * 2);
-          isActive ? ctx!.fill() : ctx!.stroke();
+          if (isActive) ctx!.fill(); else ctx!.stroke();
         } else if (n.era === "infra") {
           ctx!.beginPath(); ctx!.moveTo(n.x, n.y - r); ctx!.lineTo(n.x, n.y + r); ctx!.stroke();
           ctx!.beginPath(); ctx!.moveTo(n.x - r, n.y); ctx!.lineTo(n.x + r, n.y); ctx!.stroke();
@@ -243,7 +250,7 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
     };
   }, [nodes]);
 
-  const sel = selectedId ? byId.current[selectedId] : null;
+  const sel = selectedId ? nodeById[selectedId] : null;
 
   function selectNode(id: string) { selectedRef.current = id; setSelectedId(id); }
   function close() { selectedRef.current = null; setSelectedId(null); }
@@ -286,9 +293,9 @@ export default function ProtocolGraph({ nodes }: { nodes: GraphNode[] }) {
           <div>
             <div className="graph-panel-label">Connected concepts</div>
             <div className="connected-chips">
-              {sel.connects.filter((id) => byId.current[id]).map((cid) => (
+              {sel.connects.filter((id) => nodeById[id]).map((cid) => (
                 <button key={cid} className="connected-chip" onClick={() => selectNode(cid)}>
-                  {byId.current[cid].name} ↗
+                  {nodeById[cid].name} ↗
                 </button>
               ))}
             </div>
