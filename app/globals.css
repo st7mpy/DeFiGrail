@@ -524,3 +524,7 @@ footer.dg-footer{border-top:1px solid rgba(0, 0, 128,.14);margin-top:30px}
 .quiz-mode.active{background:#000080;border-color:#000080;color:#FFFAFA}
 .quiz-mode-count{font-family:var(--font-mono);font-size:10.5px;opacity:.85}
 .quiz-mode-blurb{font-size:13px;color:rgba(0, 0, 128,.6);margin:0 0 20px;max-width:620px}
+
+/* ─── FOOTER CONTACT ─── */
+.footer-contact{display:flex;flex-direction:column;align-items:flex-end;gap:5px;margin-top:2px}
+.footer-contact-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(0, 0, 128,.58)}

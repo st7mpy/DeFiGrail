@@ -1,3 +1,5 @@
+import FooterEmailLink from "./FooterEmailLink";
+
 export default function SiteFooter() {
   return (
     <footer className="dg-footer">
@@ -14,9 +16,13 @@ export default function SiteFooter() {
         </div>
         <div className="footer-side">
           <div className="footer-tag">CONCEPT → MECHANICS → FORMULAS → EDGE CASES</div>
-          <a className="footer-made" href="https://s7ddharth-portfolio.vercel.app" target="_blank" rel="noopener noreferrer">
-            Made by Siddharth →
-          </a>
+          <div className="footer-contact">
+            <span className="footer-contact-label">Get in touch</span>
+            <FooterEmailLink />
+            <a className="footer-made" href="https://s7ddharth-portfolio.vercel.app" target="_blank" rel="noopener noreferrer">
+              Portfolio →
+            </a>
+          </div>
         </div>
       </div>
     </footer>
