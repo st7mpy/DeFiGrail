@@ -1,4 +1,3 @@
-
 export default function SiteFooter() {
   return (
     <footer className="dg-footer">

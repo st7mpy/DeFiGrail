@@ -19,6 +19,7 @@ export default function QuizModeSwitch({ core, expert }: { core: QuizQuestion[];
         {MODES.map((m) => (
           <button
             key={m.id}
+            type="button"
             role="tab"
             aria-selected={mode === m.id}
             className={`quiz-mode${mode === m.id ? " active" : ""}`}

@@ -472,7 +472,7 @@ Check all four:
 1. The band reads as a soft wash at the top that dissolves before the headline — no visible edge or rectangle.
 2. The headline, eyebrow, CTAs and stat row are all fully legible and sit above it.
 3. Clicking each of the three hero CTAs still navigates (the element must not intercept pointer events).
-4. `document.documentElement.scrollWidth <= window.innerWidth` — the `100vw` width must not introduce a horizontal scrollbar. If it does, switch the width to `100%` and widen with negative margins instead.
+4. `document.documentElement.scrollWidth <= document.documentElement.clientWidth` — the `100vw` width must not introduce a horizontal scrollbar. Do NOT compare against `window.innerWidth`: that includes the scrollbar gutter, so the check passes while real overflow exists. If it does, switch the width to `100%` and widen with negative margins instead.
 
 - [ ] **Step 4: Commit**
 
