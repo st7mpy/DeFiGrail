@@ -7,7 +7,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
   }, [error]);
   return (
     <div style={{ padding: "100px 0 120px", maxWidth: 560 }}>
-      <div style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(0, 0, 128,.5)" }}>
+      <div style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(0, 0, 128,.62)" }}>
         ERR · unexpected fault
       </div>
       <h1 style={{ fontFamily: "var(--font-serif)", fontWeight: 500, fontSize: 44, lineHeight: 1.05, marginTop: 14 }}>

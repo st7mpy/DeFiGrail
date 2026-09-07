@@ -30,7 +30,7 @@ export default async function FeaturedArticle({ params }: { params: Promise<{ sl
       <div className="topic-divider" />
       <div className="prose-paper" dangerouslySetInnerHTML={{ __html: html }} />
       <div className="topic-divider" />
-      <p style={{ fontSize: 11, color: "rgba(0, 0, 128,.5)", fontFamily: "var(--font-mono)" }}>
+      <p style={{ fontSize: 11, color: "rgba(0, 0, 128,.62)", fontFamily: "var(--font-mono)" }}>
         Community contribution — not reviewed for financial accuracy. Nothing here is financial advice.
       </p>
     </article>

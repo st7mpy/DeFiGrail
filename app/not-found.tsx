@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <div style={{ padding: "100px 0 120px", maxWidth: 560 }}>
-      <div style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(0, 0, 128,.5)" }}>
+      <div style={{ fontSize: 11, letterSpacing: ".22em", textTransform: "uppercase", color: "rgba(0, 0, 128,.62)" }}>
         ERR 404 · route not indexed
       </div>
       <h1 style={{ fontFamily: "var(--font-serif)", fontWeight: 500, fontSize: 44, lineHeight: 1.05, marginTop: 14 }}>
