@@ -23,22 +23,22 @@ const BASE_URL = "https://defigrail.xyz";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
-  title: { default: "DeFiGrail — An interactive DeFi curriculum", template: "%s · DeFiGrail" },
+  title: { default: "DeFiGrail — DeFi mechanics, made interactive", template: "%s · DeFiGrail" },
   description:
-    "Learn DeFi the way a trading desk would teach it — every protocol anchored to its TradFi equivalent, every formula made interactive.",
+    "DeFi mechanics have a lot to dump on your brain. Every formula made interactive, every idea preceded by exactly what you need to know first.",
   openGraph: {
     type: "website",
     url: BASE_URL,
     siteName: "DeFiGrail",
-    title: "DeFiGrail — An interactive DeFi curriculum",
+    title: "DeFiGrail — DeFi mechanics, made interactive",
     description:
-      "Learn DeFi the way a trading desk would teach it — every protocol anchored to its TradFi equivalent, every formula made interactive.",
+      "DeFi mechanics have a lot to dump on your brain. Every formula made interactive, every idea preceded by exactly what you need to know first.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "DeFiGrail — An interactive DeFi curriculum",
+    title: "DeFiGrail — DeFi mechanics, made interactive",
     description:
-      "Learn DeFi the way a trading desk would teach it — every protocol anchored to its TradFi equivalent, every formula made interactive.",
+      "DeFi mechanics have a lot to dump on your brain. Every formula made interactive, every idea preceded by exactly what you need to know first.",
   },
 };
 

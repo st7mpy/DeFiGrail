@@ -1,7 +1,15 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+const subscribeNever = () => () => {};
+
+function getModKey(): string {
+  const nav = navigator as Navigator & { userAgentData?: { platform?: string } };
+  const platform = nav.userAgentData?.platform ?? navigator.userAgent;
+  return /Mac|iPhone|iPad|iPod/i.test(platform) ? "⌘" : "Ctrl ";
+}
 
 const TABS = [
   { href: "/learn", label: "Learn", key: "learn" },
@@ -15,16 +23,11 @@ const TABS = [
 
 export default function SiteNav() {
   const pathname = usePathname() || "/";
-  // Starts at the Mac glyph so the server and first client render agree — then
-  // corrects on mount for anyone who isn't. The key handler already accepts
-  // both metaKey and ctrlKey, so only the label ever needed to change.
-  const [modKey, setModKey] = useState("⌘");
-  useEffect(() => {
-    const ua = navigator.userAgent;
-    const platform =
-      (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform ?? ua;
-    if (!/Mac|iPhone|iPad|iPod/i.test(platform)) setModKey("Ctrl ");
-  }, []);
+  // Platform is external, immutable state — useSyncExternalStore reads it with
+  // an explicit server snapshot instead of setState-in-effect, so there is no
+  // cascading render and no hydration mismatch. The key handler already accepts
+  // both metaKey and ctrlKey; only the label ever needed to change.
+  const modKey = useSyncExternalStore(subscribeNever, getModKey, () => "⌘");
   const seg = pathname.split("/")[1] || "home";
 
   return (
