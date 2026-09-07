@@ -31,3 +31,6 @@ yarn-error.log*
 !.yarn/releases
 !.yarn/versions
 .superpowers/
+
+# Generated video plates — 14MB of regenerable binaries; recipe lives in docs/product/
+assets/launch-video/

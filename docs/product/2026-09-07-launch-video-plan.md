@@ -1,4 +1,4 @@
-# DeFiGrail launch video — plan v3
+# DeFiGrail launch video — plan v4
 
 *45 seconds, cut for X. v2 applies the 12-second decision and replaces v1's shot list with
 measured capture offsets from the live site.*
@@ -87,10 +87,34 @@ dated, sourced, real-money failure, not a definition.
 
 ---
 
-## Runway prompts
+## Runway plates — GENERATED ✅
 
-Palette: snow `#FFFAFA`, navy `#000080`, icy `#ADD8E6`, slate `#6D8196`. Short prompts —
-Gen-4 degrades with long ones.
+**The workspace is on Runway's free plan: every video model is gated** (`availableVideoModels`
+came back empty). So the three atmospheric beats are **high-resolution stills, animated with
+slow transforms in the edit** — which for soft drifting gradients is the better technique
+anyway: fully controllable, no temporal flicker, no AI video artifacts.
+
+Generated at **2752×1536** (2K, 16:9) with `nano-banana-pro`, 20 credits each, 120 total.
+Files in `assets/launch-video/` (git-ignored — regenerable from the prompts below).
+
+| File | Shot | What landed | Motion in the edit |
+|---|---|---|---|
+| `shot1-opener-a.png` | 1 | Icy band across upper third, clean white lower half | Slow drift left→right + gentle scale 1.00→1.06 |
+| `shot1-opener-b.png` | 1 | alt variant | — |
+| `shot5-lattice-a.png` | 5 | Navy dot grid, connected lattice cluster top-right, 2/3 empty left | **Pan left→right into the lattice** |
+| `shot9-closer-a.png` | 9 | Soft blue field, bright centre | Slow pull-back + exposure ramp toward white |
+
+**Shot 5 came out better than specified.** The lattice cluster is top-right with two-thirds
+empty on the left, so a slow pan from the empty side *into* the connected cluster literally
+performs the "in the order that makes sense" beat. Use that asymmetry; do not centre it.
+
+**Shot 9 is more saturated than 1 and 5 — that is correct.** It is the *start* frame of a
+brighten-to-white move. Ramp exposure up across its 3s so it lands on snow before cutting to
+the hero, otherwise the 9→10 dissolve is a visible colour jump.
+
+### Prompts used (reproducible)
+
+Palette: snow `#FFFAFA`, navy `#000080`, icy `#ADD8E6`, slate `#6D8196`.
 
 **Shot 1 — opener (4s)**
 ```
@@ -168,18 +192,18 @@ free · no signup
 
 ## Status
 
-**Runway — blocked on one manual step.** The server was registered under project scope
-`/Users/siddharthsingh` (home), so it never loaded in this repo. Re-added at **user** scope,
-now reachable at `https://mcp.runwayml.com/mcp`, and reporting `Needs authentication`.
-Authorise it with `/mcp` in an interactive terminal; the tools load after that. A backup of
-`~/.claude.json` was written before the change.
+**Runway — connected, plates generated.** Two config problems were fixed along the way: the
+server had been registered under project scope for the home directory (so it never loaded in
+this repo), and it then needed `claude mcp login runway`. Now user-scoped and authenticated.
+The free plan gates all video, so the three beats shipped as stills — see above. 380 of 500
+credits remain.
 
 **Capture — ready to shoot.** Every offset above is measured against the live site at
 1440×900, not estimated. Shots 3 and 7 were both wrong in earlier drafts and are now correct.
 
 ## Next
 
-1. Authorise Runway (`/mcp`), then generate shots 1, 5, 9 — 3–4 variants each, image-to-video
-   seeded with a real hero frame for 1 and 9.
-2. Shoot the six product clips against the recipe above.
-3. Assemble. The 30s cut drops shots 5 and 6.
+1. ~~Generate shots 1, 5, 9.~~ **Done** — plates in `assets/launch-video/`.
+2. Shoot the six product clips against the capture recipe above.
+3. Assemble: import the three plates, apply the transforms in the table, cut against the
+   product clips. The 30s version drops shots 5 and 6.
