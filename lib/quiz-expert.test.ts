@@ -39,4 +39,12 @@ describe("expert quiz data", () => {
   it("options are distinct within a question", () => {
     for (const q of EXPERT_QUIZ) expect(new Set(q.options).size).toBe(4);
   });
+
+  it("does not concentrate answers on one option", () => {
+    for (const [label, bank] of [["expert", EXPERT_QUIZ], ["core", QUIZ]] as const) {
+      const counts = [0, 1, 2, 3].map((i) => bank.filter((q) => q.answer === i).length);
+      const max = Math.max(...counts);
+      expect(max / bank.length, `${label} bank: ${counts.join("/")}`).toBeLessThanOrEqual(0.4);
+    }
+  });
 });

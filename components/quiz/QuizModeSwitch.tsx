@@ -4,8 +4,8 @@ import QuizClient from "./QuizClient";
 import type { QuizQuestion } from "@/lib/quiz";
 
 const MODES = [
-  { id: "core" as const, label: "Core", blurb: "Twenty questions across DeFi — quant, theory, and analytical." },
-  { id: "expert" as const, label: "Expert", blurb: "Fifteen scenario problems, tiered. Named parameters, real arithmetic, no recall questions." },
+  { id: "core" as const, label: "Core", blurb: "Questions across DeFi — quant, theory, and analytical.", bestKey: "dg:quiz-best" },
+  { id: "expert" as const, label: "Expert", blurb: "Fifteen scenario problems, tiered. Named parameters, real arithmetic, no recall questions.", bestKey: "dg:quiz-best-expert" },
 ];
 
 export default function QuizModeSwitch({ core, expert }: { core: QuizQuestion[]; expert: QuizQuestion[] }) {
@@ -30,7 +30,7 @@ export default function QuizModeSwitch({ core, expert }: { core: QuizQuestion[];
         ))}
       </div>
       <p className="quiz-mode-blurb">{active.blurb}</p>
-      <QuizClient key={mode} questions={questions} />
+      <QuizClient key={mode} questions={questions} bestKey={active.bestKey} />
     </>
   );
 }

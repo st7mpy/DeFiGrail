@@ -8,7 +8,7 @@ const TYPE_LABEL: Record<string, string> = {
   quant: "Quant", theory: "Theory", analytical: "Analytical",
 };
 
-export default function QuizClient({ questions }: { questions: QuizQuestion[] }) {
+export default function QuizClient({ questions, bestKey = BEST_KEY }: { questions: QuizQuestion[]; bestKey?: string }) {
   const total = questions.length;
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
@@ -18,9 +18,9 @@ export default function QuizClient({ questions }: { questions: QuizQuestion[] })
   const [best, setBest] = useState<number | null>(null);
 
   useEffect(() => {
-    const raw = localStorage.getItem(BEST_KEY);
+    const raw = localStorage.getItem(bestKey);
     if (raw) setBest(parseInt(raw, 10));
-  }, []);
+  }, [bestKey]);
 
   const q = questions[idx];
 
@@ -40,7 +40,7 @@ export default function QuizClient({ questions }: { questions: QuizQuestion[] })
       const finalScore = score;
       setBest((b) => {
         const nb = b === null ? finalScore : Math.max(b, finalScore);
-        try { localStorage.setItem(BEST_KEY, String(nb)); } catch { /* ignore */ }
+        try { localStorage.setItem(bestKey, String(nb)); } catch { /* ignore */ }
         return nb;
       });
       setDone(true);
