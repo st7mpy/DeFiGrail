@@ -74,13 +74,22 @@ export default async function Home() {
         </div>
         <div className="market-grid">
           <div className="news-list">
-            {market.headlines.slice(0, 4).map((h, i) => (
-              <div className="news-row" key={i}>
-                <span className="news-source">{h.source}</span>
-                <span className="news-title">{h.title}</span>
-                <span className="news-time">{h.time}</span>
-              </div>
-            ))}
+            {market.headlines.slice(0, 4).map((h, i) => {
+              const inner = (
+                <>
+                  <span className="news-source">{h.source}</span>
+                  <span className="news-title">{h.title}</span>
+                  <span className="news-time">{h.time}</span>
+                </>
+              );
+              // Same guard as /news: the fallback path emits url "#", which is
+              // not a destination — render those as plain rows, not dead links.
+              return h.url && h.url !== "#" ? (
+                <a className="news-row is-link" key={i} href={h.url} target="_blank" rel="noopener noreferrer">{inner}</a>
+              ) : (
+                <div className="news-row" key={i}>{inner}</div>
+              );
+            })}
           </div>
           <div className="tvl-card">
             <div className="tvl-label">TVL by chain</div>

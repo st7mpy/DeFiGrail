@@ -68,7 +68,12 @@ button{font-family:inherit;cursor:pointer}
 #app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;overflow-x:clip}
 
 /* ─── NAV ─── */
-nav.dg-nav{position:sticky;top:0;z-index:30;background:rgba(255, 250, 250,.88);backdrop-filter:blur(10px);border-bottom:1px solid rgba(0, 0, 128,.14)}
+/* will-change promotes the nav to its own compositing layer. Without it the
+   backdrop-filter is re-sampled at fractional device-pixel offsets on every
+   scroll frame, which shimmers — and the blurred aurora underneath makes each
+   re-sample costlier. Transform on the sticky element itself is safe; only an
+   ANCESTOR transform would create a containing block and break stickiness. */
+nav.dg-nav{position:sticky;top:0;z-index:30;background:rgba(255, 250, 250,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(0, 0, 128,.14);will-change:transform;backface-visibility:hidden}
 .nav-inner{max-width:1180px;margin:0 auto;padding:0 28px;height:62px;display:flex;align-items:center;gap:6px}
 .nav-logo{display:flex;align-items:center;gap:11px;background:none;border:none;padding:0;color:#000080;margin-right:8px;text-decoration:none}
 .nav-logo-dot{width:13px;height:13px;border-radius:50%;background:#000080;flex:none}
@@ -178,6 +183,8 @@ footer.dg-footer{border-top:1px solid rgba(0, 0, 128,.14);margin-top:30px}
 @media(max-width:700px){.market-grid{grid-template-columns:1fr}}
 .news-list{display:flex;flex-direction:column;gap:1px;background:rgba(0, 0, 128,.1);border:1px solid rgba(0, 0, 128,.12);border-radius:11px;overflow:hidden}
 .news-row{background:#F1F7FA;padding:14px 18px;display:flex;align-items:center;gap:14px}
+.news-row.is-link{text-decoration:none;color:inherit;cursor:pointer;transition:background .12s}
+.news-row.is-link:hover{background:rgba(173,216,230,.22)}
 .news-source{font-size:10px;letter-spacing:.08em;color:rgba(0, 0, 128,.5);text-transform:uppercase;width:88px;flex:none}
 .news-title{font-size:13px;flex:1;line-height:1.35}
 .news-time{font-size:10.5px;color:rgba(0, 0, 128,.42);flex:none}
@@ -309,7 +316,7 @@ footer.dg-footer{border-top:1px solid rgba(0, 0, 128,.14);margin-top:30px}
 .news-layout{padding:40px 0 60px}
 .news-full-list{display:flex;flex-direction:column;gap:1px;background:rgba(0, 0, 128,.08);border:1px solid rgba(0, 0, 128,.12);border-radius:11px;overflow:hidden}
 .news-full-row{background:#F1F7FA;padding:18px 22px;display:grid;grid-template-columns:100px 1fr 80px;gap:16px;align-items:center;cursor:pointer;transition:background .1s;text-decoration:none;color:inherit}
-.news-full-row:hover{background:rgba(239,234,221,.5)}
+.news-full-row:hover{background:rgba(173,216,230,.22)}
 
 /* ─── COMMUNITY ─── */
 .community-layout{padding:40px 0 60px}
