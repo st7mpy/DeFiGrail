@@ -5,7 +5,7 @@ import type { QuizQuestion } from "@/lib/quiz";
 
 const MODES = [
   { id: "core" as const, label: "Core", blurb: "Questions across DeFi — quant, theory, and analytical.", bestKey: "dg:quiz-best" },
-  { id: "expert" as const, label: "Expert", blurb: "Fifteen scenario problems, tiered. Named parameters, real arithmetic, no recall questions.", bestKey: "dg:quiz-best-expert" },
+  { id: "expert" as const, label: "Expert", blurb: "Scenario problems, tiered. Named parameters, real arithmetic, no recall questions.", bestKey: "dg:quiz-best-expert" },
 ];
 
 export default function QuizModeSwitch({ core, expert }: { core: QuizQuestion[]; expert: QuizQuestion[] }) {

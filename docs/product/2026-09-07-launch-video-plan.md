@@ -1,7 +1,7 @@
-# DeFiGrail launch video — plan v4
+# DeFiGrail launch video — plan v5
 
-*45 seconds, cut for X. v2 applies the 12-second decision and replaces v1's shot list with
-measured capture offsets from the live site.*
+*45 seconds, cut for X. v5 records what actually came out of the capture pass — including four
+things the earlier drafts had wrong, and two live-site bugs the capture surfaced.*
 
 ---
 
@@ -35,14 +35,14 @@ claim, and it is defensible because the anchor metadata is on all 51 topics.
 
 ## Shot list — 10 shots, 45s
 
-`[R]` Runway · `[C]` capture. All capture at **1440×900**, crop to 16:9.
+`[R]` Runway · `[C]` capture. Captured at **1440×810** (16:9 natively, no crop) at 2× scale.
 
 | # | t | Src | Shot | Type |
 |---|---|---|---|---|
 | 1 | 0:00–0:04 | **R** | Icy fluid drifting across pale field, dissolving to white | — |
 | 2 | 0:04–0:08 | **C** | Dissolve into live hero, aurora settled, headline holds | *(in frame)* |
 | 3 | 0:08–0:20 | **C** | **The money shot.** One unbroken slow scroll on `/learn/uniswap-v3` | "You already know the TradFi version." |
-| 4 | 0:20–0:25 | **C** | `/playground` — drag the IL curve, number tracks the cursor | "Every formula is a thing you can move." |
+| 4 | 0:20–0:25 | **C** | `/playground` — drag Concentrated Liquidity past its upper bound | "Every formula is a thing you can move." |
 | 5 | 0:25–0:29 | **R** | Navy particles converging into a sparse lattice on snow | "In the order that makes sense." |
 | 6 | 0:29–0:33 | **C** | `/graph` — drag a node, dependencies trace, physics settles | — |
 | 7 | 0:33–0:37 | **C** | `/learn/liquidations` — the Black Thursday `real` caveat | "Including where it broke." |
@@ -52,7 +52,7 @@ claim, and it is defensible because the anchor metadata is on all 51 topics.
 
 ### Shot 3 is the whole pitch — measured offsets
 
-`/learn/uniswap-v3` at **1440×900**. Measured: at `scrollY 300` the TradFi anchor, both
+`/learn/uniswap-v3` at **1440×810**. Measured: at `scrollY 300` the TradFi anchor, both
 prereq chips *and* the first caveat are all on screen at once.
 
 ```
@@ -77,7 +77,7 @@ the chart past the bottom edge.
 ```
 document offsets      capture scrollY
 1206  breaks                 —
-1677  real  ← the shot     1417   frames it at y 260, fully in shot at 1440x900
+1677  real  ← the shot     1417   frames it at y 260, fully in shot at 1440x810
 2083  check                  —
 ```
 
@@ -147,23 +147,71 @@ variant that fills the frame; shots 1, 5 and 9 all need negative space for type.
 
 ---
 
-## Capture recipe
+## Capture — SHOT ✅
 
-Record at 1440×900, no cursor except shots 4 and 6 where the drag *is* the point.
+`node scripts/capture-launch.mjs [shot ...]` against a **production** build (`next start`, not
+`next dev` — the dev overlay badge sits in frame). Eight files in `assets/launch-video/clips`,
+all **1920×1080 H.264**, git-ignored and reproducible from the script.
 
-| Shot | URL | Action |
-|---|---|---|
-| 2, 10 | `/` | Hard reload, wait for aurora + headline to settle, hold still |
-| 3 | `/learn/uniswap-v3` | Hold at 300 (~4s), then scroll 300 → 1100 (~8s), ease-in-out |
-| 4 | `/playground` | Drag IL entry 2000 → current 3000, slowly |
-| 6 | `/graph` | Drag one node, release, let physics settle |
-| 7 | `/learn/liquidations` | Jump to 1417, hold 4s |
-| 8 | `/quiz` | Click Expert, scroll one question into frame |
+| File | Shot | Length | How it was captured |
+|---|---|---|---|
+| `shot02-hero.mp4` | 2 | 6.5s | real-time — the flow cycles, the aurora drifts |
+| `shot03-uniswap-v3.mp4` | 3 | 12.0s | frame-stepped, hold 300 → ease to 1100 |
+| `shot04-playground-il.mp4` | 4 | 5.5s | frame-stepped, IL current price 2000 → 3000 |
+| `shot04b-playground-range.mp4` | 4 alt | 6.5s | **recommended** — real slider drag, see below |
+| `shot06-graph.mp4` | 6 | 4.9s | real-time — hover trace, drag, physics settle |
+| `shot07-liquidations.mp4` | 7 | 4.0s | still at 1417, held |
+| `shot08-quiz-expert.mp4` | 8 | 7.6s | real-time — Core → Expert switch |
+| `shot10-hero-endcard.mp4` | 10 | 2.0s | still |
 
-**Do not record:** `/news` (live prices date the video) · `/community` (empty until real
-submissions land).
+Clips run long on purpose. Trim to the shot list in the edit; the extra head and tail is
+handle, not filler.
 
----
+**Two capture techniques, and why each.** Text-dense shots (3, 4, 7) are *frame-stepped*:
+screenshot at `deviceScaleFactor: 2`, one frame per scroll position, encoded at 30fps. That
+gives a 2880×1620 source downscaled to 1080p, so the body copy stays crisp, and the scroll is
+perfectly smooth because it is computed rather than performed. Shots whose motion is real —
+a CSS animation cycle, a force simulation, a click transition — are captured through Chrome's
+own screencast with true frame timestamps, so playback speed is real.
+
+### Five things the plan had wrong, found by shooting it
+
+1. **Shot 4 was specified as a drag; `ILCurve` has no drag.** It has two number inputs. Three
+   *other* playground charts do have real `type="range"` sliders — including **Concentrated
+   Liquidity**, which is the exact topic shot 3 spends twelve seconds explaining. `shot04b`
+   drags its price slider past the upper bound, where the readout flips to `OUT OF RANGE —
+   all token1`. That is a better shot than the IL one *and* it cuts directly out of shot 3.
+   Both are captured; 4b is the recommendation.
+2. **The live price ticker is on every page, not just `/news`.** It dates the video exactly
+   the way `/news` does — which is why `/news` was cut. Hidden for shots 2, 4, 6 and 8. Shots
+   3 and 7 are scrolled well past it, so their measured offsets are untouched.
+3. **Shot 8 scrolled past its own subject.** The old recipe scrolled a page only 171px taller
+   than the viewport, pushing the Core/Expert toggle off the top and pulling the footer in.
+   The switch *is* the motion: hold at scrollY 40 (toggle at 187, card 278→760, footer at 850
+   just out of frame) and click Expert. Core 28 / theory question → Expert 17 / a real quant
+   scenario, in one cut.
+4. **Graph node coordinates cannot be hardcoded.** The force layout settles somewhere
+   different on every load, so the first capture dragged empty space. `ProtocolGraph` sets
+   `cursor: pointer` on hover, which is its own hit test — the script ring-scans outward from
+   centre and takes the first real hit. It lands on a hub node (Uniswap v2 both runs), whose
+   hover traces ~12 dependencies in navy while the rest fades.
+5. **Shot 4's framing buried the payoff.** `scrollIntoViewIfNeeded` left the `IL =` readout
+   jammed on the bottom edge. Offsets are now measured off the real card geometry.
+
+### Two live-site bugs the capture surfaced
+
+Both are fixed in this commit — a video is a slow, careful look at your own product.
+
+- **The sticky nav had no backdrop blur at all, in every browser that matters.** `globals.css`
+  declared `backdrop-filter` then `-webkit-backdrop-filter`; lightningcss collapses that pair
+  down to whichever comes *last*, so production shipped the `-webkit-` spelling alone, which
+  Chrome ignores. The nav fell back to its `.88` background and scrolled body copy read
+  straight through it — glaringly, in the middle of the money shot. Reproduced against
+  lightningcss directly, independent of browser targets. Fix: standard property last.
+- **The quiz Expert blurb said "Fifteen scenario problems"; the bank holds 17.** The count is
+  already rendered on the toggle pill, so the fix was to delete the number from the prose
+  rather than correct it. Same class of drift: the Impermanent Loss card said "Drag the price
+  ratio" on a chart with no drag.
 
 ## Copy
 
@@ -192,18 +240,13 @@ free · no signup
 
 ## Status
 
-**Runway — connected, plates generated.** Two config problems were fixed along the way: the
-server had been registered under project scope for the home directory (so it never loaded in
-this repo), and it then needed `claude mcp login runway`. Now user-scoped and authenticated.
-The free plan gates all video, so the three beats shipped as stills — see above. 380 of 500
-credits remain.
+**Runway — done.** Free plan gates all video, so the three atmospheric beats shipped as 2K
+stills to be animated with transforms in the edit. 380 of 500 credits remain.
 
-**Capture — ready to shoot.** Every offset above is measured against the live site at
-1440×900, not estimated. Shots 3 and 7 were both wrong in earlier drafts and are now correct.
+**Capture — done.** Eight clips, 1920×1080, in `assets/launch-video/clips`, reproducible with
+`node scripts/capture-launch.mjs`.
 
 ## Next
 
-1. ~~Generate shots 1, 5, 9.~~ **Done** — plates in `assets/launch-video/`.
-2. Shoot the six product clips against the capture recipe above.
-3. Assemble: import the three plates, apply the transforms in the table, cut against the
-   product clips. The 30s version drops shots 5 and 6.
+Assembly is the only step left: import the three plates, apply the transforms in the plate
+table, cut against the eight clips, trim to the shot list. The 30s version drops shots 5 and 6.

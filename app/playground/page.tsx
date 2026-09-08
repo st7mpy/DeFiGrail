@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: "Playground" };
 const TOOLS = [
   {
     title: "Impermanent Loss",
-    blurb: "Drag the price ratio and watch an LP's divergence loss against simply holding.",
+    blurb: "Set entry and current price and watch an LP's divergence loss against simply holding.",
     topic: "impermanent-loss",
     Chart: ILCurve,
     layman: "If you deposit two assets into a pool and their prices drift apart, you can end up with less value than if you'd just held them in your wallet. The dip in the curve is that gap. It's called “impermanent” because it shrinks back toward zero if prices return to where you started — and the trading fees you earn can offset whatever's left.",
